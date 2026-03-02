@@ -12,6 +12,8 @@ KwikTip.DEFAULTS = {
     showMinimapButton = true,
     persistentHide    = false,
     minimapAngle      = 225,
+    debugLog          = false,
+    mapIDLog          = {},
 }
 
 -- ============================================================
@@ -36,6 +38,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" or event == "ZONE_CHANGED" then
         KwikTip:UpdateVisibility()
         KwikTip:UpdateContent()
+        KwikTip:LogMapID()
     end
 end)
 
@@ -59,6 +62,22 @@ function KwikTip:OnLogin()
     self:UpdateVisibility()
     self:UpdateContent()
     print("|cff00ff00KwikTip|r loaded. Type /kwik for settings.")
+end
+
+-- ============================================================
+-- Debug logging
+-- ============================================================
+
+function KwikTip:LogMapID()
+    if not KwikTipDB or not KwikTipDB.debugLog then return end
+    local inInstance, instanceType = IsInInstance()
+    if not inInstance then return end
+    local mapID = C_Map.GetBestMapForUnit("player")
+    table.insert(KwikTipDB.mapIDLog, {
+        mapID        = mapID,
+        instanceType = instanceType,
+        time         = date("%Y-%m-%d %H:%M:%S"),
+    })
 end
 
 -- ============================================================

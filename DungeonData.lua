@@ -30,7 +30,7 @@ KwikTip.DUNGEONS = {
     -- NEW MIDNIGHT DUNGEONS — Level-Up (81–88)
     -- --------------------------------------------------------
     {
-        uiMapID    = 2805,
+        uiMapID    = 2492,
         name       = "Windrunner Spire",
         location   = "Eversong Woods",
         season     = "midnight",
@@ -71,7 +71,7 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        uiMapID    = 2874,
+        uiMapID    = 2501,
         name       = "Maisara Caverns",
         location   = "Zul'Aman",
         season     = "midnight",
@@ -115,7 +115,7 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        uiMapID    = 2859,
+        uiMapID    = 2500,
         name       = "The Blinding Vale",
         location   = "Harandar",
         season     = "midnight",

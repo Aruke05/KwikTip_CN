@@ -239,6 +239,24 @@ heightSlider:SetScript("OnValueChanged", function(self, value)
     self._lbl:SetText("Height: " .. value)
 end)
 
+-- ---- DEBUG section -------------------------------------------
+local debugHeader = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+debugHeader:SetPoint("TOPLEFT", heightSlider._wrap, "BOTTOMLEFT", -8, -14)
+debugHeader:SetText("DEBUG")
+debugHeader:SetTextColor(0.6, 0.6, 0.6)
+
+local debugLogCB = CreateFrame("CheckButton", "KwikTipDebugLogCB", cfg, "UICheckButtonTemplate")
+debugLogCB:SetSize(24, 24)
+debugLogCB:SetPoint("TOPLEFT", debugHeader, "BOTTOMLEFT", 0, -4)
+
+local debugLogLbl = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+debugLogLbl:SetPoint("LEFT", debugLogCB, "RIGHT", 2, 0)
+debugLogLbl:SetText("Log Map IDs to SavedVariables")
+
+debugLogCB:SetScript("OnClick", function(self)
+    KwikTipDB.debugLog = self:GetChecked()
+end)
+
 -- Logo at the bottom of the config window (477×200 source → 220×92 display)
 local cfgLogo = cfg:CreateTexture(nil, "ARTWORK")
 cfgLogo:SetTexture("Interface\\AddOns\\KwikTip\\assets\\ktlogo.tga")
@@ -267,6 +285,7 @@ local function PopulateConfig()
     opacitySlider:SetValue(math.floor(db.alpha * 100 + 0.5))
     widthSlider:SetValue(db.width)
     heightSlider:SetValue(db.height)
+    debugLogCB:SetChecked(db.debugLog)
     KwikTip:_UpdateConfigMoveBtn()
 end
 
