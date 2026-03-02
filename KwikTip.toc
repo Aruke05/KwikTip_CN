@@ -1,0 +1,14 @@
+## Interface: 120001
+## Title: KwikTip
+## Notes: A custom UI/HUD element addon
+## Author:
+## Version: 0.1.0
+## DefaultState: enabled
+
+## SavedVariables: KwikTipDB
+
+KwikTip.lua
+Frames.lua
+DungeonData.lua
+Detection.lua
+Config.lua
