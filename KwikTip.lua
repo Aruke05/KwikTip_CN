@@ -73,8 +73,10 @@ function KwikTip:LogMapID()
     local inInstance, instanceType = IsInInstance()
     if not inInstance then return end
     local mapID = C_Map.GetBestMapForUnit("player")
+    local instanceName = GetInstanceInfo()
     table.insert(KwikTipDB.mapIDLog, {
         mapID        = mapID,
+        instanceName = instanceName,
         instanceType = instanceType,
         time         = date("%Y-%m-%d %H:%M:%S"),
     })
