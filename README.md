@@ -4,7 +4,9 @@
 
 A World of Warcraft: Midnight addon that displays contextual tips for dungeons and raids. As your group moves through an instance, KwikTip surfaces relevant boss and trash tips in a small, unobtrusive HUD — no interaction required mid-pull.
 
-Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
+Inspired by **QE Dungeon Tips** by QEdev (no longer maintained). 
+
+I loved QE Dungeon Tips for quick reminders about what's going on in an instance, especially for alts. This is a hobby project - I have no LUA experience and this is absolutely vibe coded. I do not pretend to be an expert. It is absolutely something I'm using as a learning experience. Take it easy on me.
 
 ---
 
