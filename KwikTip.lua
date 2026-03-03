@@ -77,12 +77,19 @@ function KwikTip:LogMapID()
     if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then return end
     local mapID = C_Map.GetBestMapForUnit("player")
     local instanceName = GetInstanceInfo()
+    local pos = mapID and C_Map.GetPlayerMapPosition(mapID, "player")
     table.insert(KwikTipDB.mapIDLog, {
         mapID        = mapID,
         instanceName = instanceName,
         instanceType = instanceType,
         time         = date("%Y-%m-%d %H:%M:%S"),
+        x            = pos and string.format("%.4f", pos.x) or nil,
+        y            = pos and string.format("%.4f", pos.y) or nil,
     })
+    -- Cap log size to avoid SavedVariables bloat
+    if #KwikTipDB.mapIDLog > 500 then
+        table.remove(KwikTipDB.mapIDLog, 1)
+    end
 end
 
 -- ============================================================
@@ -102,12 +109,31 @@ SlashCmdList["KWIKTIP"] = function(msg)
         print("|cff00ff00KwikTip|r debug:")
         print(string.format("  inInstance=%s  type=%s", tostring(inInstance), tostring(instanceType)))
         print(string.format("  mapID=%s  dungeon=%s", tostring(mapID), dungeon and dungeon.name or "none"))
+        local pos = mapID and C_Map.GetPlayerMapPosition(mapID, "player")
+        if pos then
+            local areaName = "none"
+            if dungeon and dungeon.areas then
+                for _, a in ipairs(dungeon.areas) do
+                    if pos.x >= a.x1 and pos.x <= a.x2 and pos.y >= a.y1 and pos.y <= a.y2 then
+                        areaName = a.name
+                        break
+                    end
+                end
+            end
+            print(string.format("  pos=%.4f, %.4f  area=%s", pos.x, pos.y, areaName))
+        else
+            print("  pos=unavailable")
+        end
+    elseif cmd == "clearlog" then
+        KwikTipDB.mapIDLog = {}
+        print("|cff00ff00KwikTip|r map ID log cleared.")
     elseif cmd == "config" or cmd == "" then
         KwikTip:ToggleConfig()
     else
         print("|cff00ff00KwikTip|r commands:")
         print("  /kwik          — open settings")
         print("  /kwik move     — toggle move/lock mode")
-        print("  /kwik debug    — print detection state")
+        print("  /kwik debug    — print detection state and position")
+        print("  /kwik clearlog — clear the map ID debug log")
     end
 end

@@ -43,10 +43,8 @@ end)
 
 hud:SetScript("OnMouseUp", function(self)
     self:StopMovingOrSizing()
-    local point, _, _, x, y = self:GetPoint()
-    KwikTipDB.point = point
-    KwikTipDB.x     = x
-    KwikTipDB.y     = y
+    KwikTipDB.x = math.floor(self:GetLeft() + self:GetWidth() / 2 - UIParent:GetWidth() / 2 + 0.5)
+    KwikTipDB.y = math.floor(self:GetBottom() + self:GetHeight() / 2 - UIParent:GetHeight() / 2 + 0.5)
 end)
 
 -- ============================================================
@@ -59,7 +57,7 @@ function KwikTip:ApplySettings()
     hud:SetSize(db.width, db.height)
     hud:SetBackdropColor(0, 0, 0, db.alpha)
     hud:ClearAllPoints()
-    hud:SetPoint(db.point or "CENTER", UIParent, "CENTER", db.x or 0, db.y or 0)
+    hud:SetPoint("CENTER", UIParent, "CENTER", db.x or 0, db.y or 0)
 end
 
 -- Show the HUD when in a dungeon/raid, or when move mode is active.
@@ -93,10 +91,8 @@ function KwikTip:ToggleMoveMode()
         hud:EnableMouse(false)
         hud:SetBackdropBorderColor(0, 0, 0, 1)
         -- Persist final position before potentially hiding
-        local point, _, _, x, y = hud:GetPoint()
-        KwikTipDB.point = point
-        KwikTipDB.x     = x
-        KwikTipDB.y     = y
+        KwikTipDB.x = math.floor(hud:GetLeft() + hud:GetWidth() / 2 - UIParent:GetWidth() / 2 + 0.5)
+        KwikTipDB.y = math.floor(hud:GetBottom() + hud:GetHeight() / 2 - UIParent:GetHeight() / 2 + 0.5)
         self:UpdateVisibility()
     end
 
@@ -107,6 +103,10 @@ function KwikTip:ToggleMoveMode()
 end
 
 -- Set the text displayed inside the HUD box.
+-- Guards against redundant SetText calls when content hasn't changed.
 function KwikTip:SetContent(str)
-    contentText:SetText(str or "")
+    str = str or ""
+    if self._lastContent == str then return end
+    self._lastContent = str
+    contentText:SetText(str)
 end

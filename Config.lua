@@ -75,7 +75,7 @@ end
 -- Config Window
 -- ============================================================
 local cfg = CreateFrame("Frame", "KwikTipConfig", UIParent, "BasicFrameTemplate")
-cfg:SetSize(280, 512)
+cfg:SetSize(280, 450)
 cfg:SetPoint("CENTER")
 cfg:SetFrameStrata("HIGH")
 cfg:SetMovable(true)
@@ -109,20 +109,6 @@ moveBtn:SetText("Move Window")
 moveBtn:SetScript("OnClick", function()
     KwikTip:ToggleMoveMode()
 end)
-
--- X/Y position rows with pixel nudge and manual entry
-local posXEdit, posYEdit  -- forward-declared so ApplyXY closure can reference them
-
-local function ApplyXY(x, y)
-    x = math.floor(tonumber(x) or KwikTipDB.x or 0)
-    y = math.floor(tonumber(y) or KwikTipDB.y or 0)
-    KwikTipDB.x = x
-    KwikTipDB.y = y
-    KwikTip.HUD:ClearAllPoints()
-    KwikTip.HUD:SetPoint(KwikTipDB.point or "CENTER", UIParent, "CENTER", x, y)
-    posXEdit:SetText(tostring(x))
-    posYEdit:SetText(tostring(y))
-end
 
 local function MakeNudgeRow(label, parent, anchor)
     local wrap = CreateFrame("Frame", nil, parent)
@@ -167,35 +153,9 @@ local function MakeNudgeRow(label, parent, anchor)
     return wrap, eb, minusBtn, plusBtn
 end
 
-local posXRow, posXMinus, posXPlus
-posXRow, posXEdit, posXMinus, posXPlus = MakeNudgeRow("X:", cfg, moveBtn)
-posXEdit:SetScript("OnEnterPressed", function(self)
-    ApplyXY(self:GetText(), KwikTipDB.y)
-    self:ClearFocus()
-end)
-posXEdit:SetScript("OnEscapePressed", function(self)
-    self:SetText(tostring(math.floor(KwikTipDB.x or 0)))
-    self:ClearFocus()
-end)
-posXMinus:SetScript("OnClick", function() ApplyXY((KwikTipDB.x or 0) - 1, KwikTipDB.y) end)
-posXPlus:SetScript("OnClick",  function() ApplyXY((KwikTipDB.x or 0) + 1, KwikTipDB.y) end)
-
-local posYRow, posYMinus, posYPlus
-posYRow, posYEdit, posYMinus, posYPlus = MakeNudgeRow("Y:", cfg, posXRow)
-posYEdit:SetScript("OnEnterPressed", function(self)
-    ApplyXY(KwikTipDB.x, self:GetText())
-    self:ClearFocus()
-end)
-posYEdit:SetScript("OnEscapePressed", function(self)
-    self:SetText(tostring(math.floor(KwikTipDB.y or 0)))
-    self:ClearFocus()
-end)
-posYMinus:SetScript("OnClick", function() ApplyXY(KwikTipDB.x, (KwikTipDB.y or 0) - 1) end)
-posYPlus:SetScript("OnClick",  function() ApplyXY(KwikTipDB.x, (KwikTipDB.y or 0) + 1) end)
-
 -- ---- DISPLAY section -----------------------------------------
 local dispHeader = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-dispHeader:SetPoint("TOPLEFT", posYRow, "BOTTOMLEFT", 0, -14)
+dispHeader:SetPoint("TOPLEFT", moveBtn, "BOTTOMLEFT", 0, -14)
 dispHeader:SetText("DISPLAY")
 dispHeader:SetTextColor(0.6, 0.6, 0.6)
 
@@ -386,8 +346,6 @@ local function PopulateConfig()
     widthEdit:SetText(tostring(db.width or 220))
     heightEdit:SetText(tostring(db.height or 80))
     debugLogCB:SetChecked(db.debugLog)
-    posXEdit:SetText(tostring(math.floor(db.x or 0)))
-    posYEdit:SetText(tostring(math.floor(db.y or 0)))
     KwikTip:_UpdateConfigMoveBtn()
 end
 

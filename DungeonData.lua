@@ -19,6 +19,13 @@ local ADDON_NAME, KwikTip = ...
 --   bosses     : ordered list; each entry has:
 --     name     : boss name as shown in the game
 --     tip      : short contextual tip shown in the HUD (fill in as content is written)
+--   areas      : optional list; if present, HUD switches to area mode
+--     name     : display name shown in HUD header
+--     tip      : contextual tip for this area
+--     x1       : left bound   (0.0–1.0, C_Map.GetPlayerMapPosition — origin is top-left)
+--     y1       : top bound    (y increases downward)
+--     x2       : right bound
+--     y2       : bottom bound
 --
 -- Season 1 M+ rotation (8 dungeons total):
 --   New Midnight: Magisters' Terrace, Maisara Caverns, Nexus-Point Xenas, Windrunner Spire
@@ -104,7 +111,7 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        uiMapID    = 2915,
+        uiMapID    = 2556,
         name       = "Nexus-Point Xenas",
         location   = "Voidstorm",
         season     = "midnight",
@@ -131,7 +138,8 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        uiMapID    = 2923,
+        uiMapID    = 2572,
+        altMapIDs  = { 2574 },  -- 2574 = sub-zone
         name       = "Voidscar Arena",
         location   = "Voidstorm",
         season     = "midnight",
