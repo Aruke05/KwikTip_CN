@@ -60,7 +60,10 @@ function KwikTip:ApplySettings()
     hud:SetPoint("CENTER", UIParent, "CENTER", db.x or 0, db.y or 0)
 end
 
--- Show the HUD when in a dungeon/raid, or when move mode is active.
+-- Show the HUD when any active state warrants it, or when move mode is active.
+--   bossActive  : ENCOUNTER_START is in progress
+--   trashActive : player is targeting a known trash mob
+--   areaActive  : player is inside a named area bounding box
 -- Respects the persistentHide flag set from the config window.
 function KwikTip:UpdateVisibility()
     if KwikTipDB.persistentHide and not self.moveMode then
@@ -68,10 +71,7 @@ function KwikTip:UpdateVisibility()
         return
     end
 
-    local inInstance, instanceType = IsInInstance()
-    local inContent = inInstance and (instanceType == "party" or instanceType == "raid" or instanceType == "scenario")
-
-    if self.moveMode or inContent then
+    if self.moveMode or self.bossActive or self.trashActive or self.areaActive then
         hud:Show()
     else
         hud:Hide()

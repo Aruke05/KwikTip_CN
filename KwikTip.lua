@@ -14,6 +14,7 @@ KwikTip.DEFAULTS = {
     minimapAngle      = 225,
     debugLog          = false,
     mapIDLog          = {},
+    mobLog            = {},
 }
 
 -- ============================================================
@@ -26,6 +27,10 @@ frame:RegisterEvent("PLAYER_LOGIN")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 frame:RegisterEvent("ZONE_CHANGED")
+frame:RegisterEvent("ENCOUNTER_START")
+frame:RegisterEvent("ENCOUNTER_END")
+frame:RegisterEvent("PLAYER_TARGET_CHANGED")
+frame:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 
 frame:SetScript("OnEvent", function(self, event, ...)
     if event == "ADDON_LOADED" then
@@ -39,6 +44,15 @@ frame:SetScript("OnEvent", function(self, event, ...)
         KwikTip:UpdateVisibility()
         KwikTip:UpdateContent()
         KwikTip:LogMapID()
+    elseif event == "ENCOUNTER_START" then
+        local encounterID = ...
+        KwikTip:OnEncounterStart(encounterID)
+    elseif event == "ENCOUNTER_END" then
+        KwikTip:OnEncounterEnd()
+    elseif event == "PLAYER_TARGET_CHANGED" then
+        KwikTip:OnTargetChanged()
+    elseif event == "UPDATE_MOUSEOVER_UNIT" then
+        KwikTip:OnMouseoverUnit()
     end
 end)
 
@@ -76,10 +90,11 @@ function KwikTip:LogMapID()
     local inInstance, instanceType = IsInInstance()
     if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then return end
     local mapID = C_Map.GetBestMapForUnit("player")
-    local instanceName = GetInstanceInfo()
+    local instanceName, _, _, _, _, _, _, instanceID = GetInstanceInfo()
     local pos = mapID and C_Map.GetPlayerMapPosition(mapID, "player")
     table.insert(KwikTipDB.mapIDLog, {
         mapID        = mapID,
+        instanceID   = instanceID,
         instanceName = instanceName,
         instanceType = instanceType,
         time         = date("%Y-%m-%d %H:%M:%S"),
@@ -87,7 +102,7 @@ function KwikTip:LogMapID()
         y            = pos and string.format("%.4f", pos.y) or nil,
     })
     -- Cap log size to avoid SavedVariables bloat
-    if #KwikTipDB.mapIDLog > 500 then
+    if #KwikTipDB.mapIDLog > 2000 then
         table.remove(KwikTipDB.mapIDLog, 1)
     end
 end
@@ -104,11 +119,19 @@ SlashCmdList["KWIKTIP"] = function(msg)
         KwikTip:ToggleMoveMode()
     elseif cmd == "debug" then
         local inInstance, instanceType = IsInInstance()
-        local mapID   = C_Map.GetBestMapForUnit("player")
-        local dungeon = mapID and KwikTip.DUNGEON_BY_UIMAPID[mapID]
+        local mapID = C_Map.GetBestMapForUnit("player")
+        local _, _, _, _, _, _, _, instanceID = GetInstanceInfo()
+        local dungeon = (instanceID and KwikTip.DUNGEON_BY_INSTANCEID[instanceID])
+            or (mapID and KwikTip.DUNGEON_BY_UIMAPID[mapID])
         print("|cff00ff00KwikTip|r debug:")
-        print(string.format("  inInstance=%s  type=%s", tostring(inInstance), tostring(instanceType)))
-        print(string.format("  mapID=%s  dungeon=%s", tostring(mapID), dungeon and dungeon.name or "none"))
+        print(string.format("  inInstance=%s  type=%s  boss=%s  trash=%s  area=%s",
+            tostring(inInstance), tostring(instanceType),
+            tostring(KwikTip.bossActive), tostring(KwikTip.trashActive), tostring(KwikTip.areaActive)))
+        print(string.format("  instanceID=%s  mapID=%s  dungeon=%s",
+            tostring(instanceID), tostring(mapID), dungeon and dungeon.name or "none"))
+        print(string.format("  mapIDLog=%d  mobLog=%d",
+            KwikTipDB.mapIDLog and #KwikTipDB.mapIDLog or 0,
+            KwikTipDB.mobLog   and #KwikTipDB.mobLog   or 0))
         local pos = mapID and C_Map.GetPlayerMapPosition(mapID, "player")
         if pos then
             local areaName = "none"
@@ -126,7 +149,8 @@ SlashCmdList["KWIKTIP"] = function(msg)
         end
     elseif cmd == "clearlog" then
         KwikTipDB.mapIDLog = {}
-        print("|cff00ff00KwikTip|r map ID log cleared.")
+        KwikTipDB.mobLog   = {}
+        print("|cff00ff00KwikTip|r mapIDLog and mobLog cleared.")
     elseif cmd == "config" or cmd == "" then
         KwikTip:ToggleConfig()
     else
@@ -134,6 +158,6 @@ SlashCmdList["KWIKTIP"] = function(msg)
         print("  /kwik          — open settings")
         print("  /kwik move     — toggle move/lock mode")
         print("  /kwik debug    — print detection state and position")
-        print("  /kwik clearlog — clear the map ID debug log")
+        print("  /kwik clearlog — clear mapIDLog and mobLog")
     end
 end

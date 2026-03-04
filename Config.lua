@@ -315,6 +315,7 @@ debugLogLbl:SetText("Log Map IDs to SavedVariables")
 
 debugLogCB:SetScript("OnClick", function(self)
     KwikTipDB.debugLog = self:GetChecked()
+    KwikTip:UpdateContent()
 end)
 
 -- Logo at the bottom of the config window (477×200 source → 220×92 display)
