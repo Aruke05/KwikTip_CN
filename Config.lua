@@ -75,7 +75,7 @@ end
 -- Config Window
 -- ============================================================
 local cfg = CreateFrame("Frame", "KwikTipConfig", UIParent, "BasicFrameTemplate")
-cfg:SetSize(280, 450)
+cfg:SetSize(280, 520)
 cfg:SetPoint("CENTER")
 cfg:SetFrameStrata("HIGH")
 cfg:SetMovable(true)
@@ -187,9 +187,24 @@ hideHUDCB:SetScript("OnClick", function(self)
     KwikTip:UpdateVisibility()
 end)
 
+-- Checkbox: Show During Dungeon
+local showInDungeonCB = CreateFrame("CheckButton", "KwikTipShowInDungeonCB", cfg, "UICheckButtonTemplate")
+showInDungeonCB:SetSize(24, 24)
+showInDungeonCB:SetPoint("TOPLEFT", hideHUDCB, "BOTTOMLEFT", 0, -2)
+
+local showInDungeonLbl = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+showInDungeonLbl:SetPoint("LEFT", showInDungeonCB, "RIGHT", 2, 0)
+showInDungeonLbl:SetText("Show During Dungeon")
+
+showInDungeonCB:SetScript("OnClick", function(self)
+    KwikTipDB.showInDungeon = self:GetChecked()
+    KwikTip:UpdateContent()
+    KwikTip:UpdateVisibility()
+end)
+
 -- ---- APPEARANCE section ---------------------------------------
 local appHeader = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-appHeader:SetPoint("TOPLEFT", hideHUDCB, "BOTTOMLEFT", 0, -14)
+appHeader:SetPoint("TOPLEFT", showInDungeonCB, "BOTTOMLEFT", 0, -14)
 appHeader:SetText("APPEARANCE")
 appHeader:SetTextColor(0.6, 0.6, 0.6)
 
@@ -318,6 +333,20 @@ debugLogCB:SetScript("OnClick", function(self)
     KwikTip:UpdateContent()
 end)
 
+-- ---- DATA section -------------------------------------------
+local dataHeader = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+dataHeader:SetPoint("TOPLEFT", debugLogCB, "BOTTOMLEFT", 0, -14)
+dataHeader:SetText("DATA")
+dataHeader:SetTextColor(0.6, 0.6, 0.6)
+
+local exportBtn = CreateFrame("Button", nil, cfg, "UIPanelButtonTemplate")
+exportBtn:SetSize(180, 22)
+exportBtn:SetPoint("TOPLEFT", dataHeader, "BOTTOMLEFT", 0, -6)
+exportBtn:SetText("Export / Import Data")
+exportBtn:SetScript("OnClick", function()
+    KwikTip:ShowDataDialog()
+end)
+
 -- Logo at the bottom of the config window (477×200 source → 220×92 display)
 local cfgLogo = cfg:CreateTexture(nil, "ARTWORK")
 cfgLogo:SetTexture("Interface\\AddOns\\KwikTip\\assets\\ktlogo.tga")
@@ -343,6 +372,7 @@ local function PopulateConfig()
     local db = KwikTipDB
     showMinimapCB:SetChecked(db.showMinimapButton)
     hideHUDCB:SetChecked(db.persistentHide)
+    showInDungeonCB:SetChecked(db.showInDungeon)
     opacitySlider:SetValue(math.floor(db.alpha * 100 + 0.5))
     widthEdit:SetText(tostring(db.width or 220))
     heightEdit:SetText(tostring(db.height or 80))

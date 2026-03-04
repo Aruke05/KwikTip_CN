@@ -235,7 +235,7 @@ end
 -- Detection
 -- ============================================================
 
--- Identify the current dungeon and manage area/ticker state.
+-- Identify the current dungeon and manage area/ticker/dungeon-default state.
 -- No-op during boss encounters or while a trash mob is targeted.
 function KwikTip:UpdateContent()
     if self.bossActive then return end
@@ -244,7 +244,8 @@ function KwikTip:UpdateContent()
     if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then
         StopAreaTicker()
         StopDebugTicker()
-        self.areaActive = false
+        self.areaActive    = false
+        self.dungeonActive = false
         self:SetContent("")
         return
     end
@@ -266,29 +267,42 @@ function KwikTip:UpdateContent()
         StopDebugTicker()
     end
 
-    -- Trash target takes priority over area content; still manage area ticker.
+    -- Trash target takes priority over area/dungeon content; still manage area ticker.
     if self.trashActive then
         if dungeon and dungeon.areas then StartAreaTicker() else StopAreaTicker() end
         return
     end
 
-    -- Area detection
+    -- Try area content first (position-based, when dungeon has named areas).
+    local areaContent = nil
     if dungeon and dungeon.areas then
         StartAreaTicker()
         local mapID = C_Map.GetBestMapForUnit("player")
-        local content = mapID and FormatAreaContent(dungeon, mapID)
-        local prevAreaActive = self.areaActive
-        self.areaActive = (content ~= nil)
-        self:SetContent(content or "")
-        if prevAreaActive ~= self.areaActive then
-            self:UpdateVisibility()
-        end
+        areaContent = mapID and FormatAreaContent(dungeon, mapID)
     else
         StopAreaTicker()
-        if self.areaActive then
-            self.areaActive = false
-            self:SetContent("")
-            self:UpdateVisibility()
-        end
+    end
+
+    local prevAreaActive    = self.areaActive
+    local prevDungeonActive = self.dungeonActive
+
+    if areaContent then
+        -- Inside a named area — show area tip.
+        self.areaActive    = true
+        self.dungeonActive = false
+        self:SetContent(areaContent)
+    elseif dungeon and KwikTipDB.showInDungeon and dungeon.bosses and dungeon.bosses[1] then
+        -- No area match, but "show during dungeon" is on — default to first boss tip.
+        self.areaActive    = false
+        self.dungeonActive = true
+        self:SetContent(FormatBossContent(dungeon, dungeon.bosses[1]))
+    else
+        self.areaActive    = false
+        self.dungeonActive = false
+        self:SetContent("")
+    end
+
+    if prevAreaActive ~= self.areaActive or prevDungeonActive ~= self.dungeonActive then
+        self:UpdateVisibility()
     end
 end

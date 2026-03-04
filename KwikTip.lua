@@ -11,6 +11,7 @@ KwikTip.DEFAULTS = {
     y                 = -200,
     showMinimapButton = true,
     persistentHide    = false,
+    showInDungeon     = false,
     minimapAngle      = 225,
     debugLog          = false,
     mapIDLog          = {},
@@ -108,6 +109,112 @@ function KwikTip:LogMapID()
 end
 
 -- ============================================================
+-- Export / Import
+-- ============================================================
+
+-- Serialize mapIDLog to a compact shareable string.
+-- Format: KT1|instanceID:mapID:x,y;x,y;...|...
+-- Deduplicates positions (rounded to 3 decimal places) and groups by dungeon.
+-- Returns: str, pointCount  (nil, 0 if nothing to export)
+function KwikTip:ExportLog()
+    if not KwikTipDB.mapIDLog or #KwikTipDB.mapIDLog == 0 then
+        return nil, 0
+    end
+
+    local groups    = {}  -- gKey → { instanceID, mapID, posSet, positions }
+    local groupOrder = {}
+
+    for _, entry in ipairs(KwikTipDB.mapIDLog) do
+        if entry.x and entry.y then
+            local gKey = (entry.instanceID or 0) .. ":" .. (entry.mapID or 0)
+            if not groups[gKey] then
+                groups[gKey] = {
+                    instanceID = entry.instanceID or 0,
+                    mapID      = entry.mapID or 0,
+                    posSet     = {},
+                    positions  = {},
+                }
+                table.insert(groupOrder, gKey)
+            end
+            local g  = groups[gKey]
+            local rx = string.format("%.3f", tonumber(entry.x))
+            local ry = string.format("%.3f", tonumber(entry.y))
+            local pk = rx .. "," .. ry
+            if not g.posSet[pk] then
+                g.posSet[pk] = true
+                table.insert(g.positions, pk)
+            end
+        end
+    end
+
+    local totalPoints = 0
+    local parts       = { "KT1" }
+    for _, gKey in ipairs(groupOrder) do
+        local g = groups[gKey]
+        if #g.positions > 0 then
+            table.insert(parts, g.instanceID .. ":" .. g.mapID .. ":" .. table.concat(g.positions, ";"))
+            totalPoints = totalPoints + #g.positions
+        end
+    end
+
+    if #parts == 1 then return nil, 0 end
+    return table.concat(parts, "|"), totalPoints
+end
+
+-- Parse an export string and merge new positions into mapIDLog.
+-- Returns: added (number), errMsg (string or nil)
+function KwikTip:ImportLog(str)
+    if not str or str == "" then return 0, "Empty string." end
+
+    local rest = str:match("^KT1|(.+)$")
+    if not rest then return 0, "Unrecognised format — expected a KT1 export string." end
+
+    -- Build a set of existing positions for deduplication
+    local existingSet = {}
+    for _, entry in ipairs(KwikTipDB.mapIDLog) do
+        if entry.x and entry.y then
+            local k = (entry.instanceID or 0) .. ":" .. (entry.mapID or 0) .. ":" .. entry.x .. ":" .. entry.y
+            existingSet[k] = true
+        end
+    end
+
+    local added = 0
+    for segment in rest:gmatch("[^|]+") do
+        local iID, mID, posPart = segment:match("^(%d+):(%d+):(.+)$")
+        if iID and mID and posPart then
+            iID = tonumber(iID)
+            mID = tonumber(mID)
+            for pos in posPart:gmatch("[^;]+") do
+                local x, y = pos:match("^([%d%.]+),([%d%.]+)$")
+                if x and y then
+                    local k = iID .. ":" .. mID .. ":" .. x .. ":" .. y
+                    if not existingSet[k] then
+                        existingSet[k] = true
+                        table.insert(KwikTipDB.mapIDLog, {
+                            mapID        = mID,
+                            instanceID   = iID,
+                            instanceName = "imported",
+                            instanceType = "party",
+                            time         = "imported",
+                            x            = x,
+                            y            = y,
+                        })
+                        added = added + 1
+                    end
+                end
+            end
+        end
+    end
+
+    -- Honour the existing cap
+    while #KwikTipDB.mapIDLog > 2000 do
+        table.remove(KwikTipDB.mapIDLog, 1)
+    end
+
+    return added, nil
+end
+
+-- ============================================================
 -- Slash commands
 -- ============================================================
 SLASH_KWIKTIP1 = "/kwiktip"
@@ -147,6 +254,8 @@ SlashCmdList["KWIKTIP"] = function(msg)
         else
             print("  pos=unavailable")
         end
+    elseif cmd == "export" then
+        KwikTip:ShowDataDialog()
     elseif cmd == "clearlog" then
         KwikTipDB.mapIDLog = {}
         KwikTipDB.mobLog   = {}
@@ -158,6 +267,7 @@ SlashCmdList["KWIKTIP"] = function(msg)
         print("  /kwik          — open settings")
         print("  /kwik move     — toggle move/lock mode")
         print("  /kwik debug    — print detection state and position")
+        print("  /kwik export   — open position data export/import dialog")
         print("  /kwik clearlog — clear mapIDLog and mobLog")
     end
 end

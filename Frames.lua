@@ -10,6 +10,8 @@ KwikTip.HUD = hud
 hud:SetFrameStrata("MEDIUM")
 hud:SetClampedToScreen(true)
 hud:SetMovable(true)
+hud:SetResizable(true)
+hud:SetResizeBounds(100, 40, 600, 400)
 hud:EnableMouse(false)  -- mouse passthrough by default; enabled only in move mode
 hud:Hide()
 
@@ -33,8 +35,16 @@ contentText:SetText("")
 KwikTip.HUDText = contentText
 
 -- ============================================================
--- Drag support
+-- Drag and resize support
 -- ============================================================
+
+local function SaveHUDLayout()
+    KwikTipDB.width  = math.floor(hud:GetWidth()  + 0.5)
+    KwikTipDB.height = math.floor(hud:GetHeight() + 0.5)
+    KwikTipDB.x      = math.floor(hud:GetLeft()   + hud:GetWidth()  / 2 - UIParent:GetWidth()  / 2 + 0.5)
+    KwikTipDB.y      = math.floor(hud:GetBottom()  + hud:GetHeight() / 2 - UIParent:GetHeight() / 2 + 0.5)
+end
+
 hud:SetScript("OnMouseDown", function(self, button)
     if button == "LeftButton" then
         self:StartMoving()
@@ -43,9 +53,41 @@ end)
 
 hud:SetScript("OnMouseUp", function(self)
     self:StopMovingOrSizing()
-    KwikTipDB.x = math.floor(self:GetLeft() + self:GetWidth() / 2 - UIParent:GetWidth() / 2 + 0.5)
-    KwikTipDB.y = math.floor(self:GetBottom() + self:GetHeight() / 2 - UIParent:GetHeight() / 2 + 0.5)
+    SaveHUDLayout()
 end)
+
+-- Corner resize handles — small gold squares, visible only in move mode.
+local cornerHandles = {}
+for _, c in ipairs({
+    { point = "TOPLEFT",     dir = "TOPLEFT"     },
+    { point = "TOPRIGHT",    dir = "TOPRIGHT"    },
+    { point = "BOTTOMLEFT",  dir = "BOTTOMLEFT"  },
+    { point = "BOTTOMRIGHT", dir = "BOTTOMRIGHT" },
+}) do
+    local handle = CreateFrame("Frame", nil, hud)
+    handle:SetSize(7, 7)
+    handle:SetPoint(c.point)
+    handle:SetFrameLevel(hud:GetFrameLevel() + 2)
+    handle:EnableMouse(true)
+    handle:Hide()
+
+    local tex = handle:CreateTexture(nil, "OVERLAY")
+    tex:SetColorTexture(1, 0.82, 0, 0.9)
+    tex:SetAllPoints(handle)
+
+    local dir = c.dir
+    handle:SetScript("OnMouseDown", function(self, button)
+        if button == "LeftButton" then
+            hud:StartSizing(dir)
+        end
+    end)
+    handle:SetScript("OnMouseUp", function()
+        hud:StopMovingOrSizing()
+        SaveHUDLayout()
+    end)
+
+    table.insert(cornerHandles, handle)
+end
 
 -- ============================================================
 -- Public API
@@ -71,7 +113,7 @@ function KwikTip:UpdateVisibility()
         return
     end
 
-    if self.moveMode or self.bossActive or self.trashActive or self.areaActive then
+    if self.moveMode or self.bossActive or self.trashActive or self.areaActive or self.dungeonActive then
         hud:Show()
     else
         hud:Hide()
@@ -90,10 +132,12 @@ function KwikTip:ToggleMoveMode()
     else
         hud:EnableMouse(false)
         hud:SetBackdropBorderColor(0, 0, 0, 1)
-        -- Persist final position before potentially hiding
-        KwikTipDB.x = math.floor(hud:GetLeft() + hud:GetWidth() / 2 - UIParent:GetWidth() / 2 + 0.5)
-        KwikTipDB.y = math.floor(hud:GetBottom() + hud:GetHeight() / 2 - UIParent:GetHeight() / 2 + 0.5)
+        SaveHUDLayout()
         self:UpdateVisibility()
+    end
+
+    for _, handle in ipairs(cornerHandles) do
+        if self.moveMode then handle:Show() else handle:Hide() end
     end
 
     -- Sync the button label in the config window if it is open
@@ -102,6 +146,100 @@ function KwikTip:ToggleMoveMode()
     end
 end
 
+-- ============================================================
+-- Export / Import dialog
+-- ============================================================
+
+local dataDialog
+
+function KwikTip:ShowDataDialog()
+    if not dataDialog then
+        dataDialog = CreateFrame("Frame", "KwikTipDataDialog", UIParent, "BackdropTemplate")
+        dataDialog:SetSize(500, 320)
+        dataDialog:SetPoint("CENTER")
+        dataDialog:SetMovable(true)
+        dataDialog:EnableMouse(true)
+        dataDialog:RegisterForDrag("LeftButton")
+        dataDialog:SetScript("OnDragStart", dataDialog.StartMoving)
+        dataDialog:SetScript("OnDragStop",  dataDialog.StopMovingOrSizing)
+        dataDialog:SetFrameStrata("DIALOG")
+        dataDialog:SetBackdrop({
+            bgFile   = "Interface\\Tooltips\\UI-Tooltip-Background",
+            edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+            tile = true, tileSize = 16, edgeSize = 16,
+            insets = { left = 4, right = 4, top = 4, bottom = 4 },
+        })
+        dataDialog:SetBackdropColor(0, 0, 0, 0.9)
+
+        local title = dataDialog:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+        title:SetPoint("TOP", 0, -12)
+        title:SetText("KwikTip — Position Data")
+
+        local sub = dataDialog:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        sub:SetPoint("TOP", 0, -34)
+        sub:SetText("Copy the string below to share, or paste a string and click Import.")
+        sub:SetTextColor(0.8, 0.8, 0.8)
+
+        -- Scroll frame + EditBox
+        local scroll = CreateFrame("ScrollFrame", "KwikTipDataScroll", dataDialog, "UIPanelScrollFrameTemplate")
+        scroll:SetPoint("TOPLEFT",     dataDialog, "TOPLEFT",     10, -56)
+        scroll:SetPoint("BOTTOMRIGHT", dataDialog, "BOTTOMRIGHT", -28, 40)
+
+        local eb = CreateFrame("EditBox", "KwikTipDataEditBox", scroll)
+        eb:SetMultiLine(true)
+        eb:SetAutoFocus(false)
+        eb:SetFontObject(ChatFontNormal)
+        eb:SetWidth(450)
+        eb:SetScript("OnEscapePressed", function() dataDialog:Hide() end)
+        scroll:SetScrollChild(eb)
+        dataDialog.editBox = eb
+
+        -- Buttons
+        local closeBtn = CreateFrame("Button", nil, dataDialog, "UIPanelButtonTemplate")
+        closeBtn:SetSize(80, 22)
+        closeBtn:SetPoint("BOTTOMRIGHT", -8, 8)
+        closeBtn:SetText("Close")
+        closeBtn:SetScript("OnClick", function() dataDialog:Hide() end)
+
+        local importBtn = CreateFrame("Button", nil, dataDialog, "UIPanelButtonTemplate")
+        importBtn:SetSize(80, 22)
+        importBtn:SetPoint("RIGHT", closeBtn, "LEFT", -4, 0)
+        importBtn:SetText("Import")
+        importBtn:SetScript("OnClick", function()
+            local text = dataDialog.editBox:GetText()
+            local added, err = KwikTip:ImportLog(text)
+            if err then
+                print("|cff00ff00KwikTip|r import error: " .. err)
+            else
+                print(string.format("|cff00ff00KwikTip|r Imported %d new position entries.", added))
+                local str = KwikTip:ExportLog()
+                dataDialog.editBox:SetText(str or "")
+            end
+        end)
+
+        local selectBtn = CreateFrame("Button", nil, dataDialog, "UIPanelButtonTemplate")
+        selectBtn:SetSize(80, 22)
+        selectBtn:SetPoint("RIGHT", importBtn, "LEFT", -4, 0)
+        selectBtn:SetText("Select All")
+        selectBtn:SetScript("OnClick", function()
+            dataDialog.editBox:SetFocus()
+            dataDialog.editBox:HighlightText()
+        end)
+    end
+
+    local str, count = KwikTip:ExportLog()
+    dataDialog.editBox:SetText(str or "")
+    dataDialog:Show()
+    if str then
+        dataDialog.editBox:SetFocus()
+        dataDialog.editBox:HighlightText()
+        print(string.format("|cff00ff00KwikTip|r %d unique positions ready to export.", count))
+    else
+        print("|cff00ff00KwikTip|r No position data yet — enable Debug Logging and walk around a dungeon.")
+    end
+end
+
+-- ============================================================
 -- Set the text displayed inside the HUD box.
 -- Guards against redundant SetText calls when content hasn't changed.
 function KwikTip:SetContent(str)
