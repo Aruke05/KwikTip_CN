@@ -8,7 +8,7 @@
 
 A World of Warcraft: Midnight addon that displays contextual tips for dungeons and raids. As your group moves through an instance, KwikTip surfaces relevant boss and trash tips in a small, unobtrusive HUD — no interaction required mid-pull.
 
-> **Note:** KwikTip targets **WoW: Midnight** (Interface 120001). It will not work on live retail or older versions.
+> **Note:** KwikTip targets **WoW: Midnight** (Interface 120001) — the current live retail version.
 
 Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 
