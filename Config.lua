@@ -1,75 +1,5 @@
--- KwikTip: Config window and minimap button
+-- KwikTip: Config window
 local ADDON_NAME, KwikTip = ...
-
-local MINIMAP_RADIUS = 80
-
--- ============================================================
--- Minimap Button
--- ============================================================
-local minimapBtn = CreateFrame("Button", "KwikTipMinimapBtn", Minimap)
-minimapBtn:SetSize(31, 31)
-minimapBtn:SetFrameStrata("MEDIUM")
-minimapBtn:SetFrameLevel(8)
-minimapBtn:SetClampedToScreen(true)
-minimapBtn:RegisterForDrag("LeftButton")
-minimapBtn:Hide()
-KwikTip.MinimapBtn = minimapBtn
-
-local mmIcon = minimapBtn:CreateTexture(nil, "BACKGROUND")
-mmIcon:SetTexture("Interface\\AddOns\\KwikTip\\assets\\ktmini.tga")
-mmIcon:SetBlendMode("BLEND")
-mmIcon:SetSize(31, 31)
-mmIcon:SetPoint("CENTER")
-
-
-local mmHighlight = minimapBtn:CreateTexture(nil, "HIGHLIGHT")
-mmHighlight:SetColorTexture(1, 1, 1, 0.2)
-mmHighlight:SetAllPoints(minimapBtn)
-
-minimapBtn:SetScript("OnClick", function(self, btn)
-    if btn == "LeftButton" then
-        KwikTip:ToggleConfig()
-    end
-end)
-
-minimapBtn:SetScript("OnEnter", function(self)
-    GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-    GameTooltip:AddLine("KwikTip")
-    GameTooltip:AddLine("Click to open settings", 1, 1, 1)
-    GameTooltip:Show()
-end)
-
-minimapBtn:SetScript("OnLeave", function()
-    GameTooltip:Hide()
-end)
-
--- Drag around the minimap edge
-minimapBtn:SetScript("OnDragStart", function(self)
-    self:SetScript("OnUpdate", function()
-        local cx, cy   = Minimap:GetCenter()
-        local scale    = UIParent:GetEffectiveScale()
-        local px, py   = GetCursorPosition()
-        px, py         = px / scale, py / scale
-        KwikTipDB.minimapAngle = math.deg(math.atan2(py - cy, px - cx))
-        KwikTip:_PlaceMinimapBtn()
-    end)
-end)
-
-minimapBtn:SetScript("OnDragStop", function(self)
-    self:SetScript("OnUpdate", nil)
-end)
-
-local function _PlaceMinimapBtn()
-    local angle = KwikTipDB and KwikTipDB.minimapAngle or 225
-    local x = math.cos(math.rad(angle)) * MINIMAP_RADIUS
-    local y = math.sin(math.rad(angle)) * MINIMAP_RADIUS
-    minimapBtn:ClearAllPoints()
-    minimapBtn:SetPoint("CENTER", Minimap, "CENTER", x, y)
-end
-
-function KwikTip:_PlaceMinimapBtn()
-    _PlaceMinimapBtn()
-end
 
 -- ============================================================
 -- Config Window
@@ -159,24 +89,10 @@ dispHeader:SetPoint("TOPLEFT", moveBtn, "BOTTOMLEFT", 0, -14)
 dispHeader:SetText("DISPLAY")
 dispHeader:SetTextColor(0.6, 0.6, 0.6)
 
--- Checkbox: Show Minimap Button
-local showMinimapCB = CreateFrame("CheckButton", "KwikTipShowMinimapCB", cfg, "UICheckButtonTemplate")
-showMinimapCB:SetSize(24, 24)
-showMinimapCB:SetPoint("TOPLEFT", dispHeader, "BOTTOMLEFT", 0, -4)
-
-local showMinimapLbl = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-showMinimapLbl:SetPoint("LEFT", showMinimapCB, "RIGHT", 2, 0)
-showMinimapLbl:SetText("Show Minimap Button")
-
-showMinimapCB:SetScript("OnClick", function(self)
-    KwikTipDB.showMinimapButton = self:GetChecked()
-    KwikTip:UpdateMinimapButton()
-end)
-
 -- Checkbox: Hide Info Window
 local hideHUDCB = CreateFrame("CheckButton", "KwikTipHideHUDCB", cfg, "UICheckButtonTemplate")
 hideHUDCB:SetSize(24, 24)
-hideHUDCB:SetPoint("TOPLEFT", showMinimapCB, "BOTTOMLEFT", 0, -2)
+hideHUDCB:SetPoint("TOPLEFT", dispHeader, "BOTTOMLEFT", 0, -4)
 
 local hideHUDLbl = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 hideHUDLbl:SetPoint("LEFT", hideHUDCB, "RIGHT", 2, 0)
@@ -370,7 +286,6 @@ end
 -- Populate all controls from KwikTipDB before showing the config.
 local function PopulateConfig()
     local db = KwikTipDB
-    showMinimapCB:SetChecked(db.showMinimapButton)
     hideHUDCB:SetChecked(db.persistentHide)
     showInDungeonCB:SetChecked(db.showInDungeon)
     opacitySlider:SetValue(math.floor(db.alpha * 100 + 0.5))
@@ -393,20 +308,4 @@ function KwikTip:ToggleConfig()
     end
 end
 
--- Show or hide the minimap button based on KwikTipDB.showMinimapButton.
-function KwikTip:UpdateMinimapButton()
-    if KwikTipDB.showMinimapButton then
-        _PlaceMinimapBtn()
-        minimapBtn:Show()
-    else
-        minimapBtn:Hide()
-    end
-end
 
--- Called once on login to position and conditionally show the minimap button.
-function KwikTip:InitMinimapButton()
-    _PlaceMinimapBtn()
-    if KwikTipDB.showMinimapButton then
-        minimapBtn:Show()
-    end
-end

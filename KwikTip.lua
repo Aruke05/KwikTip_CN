@@ -3,18 +3,16 @@ local ADDON_NAME, KwikTip = ...
 
 -- Default settings (merged into KwikTipDB on first load)
 KwikTip.DEFAULTS = {
-    width             = 220,
-    height            = 80,
-    alpha             = 0.75,   -- background opacity (0 = invisible, 1 = solid)
-    x                 = 0,
-    y                 = -200,
-    showMinimapButton = true,
-    persistentHide    = false,
-    showInDungeon     = false,
-    minimapAngle      = 225,
-    debugLog          = false,
-    mapIDLog          = {},
-    mobLog            = {},
+    width          = 220,
+    height         = 80,
+    alpha          = 0.75,   -- background opacity (0 = invisible, 1 = solid)
+    x              = 0,
+    y              = -200,
+    persistentHide = false,
+    showInDungeon  = false,
+    debugLog       = false,
+    mapIDLog       = {},
+    mobLog         = {},
 }
 
 -- ============================================================
@@ -75,7 +73,6 @@ end
 
 function KwikTip:OnLogin()
     self:ApplySettings()
-    self:InitMinimapButton()
     self:UpdateVisibility()
     self:UpdateContent()
     print("|cff00ff00KwikTip|r loaded. Type /kwik for settings.")
