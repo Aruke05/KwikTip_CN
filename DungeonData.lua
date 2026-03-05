@@ -93,8 +93,8 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 2874,  -- BigWigs, unverified in-game
-        uiMapID    = 2501,
+        instanceID = 2874,  -- confirmed in-game
+        uiMapID    = 2501,  -- confirmed in-game
         name       = "Maisara Caverns",
         location   = "Zul'Aman",
         season     = "midnight",
@@ -141,8 +141,8 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 2859,  -- BigWigs, unverified in-game
-        uiMapID    = 2500,  -- unverified in-game
+        instanceID = 2859,  -- confirmed in-game
+        uiMapID    = 2500,  -- confirmed in-game
         name       = "The Blinding Vale",
         location   = "Harandar",
         season     = "midnight",
@@ -156,9 +156,9 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 2923,  -- BigWigs, unverified in-game
-        uiMapID    = 2572,
-        altMapIDs  = { 2574 },  -- 2574 = sub-zone
+        instanceID = 2923,  -- confirmed in-game
+        uiMapID    = 2572,  -- confirmed in-game
+        altMapIDs  = { 2574 },  -- 2574 = confirmed in-game sub-zone
         name       = "Voidscar Arena",
         location   = "Voidstorm",
         season     = "midnight",
