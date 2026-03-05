@@ -6,7 +6,6 @@ KwikTip.DEFAULTS = {
     width             = 220,
     height            = 80,
     alpha             = 0.75,   -- background opacity (0 = invisible, 1 = solid)
-    point             = "CENTER",
     x                 = 0,
     y                 = -200,
     showMinimapButton = true,
@@ -66,7 +65,7 @@ function KwikTip:OnLoad()
     -- Seed any missing keys with defaults
     for k, v in pairs(self.DEFAULTS) do
         if KwikTipDB[k] == nil then
-            KwikTipDB[k] = v
+            KwikTipDB[k] = type(v) == "table" and {} or v
         end
     end
     -- Apply saved settings now so position is restored on /reload.
@@ -92,9 +91,10 @@ function KwikTip:LogMapID()
     if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then return end
     local mapID = C_Map.GetBestMapForUnit("player")
     local instanceName, _, _, _, _, _, _, instanceID = GetInstanceInfo()
-    local pos = mapID and C_Map.GetPlayerMapPosition(mapID, "player")
+    local pos, workingMapID = mapID and KwikTip:GetPlayerPosition(mapID)
     table.insert(KwikTipDB.mapIDLog, {
         mapID        = mapID,
+        workingMapID = (workingMapID and workingMapID ~= mapID) and workingMapID or nil,
         instanceID   = instanceID,
         instanceName = instanceName,
         instanceType = instanceType,
@@ -126,11 +126,13 @@ function KwikTip:ExportLog()
 
     for _, entry in ipairs(KwikTipDB.mapIDLog) do
         if entry.x and entry.y then
-            local gKey = (entry.instanceID or 0) .. ":" .. (entry.mapID or 0)
+            -- Use workingMapID when available: x/y are in that map's coordinate space.
+            local posMapID = entry.workingMapID or entry.mapID or 0
+            local gKey = (entry.instanceID or 0) .. ":" .. posMapID
             if not groups[gKey] then
                 groups[gKey] = {
                     instanceID = entry.instanceID or 0,
-                    mapID      = entry.mapID or 0,
+                    mapID      = posMapID,
                     posSet     = {},
                     positions  = {},
                 }
@@ -231,15 +233,19 @@ SlashCmdList["KWIKTIP"] = function(msg)
         local dungeon = (instanceID and KwikTip.DUNGEON_BY_INSTANCEID[instanceID])
             or (mapID and KwikTip.DUNGEON_BY_UIMAPID[mapID])
         print("|cff00ff00KwikTip|r debug:")
-        print(string.format("  inInstance=%s  type=%s  boss=%s  trash=%s  area=%s",
+        print(string.format("  inInstance=%s  type=%s  boss=%s  trash=%s  area=%s  dungeon=%s",
             tostring(inInstance), tostring(instanceType),
-            tostring(KwikTip.bossActive), tostring(KwikTip.trashActive), tostring(KwikTip.areaActive)))
+            tostring(KwikTip.bossActive), tostring(KwikTip.trashActive),
+            tostring(KwikTip.areaActive), tostring(KwikTip.dungeonActive)))
         print(string.format("  instanceID=%s  mapID=%s  dungeon=%s",
             tostring(instanceID), tostring(mapID), dungeon and dungeon.name or "none"))
         print(string.format("  mapIDLog=%d  mobLog=%d",
             KwikTipDB.mapIDLog and #KwikTipDB.mapIDLog or 0,
             KwikTipDB.mobLog   and #KwikTipDB.mobLog   or 0))
-        local pos = mapID and C_Map.GetPlayerMapPosition(mapID, "player")
+        local pos, workingMapID = mapID and KwikTip:GetPlayerPosition(mapID)
+        if workingMapID and workingMapID ~= mapID then
+            print(string.format("  posMapID=%d (child of mapID %d)", workingMapID, mapID))
+        end
         if pos then
             local areaName = "none"
             if dungeon and dungeon.areas then

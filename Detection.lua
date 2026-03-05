@@ -2,6 +2,28 @@
 local ADDON_NAME, KwikTip = ...
 
 -- ============================================================
+-- Position helper
+-- ============================================================
+
+-- Try GetPlayerMapPosition on mapID first. If it returns nil (common for
+-- top-level zone maps), scan direct children via GetMapChildrenInfo and
+-- return the first child that yields a valid position.
+-- Returns: pos, workingMapID  (nil, nil if nothing works)
+function KwikTip:GetPlayerPosition(mapID)
+    if not mapID then return nil, nil end
+    local pos = C_Map.GetPlayerMapPosition(mapID, "player")
+    if pos then return pos, mapID end
+    local children = C_Map.GetMapChildrenInfo(mapID)
+    if children then
+        for _, child in ipairs(children) do
+            pos = C_Map.GetPlayerMapPosition(child.mapID, "player")
+            if pos then return pos, child.mapID end
+        end
+    end
+    return nil, nil
+end
+
+-- ============================================================
 -- Content formatting
 -- ============================================================
 
@@ -30,7 +52,7 @@ end
 
 -- Build the HUD string for a named area. Returns nil if the player isn't in any defined area.
 local function FormatAreaContent(dungeon, mapID)
-    local pos = C_Map.GetPlayerMapPosition(mapID, "player")
+    local pos = KwikTip:GetPlayerPosition(mapID)
     if not pos then return nil end
     for _, a in ipairs(dungeon.areas) do
         if pos.x >= a.x1 and pos.x <= a.x2 and pos.y >= a.y1 and pos.y <= a.y2 then
@@ -87,7 +109,7 @@ local function StartDebugTicker()
     debugTicker = C_Timer.NewTicker(2, function()
         local mapID = C_Map.GetBestMapForUnit("player")
         if not mapID then return end
-        local pos = C_Map.GetPlayerMapPosition(mapID, "player")
+        local pos, workingMapID = KwikTip:GetPlayerPosition(mapID)
         if not pos then return end
         local dx = pos.x - _lastLogX
         local dy = pos.y - _lastLogY
@@ -95,13 +117,15 @@ local function StartDebugTicker()
         _lastLogX, _lastLogY = pos.x, pos.y
         local instanceName, instanceType, _, _, _, _, _, instanceID = GetInstanceInfo()
         local dungeon = instanceID and KwikTip.DUNGEON_BY_INSTANCEID[instanceID]
-        print(string.format("|cff00ff00KwikTip|r pos=%.4f, %.4f  %s  mapID=%d  instanceID=%s",
+        local mapNote = (workingMapID ~= mapID) and ("  posMapID=" .. workingMapID) or ""
+        print(string.format("|cff00ff00KwikTip|r pos=%.4f, %.4f  %s  mapID=%d%s  instanceID=%s",
             pos.x, pos.y,
             dungeon and dungeon.name or (instanceName or "unknown"),
-            mapID,
+            mapID, mapNote,
             tostring(instanceID)))
         table.insert(KwikTipDB.mapIDLog, {
             mapID        = mapID,
+            workingMapID = (workingMapID ~= mapID) and workingMapID or nil,
             instanceID   = instanceID,
             instanceName = instanceName,
             instanceType = instanceType,
@@ -153,13 +177,14 @@ local function LogMobPosition(npcID, unitToken)
     if not KwikTipDB or not KwikTipDB.debugLog then return end
     local mapID = C_Map.GetBestMapForUnit("player")
     if not mapID then return end
-    local pos = C_Map.GetPlayerMapPosition(mapID, "player")
+    local pos, workingMapID = KwikTip:GetPlayerPosition(mapID)
     if not pos then return end
     local instanceName, _, _, _, _, _, _, instanceID = GetInstanceInfo()
     table.insert(KwikTipDB.mobLog, {
         npcID        = npcID,
         npcName      = UnitName(unitToken),
         mapID        = mapID,
+        workingMapID = (workingMapID ~= mapID) and workingMapID or nil,
         instanceID   = instanceID,
         instanceName = instanceName,
         x            = string.format("%.4f", pos.x),
@@ -246,6 +271,7 @@ function KwikTip:UpdateContent()
         StopDebugTicker()
         self.areaActive    = false
         self.dungeonActive = false
+        self.trashActive   = false
         self:SetContent("")
         return
     end
