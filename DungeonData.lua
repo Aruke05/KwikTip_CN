@@ -72,7 +72,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2813,  -- BigWigs, unverified in-game
-        uiMapID    = 2813,  -- TODO: unverified — matches BigWigs instanceID, likely wrong; verify in-game
+        uiMapID    = 0,     -- TODO: verify in-game with /run print(C_Map.GetBestMapForUnit("player"))
         name       = "Murder Row",
         location   = "Silvermoon City",
         season     = "midnight",
@@ -160,7 +160,7 @@ KwikTip.DUNGEONS = {
         bosses = {
             { encounterID = 3328, name = "Chief Corewright Kasreth", tip = "Never cross active Leyline Arrays — lethal. When targeted by Reflux Charge, use it to destroy a nearby array for bonus damage." },
             { encounterID = 3332, name = "Corewarden Nysarra",       tip = "Kill Null Vanguard adds before Lightscar Flare; then stand in the wound during 18s stun for 300% damage." },
-            { encounterID = 3333, name = "Lothraxion",               tip = "At 100 energy, find and interrupt the real Lothraxion among his images; wrong target = Core Exposure (group damage + 20% increased Holy damage taken for 1 min)." },
+            { encounterID = 3333, name = "Lothraxion",               tip = "At 100 energy, find and interrupt the real Lothraxion among his images — he's the only one without glowing horns; wrong target = Core Exposure (group damage + 20% increased Holy damage taken for 1 min)." },
         },
         trash = {
             { npcID = 241643, name = "Shadowguard Defender",  tip = "Null Sunder stacks per Defender active — control pull size; tank rotate or pop a cooldown on high-stack groups." },
@@ -217,8 +217,8 @@ KwikTip.DUNGEONS = {
     -- SEASON 1 MYTHIC+ — Legacy Dungeons
     -- --------------------------------------------------------
     {
-        instanceID = 0,     -- TODO: source from LittleWigs
-        uiMapID    = 2526,  -- unverified in-game
+        instanceID = 2526,  -- BigWigs Loader.lua
+        uiMapID    = 0,     -- TODO: verify in-game with /run print(C_Map.GetBestMapForUnit("player"))
         name       = "Algeth'ar Academy",
         location   = "Thaldraszus",
         season     = "legacy",
@@ -232,8 +232,8 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 0,    -- TODO: source from LittleWigs
-        uiMapID    = 658,  -- unverified in-game
+        instanceID = 658,  -- BigWigs Loader.lua
+        uiMapID    = 0,    -- TODO: verify in-game with /run print(C_Map.GetBestMapForUnit("player"))
         name       = "Pit of Saron",
         location   = "Icecrown",
         season     = "legacy",
@@ -246,8 +246,8 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 0,     -- TODO: source from LittleWigs
-        uiMapID    = 1753,  -- unverified in-game
+        instanceID = 1753,  -- BigWigs Loader.lua
+        uiMapID    = 0,     -- TODO: verify in-game with /run print(C_Map.GetBestMapForUnit("player"))
         name       = "Seat of the Triumvirate",
         location   = "Argus",
         season     = "legacy",
@@ -261,8 +261,8 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 0,     -- TODO: source from LittleWigs
-        uiMapID    = 1209,  -- unverified in-game
+        instanceID = 1209,  -- BigWigs Loader.lua
+        uiMapID    = 0,     -- TODO: verify in-game with /run print(C_Map.GetBestMapForUnit("player"))
         name       = "Skyreach",
         location   = "Spires of Arak",
         season     = "legacy",

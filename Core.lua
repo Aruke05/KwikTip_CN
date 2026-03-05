@@ -292,11 +292,11 @@ function KwikTip:UpdateContent()
     elseif self.trashActive then
         -- Known trash target is already displayed; nothing to update.
         return
-    elseif dungeon and KwikTipDB.showInDungeon and dungeon.bosses and dungeon.bosses[1] then
-        -- No area match and no trash — default to first boss tip when showInDungeon is on.
+    elseif dungeon and KwikTipDB.showInDungeon then
+        -- No area match and no trash — keep HUD open with a holding message.
         self.areaActive    = false
         self.dungeonActive = true
-        self:SetContent(FormatBossContent(dungeon, dungeon.bosses[1]))
+        self:SetContent(GRAY .. "Waiting for relevant encounter..." .. RESET)
     else
         self.areaActive    = false
         self.dungeonActive = false
