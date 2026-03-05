@@ -13,11 +13,21 @@ WoW addon inspired by **QE Dungeon Tips** (by QEdev — no longer maintained). K
 - **WoW: Midnight** retail — interface `120001`
 
 ## Data Sources
-**Wowhead is the primary source for all game data.** Always look there first. Only fall back to other sources (Icy Veins, Warcraftpedia, Method, etc.) if the specific data cannot be found on Wowhead.
 
-Reasons:
-- Wowhead's database is pulled directly from the game client and is consistently accurate and up-to-date
-- Boss names and encounter data on Wowhead can be trusted without secondary verification
+Two concerns are handled separately: **game data** (IDs, names) and **tip content** (strategy, priorities).
+
+### Game Data — IDs, ability names, mob names
+1. **Wowhead** — primary. Database is pulled directly from the game client; NPC IDs, encounter IDs, and ability names can be trusted without secondary verification.
+2. **warcraft.wiki.gg** — secondary. Most mechanically precise; exact ability numbers, durations, and damage values sourced from game data. Use to cross-check specific ability details when writing tips.
+
+### Tip Content — what to write in `tip` fields
+**M+ dungeons** (Magisters' Terrace, Windrunner Spire, Maisara Caverns, Nexus-Point Xenas + legacy four):
+1. **method.gg** — primary. M+-focused, practical, high-end perspective. Best source for positioning cues, pull priorities, and mechanic callouts.
+2. **Icy Veins** — secondary. Structured tank/healer/DPS notes; useful for completeness and cross-verification.
+
+**Non-M+ dungeons** (Murder Row, Den of Nalorakk, The Blinding Vale, Voidscar Arena):
+1. **Icy Veins** — primary. method.gg does not cover non-M+ dungeons.
+2. **Wowhead** — secondary.
 
 **uiMapID values must be verified in-game.** External sources are unreliable for `C_Map.GetBestMapForUnit("player")` values:
 - Wowhead zone IDs (`/zone=XXXXX`) are **not** the same as uiMapIDs — they use a different ID space

@@ -37,6 +37,9 @@ local ADDON_NAME, KwikTip = ...
 --                 matched against GetSubZoneText() as the player moves through the dungeon
 --     subzone   : exact string returned by GetSubZoneText() for this area (verify in-game)
 --     tip       : contextual tip shown in HUD when the player is in this sub-zone
+--     bossIndex : (optional) 1-based index into dungeon.bosses; if set, the boss tip is
+--                 shown instead of `tip` — use for boss room sub-zones so the tip appears
+--                 on entry rather than waiting for ENCOUNTER_START
 --
 -- Season 1 M+ rotation (8 dungeons total):
 --   New Midnight: Magisters' Terrace, Maisara Caverns, Nexus-Point Xenas, Windrunner Spire
@@ -173,7 +176,7 @@ KwikTip.DUNGEONS = {
             { subzone = "The Bazaar",            tip = "Central hub. Corespark Conduits grant an offensive buff — use with cooldowns, but manage the stacking DoT they apply." },
             { subzone = "Corespark Engineway",   tip = "Interrupt Circuit Seers before they activate Mana Batteries (group DoT channel). Sidestep Erratic Surge skillshots. Interrupt Nexus Adepts' Umbra Bolt." },
             { subzone = "Core Defense Nullward", tip = "Dodge Duskfright Herald's Dark Beckoning frontal — lethal. Interrupt Grand Nullifier. Tank: manage stacking Null Sunder from Shadowguard Defenders; control pull size." },
-            { subzone = "The Nexus Core",        tip = "Lothraxion's wing. Fractured Image adds use Mirrored Rend — avoid clustering near them. Save cooldowns for the boss." },
+            { subzone = "The Nexus Core",        bossIndex = 3 },  -- Lothraxion's boss room; confirmed in-game
         },
     },
     {
@@ -194,7 +197,7 @@ KwikTip.DUNGEONS = {
     {
         instanceID = 2923,  -- confirmed in-game
         uiMapID    = 2572,  -- confirmed in-game
-        altMapIDs  = { 2574 },  -- 2574 = confirmed in-game sub-zone
+        altMapIDs  = { 2573, 2574 },  -- 2573/2574 = confirmed in-game sub-zones
         name       = "Voidscar Arena",
         location   = "Voidstorm",
         season     = "midnight",
@@ -204,6 +207,9 @@ KwikTip.DUNGEONS = {
             { encounterID = 3285, name = "Taz'Rah",  tip = "Stay out of Dark Rift gravity pull; dodge shade Nether Dash lines." },
             { encounterID = 3286, name = "Atroxus",  tip = "Avoid Noxious Breath frontal; when Toxic Creepers fixate on a player, that player and nearby allies spread out to avoid the 8-yard toxic aura." },
             { encounterID = 3287, name = "Charonus", tip = "Lead Gravitic Orbs into Singularities to consume them; avoid the Unstable Singularity gravity well." },
+        },
+        areas = {
+            { subzone = "The Den", bossIndex = 1 },  -- Taz'Rah's arena; confirmed in-game
         },
     },
 

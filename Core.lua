@@ -36,12 +36,21 @@ end
 
 -- Build the HUD string for the current sub-zone area.
 -- Matches GetSubZoneText() against dungeon.areas[].subzone.
+-- If the area entry has a bossIndex field, the boss tip is shown instead
+-- of a generic area tip — used for boss room sub-zones so the tip appears
+-- as the group enters, before ENCOUNTER_START fires.
 -- Returns nil if the current sub-zone has no defined tip.
 local function FormatAreaContent(dungeon)
     local subzone = GetSubZoneText()
     if not subzone or subzone == "" then return nil end
     for _, a in ipairs(dungeon.areas) do
         if a.subzone == subzone then
+            if a.bossIndex then
+                local boss = dungeon.bosses[a.bossIndex]
+                if boss then
+                    return FormatBossContent(dungeon, boss)
+                end
+            end
             return GOLD .. dungeon.name .. RESET .. "\n"
                 .. WHITE .. subzone .. RESET .. "\n"
                 .. GRAY .. a.tip .. RESET
