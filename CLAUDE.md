@@ -34,10 +34,11 @@ The only reliable method is running this command while standing inside the dunge
 | File | Purpose |
 |---|---|
 | `KwikTip.toc` | Addon manifest — interface version, file load order, saved variables |
-| `KwikTip.lua` | Main entry point — event handling, lifecycle hooks (`OnLoad`, `OnLogin`), slash commands, `DEFAULTS` table |
-| `Frames.lua` | HUD frame — backdrop, drag support, `UpdateVisibility`, `ToggleMoveMode`, `SetContent` |
+| `Init.lua` | Main entry point — event handling for initial addon load (`OnLoad`, `OnLogin`) and lazy evaluation initialization triggers |
 | `DungeonData.lua` | Static data — dungeon names, boss lists, tips keyed by `uiMapID` |
-| `Config.lua` | Config window + minimap button — sliders, checkboxes, `ToggleConfig`, `InitMinimapButton` |
+| `Core.lua` | Engine handlers — tracking active environment, event polling, and general utilities |
+| `Frames.lua` | HUD frame — backdrop, drag support, wrapped in lazy `InitHUD()` |
+| `UI_Config.lua` | Config window + minimap button — loaded lazily via `CreateConfigWindow()` only when requested |
 
 ## Key Conventions
 - **Namespace**: every file opens with `local ADDON_NAME, KwikTip = ...`
@@ -71,9 +72,10 @@ See `DungeonData.lua` for the full data table.
 **Legacy M+ dungeons (uiMapIDs deferred):** Algeth'ar Academy, Pit of Saron, Seat of the Triumvirate, Skyreach
 
 ## Performance Optimizations
+- **Lazy Initialization:** `UI_Config.lua` and HUD visual resources are deferred until explicitly triggered (via gameplay events or slash cmds). This eliminates UI frame allocation during the initial character loading sequence.
 - **Array Limits:** Uses standard array slicing (`KwikTip:PruneArray()`) instead of CPU-blocking `table.remove(..., 1)` logic to enforce size caps on logging vectors.
 - **Event Deduplication:** State checks guard `ZONE_CHANGED` events from unconditionally creating duplicate GC payload logs on the same subzone mappings.
-- **Dynamic Event Registration:** High-frequency targeting events (`PLAYER_TARGET_CHANGED`, `UPDATE_MOUSEOVER_UNIT`) are now dynamically registered only when the player is actively inside a supported instance (`party/raid/scenario`). This prevents unnecessary CPU cycles and polling during open-world gameplay. Initialization events (`ADDON_LOADED`, `PLAYER_LOGIN`) are also cleanly unregistered after bootstrapping.
+- **Dynamic Event Registration:** High-frequency targeting events (`PLAYER_TARGET_CHANGED`, `UPDATE_MOUSEOVER_UNIT`) are optimized or unregistered when the player is not actively inside a supported instance (`party/raid/scenario`). This prevents unnecessary CPU cycles and polling during open-world gameplay.
 
 ## Slash Commands
 | Command | Action |

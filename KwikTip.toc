@@ -2,13 +2,13 @@
 ## Title: KwikTip
 ## Notes: A custom UI/HUD element addon
 ## Author:
-## Version: 0.1-Preview
+## Version: 1.0
 ## DefaultState: enabled
 
 ## SavedVariables: KwikTipDB
 
-KwikTip.lua
-Frames.lua
+Init.lua
 DungeonData.lua
-Detection.lua
-Config.lua
+Core.lua
+Frames.lua
+UI_Config.lua
