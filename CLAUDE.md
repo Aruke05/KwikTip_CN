@@ -70,6 +70,11 @@ See `DungeonData.lua` for the full data table.
 
 **Legacy M+ dungeons (uiMapIDs deferred):** Algeth'ar Academy, Pit of Saron, Seat of the Triumvirate, Skyreach
 
+## Performance Optimizations
+- **Array Limits:** Uses standard array slicing (`KwikTip:PruneArray()`) instead of CPU-blocking `table.remove(..., 1)` logic to enforce size caps on logging vectors.
+- **Event Deduplication:** State checks guard `ZONE_CHANGED` events from unconditionally creating duplicate GC payload logs on the same subzone mappings.
+- **Dynamic Event Registration:** High-frequency targeting events (`PLAYER_TARGET_CHANGED`, `UPDATE_MOUSEOVER_UNIT`) are now dynamically registered only when the player is actively inside a supported instance (`party/raid/scenario`). This prevents unnecessary CPU cycles and polling during open-world gameplay. Initialization events (`ADDON_LOADED`, `PLAYER_LOGIN`) are also cleanly unregistered after bootstrapping.
+
 ## Slash Commands
 | Command | Action |
 |---|---|

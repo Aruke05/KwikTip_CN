@@ -25,20 +25,38 @@ frame:RegisterEvent("PLAYER_LOGIN")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 frame:RegisterEvent("ZONE_CHANGED")
-frame:RegisterEvent("ENCOUNTER_START")
-frame:RegisterEvent("ENCOUNTER_END")
-frame:RegisterEvent("PLAYER_TARGET_CHANGED")
-frame:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
+
+function KwikTip:RegisterInstanceEvents()
+    frame:RegisterEvent("ENCOUNTER_START")
+    frame:RegisterEvent("ENCOUNTER_END")
+    frame:RegisterEvent("PLAYER_TARGET_CHANGED")
+    frame:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
+end
+
+function KwikTip:UnregisterInstanceEvents()
+    frame:UnregisterEvent("ENCOUNTER_START")
+    frame:UnregisterEvent("ENCOUNTER_END")
+    frame:UnregisterEvent("PLAYER_TARGET_CHANGED")
+    frame:UnregisterEvent("UPDATE_MOUSEOVER_UNIT")
+end
 
 frame:SetScript("OnEvent", function(self, event, ...)
     if event == "ADDON_LOADED" then
         local name = ...
         if name == ADDON_NAME then
+            self:UnregisterEvent("ADDON_LOADED")
             KwikTip:OnLoad()
         end
     elseif event == "PLAYER_LOGIN" then
+        self:UnregisterEvent("PLAYER_LOGIN")
         KwikTip:OnLogin()
     elseif event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" or event == "ZONE_CHANGED" then
+        local inInstance, instanceType = IsInInstance()
+        if inInstance and (instanceType == "party" or instanceType == "raid" or instanceType == "scenario") then
+            KwikTip:RegisterInstanceEvents()
+        else
+            KwikTip:UnregisterInstanceEvents()
+        end
         KwikTip:UpdateVisibility()
         KwikTip:UpdateContent()
         KwikTip:LogMapID()
@@ -86,20 +104,49 @@ function KwikTip:LogMapID()
     if not KwikTipDB or not KwikTipDB.debugLog then return end
     local inInstance, instanceType = IsInInstance()
     if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then return end
+    
     local mapID = C_Map.GetBestMapForUnit("player")
     local instanceName, _, _, _, _, _, _, instanceID = GetInstanceInfo()
+    local subzone = GetSubZoneText()
+    
+    -- Deduplication to prevent redundant GC thrashing on ZONE_CHANGED
+    if self._lastMapID == mapID and self._lastInstanceID == instanceID and self._lastSubzone == subzone then
+        return
+    end
+    self._lastMapID = mapID
+    self._lastInstanceID = instanceID
+    self._lastSubzone = subzone
+
     table.insert(KwikTipDB.mapIDLog, {
         mapID        = mapID,
         instanceID   = instanceID,
         instanceName = instanceName,
         instanceType = instanceType,
-        subzone      = GetSubZoneText(),
+        subzone      = subzone,
         time         = date("%Y-%m-%d %H:%M:%S"),
     })
+    
     -- Cap log size to avoid SavedVariables bloat
     if #KwikTipDB.mapIDLog > 2000 then
-        table.remove(KwikTipDB.mapIDLog, 1)
+        KwikTipDB.mapIDLog = self:PruneArray(KwikTipDB.mapIDLog, 2000)
     end
+end
+
+-- ============================================================
+-- Utility: PruneArray
+-- O(N) array slicing to avoid catastrophic O(N^2) from table.remove(arr, 1) in loops
+-- ============================================================
+function KwikTip:PruneArray(arr, maxLen)
+    local len = #arr
+    local over = len - maxLen
+    if over > 0 then
+        local newArr = {}
+        for i = over + 1, len do
+            newArr[i - over] = arr[i]
+        end
+        return newArr
+    end
+    return arr
 end
 
 -- ============================================================
@@ -202,9 +249,9 @@ function KwikTip:ImportLog(str)
         end
     end
 
-    -- Honour the existing cap
-    while #KwikTipDB.mapIDLog > 2000 do
-        table.remove(KwikTipDB.mapIDLog, 1)
+    -- Honour the existing cap using efficient slice
+    if #KwikTipDB.mapIDLog > 2000 then
+        KwikTipDB.mapIDLog = self:PruneArray(KwikTipDB.mapIDLog, 2000)
     end
 
     return added, nil

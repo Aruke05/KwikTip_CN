@@ -61,6 +61,11 @@ KwikTip.DUNGEONS = {
             { encounterID = 3058, name = "Commander Kroluk",   tip = "Burn adds at 66%/33%; boss immune (Shield Wall) until warparty dies; stay grouped — Intimidating Shout fears isolated players." },
             { encounterID = 3059, name = "The Restless Heart", tip = "Dodge Arrow Rain; sidestep targeted Bolt Gale; at 100 energy, boss fires wind arrow spawning expanding Billowing Wind rings — stay out; never touch Turbulent Arrows (knockup + removes Squall Leap)." },
         },
+        trash = {
+            { npcID = 232070, name = "Restless Steward",   tip = "Interrupt Spirit Bolt; use stops on Soul Torment to cancel the channel." },
+            { npcID = 232113, name = "Spellguard Magus",   tip = "Defensives for Arcane Salvo; knock mobs out of Spellguard's Protection sphere — it makes them immune to damage." },
+            { npcID = 232067, name = "Creeping Spindleweb", tip = "Poison Spray — use a personal defensive." },
+        },
     },
     {
         instanceID = 2813,  -- BigWigs, unverified in-game
@@ -105,6 +110,21 @@ KwikTip.DUNGEONS = {
             { encounterID = 3213, name = "Vordaza",                  tip = "Burst the Deathshroud shield during Necrotic Convergence with damage CDs; kite Unstable Phantoms into each other to detonate them — killing them directly applies Lingering Dread to the group; dodge Unmake line." },
             { encounterID = 3214, name = "Rak'tul, Vessel of Souls", tip = "In spirit realm: interrupt Malignant Souls for Spectral Residue (+25% dmg/heal/speed); avoid Restless Masses roots. Destroy Crush Souls totems before returning." },
         },
+        trash = {
+            { npcID = 242964, name = "Keen Headhunter",   tip = "Interrupt Hooked Snare. If it lands, use a freedom effect to clear the root and bleed." },
+            { npcID = 248686, name = "Dread Souleater",   tip = "Avoid Rain of Toads pools. Defensives for Necrotic Wave — it leaves a healing absorb on hit players." },
+            { npcID = 248685, name = "Ritual Hexxer",     tip = "Interrupt Hex first. Use spare kicks on Shadow Bolt." },
+            { npcID = 248678, name = "Hulking Juggernaut", tip = "Defensive before Deafening Roar lands — it spell-locks anyone mid-cast. Tank watch Rending Gore bleed stacks." },
+            { npcID = 249020, name = "Hexbound Eagle",    tip = "Sidestep Shredding Talons — step to the side of the eagle as it winds up." },
+            { npcID = 249022, name = "Bramblemaw Bear",   tip = "Crunch Armor stacks per bear — avoid pulling multiple bears simultaneously; rotate defensive cooldowns." },
+            { npcID = 248692, name = "Reanimated Warrior", tip = "CC or stop Reanimation at 0 HP or it revives. Any crowd-control effect works." },
+            { npcID = 248690, name = "Grim Skirmisher",   tip = "Grim Ward shield: don't purge multiple at once — each break hits the whole group. Stagger dispels." },
+            { npcID = 249030, name = "Restless Gnarldin",  tip = "Out-range Ancestral Crush. Spectral Strike autos deal shadow — healer watch sustained damage." },
+            { npcID = 249036, name = "Tormented Shade",   tip = "Interrupt Spirit Rend. Dispel the magic DoT if the kick was missed." },
+            { npcID = 253683, name = "Rokh'zal",          tip = "Ritual Sacrifice chains an ally to an altar — break the shackles to free them; freedom effects also work." },
+            { npcID = 249025, name = "Bound Defender",    tip = "Attack from behind to bypass Vigilant Defense frontal immunity. Dodge Soulstorm tornadoes." },
+            { npcID = 249024, name = "Hollow Soulrender",  tip = "Interrupt Shadowfrost Blast. Step away from allies before Frost Nova hits — it chains to nearby players." },
+        },
     },
 
     -- --------------------------------------------------------
@@ -138,6 +158,16 @@ KwikTip.DUNGEONS = {
             { encounterID = 3328, name = "Chief Corewright Kasreth", tip = "Never cross active Leyline Arrays — lethal. When targeted by Reflux Charge, use it to destroy a nearby array for bonus damage." },
             { encounterID = 3332, name = "Corewarden Nysarra",       tip = "Kill Null Vanguard adds before Lightscar Flare; then stand in the wound during 18s stun for 300% damage." },
             { encounterID = 3333, name = "Lothraxion",               tip = "At 100 energy, find and interrupt the real Lothraxion among his images; wrong target = Core Exposure (group damage + 20% increased Holy damage taken for 1 min)." },
+        },
+        trash = {
+            { npcID = 241643, name = "Shadowguard Defender",  tip = "Null Sunder stacks per Defender active — control pull size; tank rotate or pop a cooldown on high-stack groups." },
+            { npcID = 241647, name = "Flux Engineer",          tip = "Interrupt Erratic Surge before it fires — random-target bolts that chain to nearby allies." },
+            { npcID = 248708, name = "Nexus Adept",            tip = "Interrupt Umbra Bolt — high-damage shadow nuke; use a stun or stop if interrupt is on cooldown." },
+            { npcID = 248373, name = "Circuit Seer",           tip = "Top interrupt priority — Mana Battery channel deals a sustained group DoT for its full duration." },
+            { npcID = 248706, name = "Cursed Voidcaller",      tip = "Interrupt the summon channel or kill quickly — Void Gate calls additional adds if it completes." },
+            { npcID = 251853, name = "Grand Nullifier",        tip = "Interrupt Null Pulse to prevent party-wide silence; its Nullification aura passively reduces healing output." },
+            { npcID = 241660, name = "Duskfright Herald",      tip = "Dark Beckoning frontal is lethal — step out of the cone the instant the cast begins." },
+            { npcID = 251024, name = "Dreadflail",             tip = "Corewarden Nysarra add — kill before burning the boss; Lightscar wound opens the 18s vulnerability window after." },
         },
         areas = {
             { subzone = "The Bazaar",            tip = "Central hub. Corespark Conduits grant an offensive buff — use with cooldowns, but manage the stacking DoT they apply." },

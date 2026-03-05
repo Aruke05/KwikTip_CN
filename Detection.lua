@@ -88,7 +88,7 @@ local function StartDebugTicker()
             time         = date("%Y-%m-%d %H:%M:%S"),
         })
         if #KwikTipDB.mapIDLog > 2000 then
-            table.remove(KwikTipDB.mapIDLog, 1)
+            KwikTipDB.mapIDLog = KwikTip:PruneArray(KwikTipDB.mapIDLog, 2000)
         end
     end)
 end
@@ -139,7 +139,7 @@ local function LogMobPosition(npcID, unitToken)
         time         = date("%Y-%m-%d %H:%M:%S"),
     })
     if #KwikTipDB.mobLog > 5000 then
-        table.remove(KwikTipDB.mobLog, 1)
+        KwikTipDB.mobLog = KwikTip:PruneArray(KwikTipDB.mobLog, 5000)
     end
     _lastLoggedNpcID = npcID
 end
