@@ -107,14 +107,14 @@ function KwikTip:CreateConfigWindow()
         KwikTip:UpdateVisibility()
     end)
 
-    -- Checkbox: Show During Dungeon
+    -- Checkbox: Keep Open Through Instance
     local showInDungeonCB = CreateFrame("CheckButton", "KwikTipShowInDungeonCB", cfg, "UICheckButtonTemplate")
     showInDungeonCB:SetSize(24, 24)
     showInDungeonCB:SetPoint("TOPLEFT", hideHUDCB, "BOTTOMLEFT", 0, -2)
 
     local showInDungeonLbl = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     showInDungeonLbl:SetPoint("LEFT", showInDungeonCB, "RIGHT", 2, 0)
-    showInDungeonLbl:SetText("Show During Dungeon")
+    showInDungeonLbl:SetText("Keep Open Through Instance")
 
     showInDungeonCB:SetScript("OnClick", function(self)
         KwikTipDB.showInDungeon = self:GetChecked()

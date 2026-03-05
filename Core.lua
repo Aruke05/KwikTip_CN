@@ -9,7 +9,7 @@ frame:RegisterEvent("ENCOUNTER_START")
 frame:RegisterEvent("ENCOUNTER_END")
 -- PLAYER_TARGET_CHANGED and UPDATE_MOUSEOVER_UNIT are registered dynamically
 -- inside UpdateContent() only while the player is inside a supported instance.
-frame:SetScript("OnEvent", function(self, event, ...)     if event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" or event == "ZONE_CHANGED" then         KwikTip:UpdateContent()         KwikTip:UpdateVisibility()         KwikTip:LogMapID()     elseif event == "ENCOUNTER_START" then         local encounterID = ...         KwikTip:OnEncounterStart(encounterID)     elseif event == "ENCOUNTER_END" then         KwikTip:OnEncounterEnd()     elseif event == "PLAYER_TARGET_CHANGED" then         KwikTip:OnTargetChanged()     elseif event == "UPDATE_MOUSEOVER_UNIT" then         KwikTip:OnMouseoverUnit()     end end)
+frame:SetScript("OnEvent", function(self, event, ...)     if event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" or event == "ZONE_CHANGED" then         KwikTip:UpdateContent()         KwikTip:UpdateVisibility()         KwikTip:LogMapID()     elseif event == "ENCOUNTER_START" then         local encounterID = ...         KwikTip:OnEncounterStart(encounterID)     elseif event == "ENCOUNTER_END" then         local _, _, _, _, success = ...         KwikTip:OnEncounterEnd(success)     elseif event == "PLAYER_TARGET_CHANGED" then         KwikTip:OnTargetChanged()     elseif event == "UPDATE_MOUSEOVER_UNIT" then         KwikTip:OnMouseoverUnit()     end end)
 
 local GOLD  = "|cffffcc00"
 local WHITE = "|cffffffff"
@@ -125,12 +125,21 @@ function KwikTip:OnEncounterStart(encounterID)
     self:UpdateVisibility()
 end
 
--- Called by ENCOUNTER_END. Restores normal area/trash detection.
-function KwikTip:OnEncounterEnd()
+-- Called by ENCOUNTER_END. On a kill, leaves the boss tip visible until the
+-- next natural tip trigger (area change, trash target, or new encounter).
+-- On a wipe/reset, restores normal area/trash detection immediately.
+function KwikTip:OnEncounterEnd(success)
     self.bossActive = false
-    self:SetContent("")
-    self:UpdateContent()
-    self:UpdateVisibility()
+    if success == 1 then
+        -- Boss killed — leave current tip up; resume debug ticker if needed.
+        StartDebugTicker()
+        self:UpdateVisibility()
+    else
+        -- Wipe or reset — clear and return to normal detection.
+        self:SetContent("")
+        self:UpdateContent()
+        self:UpdateVisibility()
+    end
 end
 
 -- ============================================================
@@ -166,6 +175,7 @@ end
 -- Called by PLAYER_TARGET_CHANGED. Logs the mob and shows a tip if known.
 function KwikTip:OnTargetChanged()
     if self.bossActive then return end
+    if self.areaActive then return end  -- area tip takes priority over trash
 
     local inInstance, instanceType = IsInInstance()
     if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then
@@ -267,20 +277,23 @@ function KwikTip:UpdateContent()
         StopDebugTicker()
     end
 
-    -- Trash target takes priority over area/dungeon content.
-    if self.trashActive then return end
-
     local prevAreaActive    = self.areaActive
     local prevDungeonActive = self.dungeonActive
 
+    -- DungeonData area tips take priority. Trash target info is a secondary
+    -- fallback used only when no area tip is defined for the current sub-zone.
     local areaContent = dungeon and dungeon.areas and FormatAreaContent(dungeon)
 
     if areaContent then
+        self.trashActive   = false
         self.areaActive    = true
         self.dungeonActive = false
         self:SetContent(areaContent)
+    elseif self.trashActive then
+        -- Known trash target is already displayed; nothing to update.
+        return
     elseif dungeon and KwikTipDB.showInDungeon and dungeon.bosses and dungeon.bosses[1] then
-        -- No area match — default to first boss tip when showInDungeon is on.
+        -- No area match and no trash — default to first boss tip when showInDungeon is on.
         self.areaActive    = false
         self.dungeonActive = true
         self:SetContent(FormatBossContent(dungeon, dungeon.bosses[1]))
