@@ -8,6 +8,17 @@ local hud
 local contentText
 local cornerHandles = {}
 
+-- ============================================================
+-- Drag and resize support
+-- ============================================================
+
+local function SaveHUDLayout()
+    KwikTipDB.width  = math.floor(hud:GetWidth()  + 0.5)
+    KwikTipDB.height = math.floor(hud:GetHeight() + 0.5)
+    KwikTipDB.x      = math.floor(hud:GetLeft()   + hud:GetWidth()  / 2 - UIParent:GetWidth()  / 2 + 0.5)
+    KwikTipDB.y      = math.floor(hud:GetBottom()  + hud:GetHeight() / 2 - UIParent:GetHeight() / 2 + 0.5)
+end
+
 function KwikTip:InitHUD()
     if self.HUD then return end
 
@@ -40,17 +51,6 @@ function KwikTip:InitHUD()
     contentText:SetWordWrap(true)
     contentText:SetText("")
     KwikTip.HUDText = contentText
-
--- ============================================================
--- Drag and resize support
--- ============================================================
-
-local function SaveHUDLayout()
-    KwikTipDB.width  = math.floor(hud:GetWidth()  + 0.5)
-    KwikTipDB.height = math.floor(hud:GetHeight() + 0.5)
-    KwikTipDB.x      = math.floor(hud:GetLeft()   + hud:GetWidth()  / 2 - UIParent:GetWidth()  / 2 + 0.5)
-    KwikTipDB.y      = math.floor(hud:GetBottom()  + hud:GetHeight() / 2 - UIParent:GetHeight() / 2 + 0.5)
-end
 
     hud:SetScript("OnMouseDown", function(self, button)
         if button == "LeftButton" then
@@ -154,99 +154,6 @@ function KwikTip:ToggleMoveMode()
     -- Sync the button label in the config window if it is open
     if self._UpdateConfigMoveBtn then
         self:_UpdateConfigMoveBtn()
-    end
-end
-
--- ============================================================
--- Export / Import dialog
--- ============================================================
-
-local dataDialog
-
-function KwikTip:ShowDataDialog()
-    if not dataDialog then
-        dataDialog = CreateFrame("Frame", "KwikTipDataDialog", UIParent, "BackdropTemplate")
-        dataDialog:SetSize(500, 320)
-        dataDialog:SetPoint("CENTER")
-        dataDialog:SetMovable(true)
-        dataDialog:EnableMouse(true)
-        dataDialog:RegisterForDrag("LeftButton")
-        dataDialog:SetScript("OnDragStart", dataDialog.StartMoving)
-        dataDialog:SetScript("OnDragStop",  dataDialog.StopMovingOrSizing)
-        dataDialog:SetFrameStrata("DIALOG")
-        dataDialog:SetBackdrop({
-            bgFile   = "Interface\\Tooltips\\UI-Tooltip-Background",
-            edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-            tile = true, tileSize = 16, edgeSize = 16,
-            insets = { left = 4, right = 4, top = 4, bottom = 4 },
-        })
-        dataDialog:SetBackdropColor(0, 0, 0, 0.9)
-
-        local title = dataDialog:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-        title:SetPoint("TOP", 0, -12)
-        title:SetText("KwikTip — Position Data")
-
-        local sub = dataDialog:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        sub:SetPoint("TOP", 0, -34)
-        sub:SetText("Copy the string below to share, or paste a string and click Import.")
-        sub:SetTextColor(0.8, 0.8, 0.8)
-
-        -- Scroll frame + EditBox
-        local scroll = CreateFrame("ScrollFrame", "KwikTipDataScroll", dataDialog, "UIPanelScrollFrameTemplate")
-        scroll:SetPoint("TOPLEFT",     dataDialog, "TOPLEFT",     10, -56)
-        scroll:SetPoint("BOTTOMRIGHT", dataDialog, "BOTTOMRIGHT", -28, 40)
-
-        local eb = CreateFrame("EditBox", "KwikTipDataEditBox", scroll)
-        eb:SetMultiLine(true)
-        eb:SetAutoFocus(false)
-        eb:SetFontObject(ChatFontNormal)
-        eb:SetWidth(450)
-        eb:SetScript("OnEscapePressed", function() dataDialog:Hide() end)
-        scroll:SetScrollChild(eb)
-        dataDialog.editBox = eb
-
-        -- Buttons
-        local closeBtn = CreateFrame("Button", nil, dataDialog, "UIPanelButtonTemplate")
-        closeBtn:SetSize(80, 22)
-        closeBtn:SetPoint("BOTTOMRIGHT", -8, 8)
-        closeBtn:SetText("Close")
-        closeBtn:SetScript("OnClick", function() dataDialog:Hide() end)
-
-        local importBtn = CreateFrame("Button", nil, dataDialog, "UIPanelButtonTemplate")
-        importBtn:SetSize(80, 22)
-        importBtn:SetPoint("RIGHT", closeBtn, "LEFT", -4, 0)
-        importBtn:SetText("Import")
-        importBtn:SetScript("OnClick", function()
-            local text = dataDialog.editBox:GetText()
-            local added, err = KwikTip:ImportLog(text)
-            if err then
-                print("|cff00ff00KwikTip|r import error: " .. err)
-            else
-                print(string.format("|cff00ff00KwikTip|r Imported %d new position entries.", added))
-                local str = KwikTip:ExportLog()
-                dataDialog.editBox:SetText(str or "")
-            end
-        end)
-
-        local selectBtn = CreateFrame("Button", nil, dataDialog, "UIPanelButtonTemplate")
-        selectBtn:SetSize(80, 22)
-        selectBtn:SetPoint("RIGHT", importBtn, "LEFT", -4, 0)
-        selectBtn:SetText("Select All")
-        selectBtn:SetScript("OnClick", function()
-            dataDialog.editBox:SetFocus()
-            dataDialog.editBox:HighlightText()
-        end)
-    end
-
-    local str, count = KwikTip:ExportLog()
-    dataDialog.editBox:SetText(str or "")
-    dataDialog:Show()
-    if str then
-        dataDialog.editBox:SetFocus()
-        dataDialog.editBox:HighlightText()
-        print(string.format("|cff00ff00KwikTip|r %d unique positions ready to export.", count))
-    else
-        print("|cff00ff00KwikTip|r No position data yet — enable Debug Logging and walk around a dungeon.")
     end
 end
 

@@ -242,20 +242,6 @@ function KwikTip:CreateConfigWindow()
         KwikTip:UpdateContent()
     end)
 
-    -- ---- DATA section -------------------------------------------
-    local dataHeader = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    dataHeader:SetPoint("TOPLEFT", debugLogCB, "BOTTOMLEFT", 0, -14)
-    dataHeader:SetText("DATA")
-    dataHeader:SetTextColor(0.6, 0.6, 0.6)
-
-    local exportBtn = CreateFrame("Button", nil, cfg, "UIPanelButtonTemplate")
-    exportBtn:SetSize(180, 22)
-    exportBtn:SetPoint("TOPLEFT", dataHeader, "BOTTOMLEFT", 0, -6)
-    exportBtn:SetText("Export / Import Data")
-    exportBtn:SetScript("OnClick", function()
-        KwikTip:ShowDataDialog()
-    end)
-
     local cfgLogo = cfg:CreateTexture(nil, "ARTWORK")
     cfgLogo:SetTexture("Interface\\AddOns\\KwikTip\\assets\\ktlogo.tga")
     cfgLogo:SetBlendMode("BLEND")

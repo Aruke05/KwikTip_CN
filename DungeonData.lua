@@ -51,8 +51,9 @@ KwikTip.DUNGEONS = {
     -- NEW MIDNIGHT DUNGEONS — Level-Up (81–88)
     -- --------------------------------------------------------
     {
-        instanceID = 2805,  -- BigWigs, unverified in-game
-        uiMapID    = 2492,
+        instanceID = 2805,  -- confirmed in-game
+        uiMapID    = 2492,  -- confirmed in-game
+        altMapIDs  = { 2537, 2493, 2494, 2496, 2497, 2498, 2499 },  -- all confirmed in-game
         name       = "Windrunner Spire",
         location   = "Eversong Woods",
         season     = "midnight",
@@ -69,10 +70,18 @@ KwikTip.DUNGEONS = {
             { npcID = 232113, name = "Spellguard Magus",   tip = "Defensives for Arcane Salvo; knock mobs out of Spellguard's Protection sphere — it makes them immune to damage." },
             { npcID = 232067, name = "Creeping Spindleweb", tip = "Poison Spray — use a personal defensive." },
         },
+        areas = {
+            { subzone = "The Promenade",       tip = "Knock mobs out of Spellguard's Protection sphere — it makes them immune. Interrupt Spirit Bolt on Restless Stewards; use stops on Soul Torment." },
+            { subzone = "Vereesa's Repose",    tip = "Two wing bosses (Emberdawn and Derelict Duo) — Soul Conduit returns you to The Promenade to access the other wing after killing one. Clear both before heading up." },
+            { subzone = "Sylvanas's Quarters", tip = "Interrupt Phantasmal Mystic's Chain Lightning; kill or soothe before 50% (enrages nearby mobs). Stop Lingering Marauder's Gore Whirl. Dodge Swiftshot Archer Arrow Rain." },
+            { subzone = "Windrunner Vault",    bossIndex = 3 },  -- Commander Kroluk's arena; confirmed in-game
+            { subzone = "The Pinnacle",        bossIndex = 4 },  -- The Restless Heart; confirmed in-game
+        },
     },
     {
-        instanceID = 2813,  -- BigWigs, unverified in-game
-        uiMapID    = 0,     -- TODO: verify in-game with /run print(C_Map.GetBestMapForUnit("player"))
+        instanceID = 2813,  -- confirmed in-game
+        uiMapID    = 2433,  -- confirmed in-game
+        altMapIDs  = { 2435, 2434 },  -- confirmed in-game
         name       = "Murder Row",
         location   = "Silvermoon City",
         season     = "midnight",
@@ -83,6 +92,12 @@ KwikTip.DUNGEONS = {
             { encounterID = 3102, name = "Zaen Bladesorrow",        tip = "Stand behind Forbidden Freight during Murder in a Row; move Fire Bomb away from freight (it destroys cover); Heartstop Poison halves tank max health — prioritize tank healing." },
             { encounterID = 3103, name = "Xathuux the Annihilator", tip = "Dodge Axe Toss impact zones and the Fel Light left behind; stay mobile to avoid Burning Steps." },
             { encounterID = 3105, name = "Lithiel Cinderfury",      tip = "Kill Wild Imps before Malefic Wave reaches them (they gain haste if hit); use Gateways to avoid the wave; interrupt Chaos Bolt." },
+        },
+        areas = {
+            { subzone = "Silvermoon Pet Shop", bossIndex = 1 },  -- Kystia Manaheart; confirmed in-game
+            { subzone = "The Illicit Rain",    bossIndex = 2 },  -- Zaen Bladesorrow; confirmed in-game
+            { subzone = "Augurs' Terrace",     bossIndex = 3 },  -- Xathuux the Annihilator; confirmed in-game
+            { subzone = "Lithiel's Landing",   bossIndex = 4 },  -- Lithiel Cinderfury; confirmed in-game
         },
     },
     {
@@ -133,15 +148,20 @@ KwikTip.DUNGEONS = {
             { npcID = 249025, name = "Bound Defender",    tip = "Attack from behind to bypass Vigilant Defense frontal immunity. Dodge Soulstorm tornadoes." },
             { npcID = 249024, name = "Hollow Soulrender",  tip = "Interrupt Shadowfrost Blast. Step away from allies before Frost Nova hits — it chains to nearby players." },
         },
+        areas = {
+            { subzone = "Wailing Depths",    tip = "Interrupt Ritual Hexxers (Hex) and Keen Headhunters (Hooked Snare) first. Never pull multiple Bramblemaw Bears — Crunch Armor stacks per bear. Stop Reanimated Warriors at 0 HP or they revive." },
+            { subzone = "Dais of Suffering", bossIndex = 2 },  -- Vordaza's arena; confirmed in-game
+            { subzone = "Echoing Span",      bossIndex = 3 },  -- Rak'tul's arena; gauntlet runs during the fight (spirit realm bridge); confirmed in-game
+        },
     },
 
     -- --------------------------------------------------------
     -- NEW MIDNIGHT DUNGEONS — Max Level (88–90)
     -- --------------------------------------------------------
     {
-        instanceID = 2811,  -- BigWigs, unverified in-game
-        uiMapID    = 2511,
-        altMapIDs  = { 2424, 2515, 2519, 2520 },  -- antechamber, entrance, sub-zones
+        instanceID = 2811,  -- confirmed in-game
+        uiMapID    = 2511,  -- confirmed in-game
+        altMapIDs  = { 2424, 2515, 2516, 2517, 2519, 2520 },  -- all confirmed in-game except 2424
         name       = "Magisters' Terrace",
         location   = "Isle of Quel'Danas",
         season     = "midnight",
@@ -152,6 +172,14 @@ KwikTip.DUNGEONS = {
             { encounterID = 3072, name = "Seranel Sunlash",   tip = "At 100 energy, be inside a Suppression Zone or Wave of Silence pacifies you for 8s (unable to cast); also step into a zone to resolve Runic Mark (Feedback) — but zones purge your buffs." },
             { encounterID = 3073, name = "Gemellus",          tip = "All copies share health; touch correct clone to clear Neural Link." },
             { encounterID = 3074, name = "Degentrius",        tip = "One player per quadrant soaks Void Essence as it bounces; miss = Void Destruction stack (wipe at 2). Never touch Void Torrent beams — they stun." },
+        },
+        areas = {
+            { subzone = "Arcane Atheneum",       tip = "Library Gauntlet — pulling Librarians teleports the whole group back to the entrance. Interrupt Blazing Pyromancers (CC immune). Dodge Animated Codex persistent AoE pulses." },
+            { subzone = "Observation Grounds",   bossIndex = 1 },  -- Arcanotron Custos; confirmed in-game
+            { subzone = "Grand Magister Asylum",  bossIndex = 2 },  -- Seranel Sunlash; confirmed in-game
+            { subzone = "Constellarium",         bossIndex = 3 },  -- Gemellus; confirmed in-game
+            { subzone = "Tower of Theory",       tip = "Interrupt Shadowrift Voidcaller summon channels — adds multiply quickly. Devouring Tyrant applies healing absorbs; healer watch tank health." },
+            { subzone = "Celestial Orrery",      bossIndex = 4 },  -- Degentrius; confirmed in-game
         },
     },
     {
@@ -197,6 +225,12 @@ KwikTip.DUNGEONS = {
             { encounterID = 3200, name = "Ikuzz the Light Hunter", tip = "Destroy Bloodthorn Roots quickly — rooted players are also hit by Crushing Footfalls; Bloodthirsty Gaze fixates Ikuzz on a player for 10s — maintain distance or be Incised." },
             { encounterID = 3201, name = "Lightwarden Ruia",       tip = "Heal players to full to clear Grievous Thrash bleeds; at 40%, Ruia enters Haranir form (Spirits of the Vale) and rapidly cycles all abilities — tank rotate to avoid stacking Pulverizing Strikes damage-taken debuff." },
             { encounterID = 3202, name = "Ziekket",                tip = "Position so Ziekket's Concentrated Lightbeam sweeps over Dormant Lashers to vaporize them; dodge the beam and avoid the Lightsap puddles it leaves behind." },
+        },
+        areas = {
+            { subzone = "The Luminous Garden",  bossIndex = 1 },  -- Lightblossom Trinity; confirmed in-game
+            { subzone = "The Gilded Tangle",    bossIndex = 2 },  -- Ikuzz the Light Hunter; confirmed in-game
+            { subzone = "Warden's Retreat",     bossIndex = 3 },  -- Lightwarden Ruia; confirmed in-game
+            { subzone = "Conviction's Crucible", bossIndex = 4 }, -- Ziekket; confirmed in-game
         },
     },
     {

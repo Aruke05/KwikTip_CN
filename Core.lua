@@ -53,7 +53,7 @@ local function FormatAreaContent(dungeon)
             end
             return GOLD .. dungeon.name .. RESET .. "\n"
                 .. WHITE .. subzone .. RESET .. "\n"
-                .. GRAY .. a.tip .. RESET
+                .. GRAY .. (a.tip or "") .. RESET
         end
     end
     return nil
@@ -68,26 +68,23 @@ end
 -- ============================================================
 
 local debugTicker
-local _lastLoggedSubzone = nil
 
 local function StopDebugTicker()
     if debugTicker then
         debugTicker:Cancel()
         debugTicker = nil
     end
-    _lastLoggedSubzone = nil
 end
 
 local function StartDebugTicker()
     if not KwikTipDB or not KwikTipDB.debugLog then return end
     if debugTicker then return end
-    _lastLoggedSubzone = nil
     debugTicker = C_Timer.NewTicker(2, function()
         local subzone = GetSubZoneText() or ""
-        if subzone == _lastLoggedSubzone then return end
-        _lastLoggedSubzone = subzone
+        local mapID   = C_Map.GetBestMapForUnit("player")
+        -- Skip if LogMapID (event-driven) already captured this exact state.
+        if subzone == KwikTip._lastSubzone and mapID == KwikTip._lastMapID then return end
         local instanceName, instanceType, _, _, _, _, _, instanceID = GetInstanceInfo()
-        local mapID  = C_Map.GetBestMapForUnit("player")
         local dungeon = instanceID and KwikTip.DUNGEON_BY_INSTANCEID[instanceID]
         print(string.format("|cff00ff00KwikTip|r subzone=%q  %s  mapID=%s  instanceID=%s",
             subzone,
@@ -102,6 +99,10 @@ local function StartDebugTicker()
             subzone      = subzone,
             time         = date("%Y-%m-%d %H:%M:%S"),
         })
+        -- Update shared dedup state so LogMapID won't re-log this.
+        KwikTip._lastSubzone    = subzone
+        KwikTip._lastMapID      = mapID
+        KwikTip._lastInstanceID = instanceID
         if #KwikTipDB.mapIDLog > 2000 then
             KwikTipDB.mapIDLog = KwikTip:PruneArray(KwikTipDB.mapIDLog, 2000)
         end
@@ -173,9 +174,12 @@ end
 -- ============================================================
 
 -- Called by PLAYER_TARGET_CHANGED. Logs the mob and shows a tip if known.
+-- Logging always runs (regardless of areaActive) so mob data is collected even
+-- in named sub-zones. The HUD display is still gated: area tips take priority
+-- over trash tips and trashActive is only set when no area tip is shown.
 function KwikTip:OnTargetChanged()
+    local guid = UnitGUID("target")
     if self.bossActive then return end
-    if self.areaActive then return end  -- area tip takes priority over trash
 
     local inInstance, instanceType = IsInInstance()
     if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then
@@ -185,23 +189,25 @@ function KwikTip:OnTargetChanged()
         end
         return
     end
-
-    local guid = UnitGUID("target")
     if guid then
-        local npcID = tonumber(guid:match("-(%d+)-%x+$"))
+        local npcID = guid:sub(1, 9) == "Creature-" and tonumber(guid:match("-(%d+)-%x+$"))
+        if npcID then
+            LogMobPosition(npcID, "target")  -- log dead or alive; areaActive must not gate this
+        end
         if npcID and UnitCanAttack("player", "target") then
-            LogMobPosition(npcID, "target")
-            local entry = KwikTip.TRASH_BY_NPCID[npcID]
-            if entry then
-                self.trashActive = true
-                self:SetContent(FormatTrashContent(entry.dungeon, entry.mob))
-                self:UpdateVisibility()
-                return
+            if not self.areaActive then
+                local entry = KwikTip.TRASH_BY_NPCID[npcID]
+                if entry then
+                    self.trashActive = true
+                    self:SetContent(FormatTrashContent(entry.dungeon, entry.mob))
+                    self:UpdateVisibility()
+                    return
+                end
             end
         end
     end
 
-    -- No known trash target — clear trash state and let area detection take over.
+    -- No known trash target (or area tip is active) — clear trash state.
     if self.trashActive then
         self.trashActive = false
         self:SetContent("")
@@ -362,114 +368,6 @@ function KwikTip:PruneArray(arr, maxLen)
 end
 
 -- ============================================================
--- Export / Import
--- ============================================================
-
--- Serialize mapIDLog to a compact shareable string.
--- Format: KT1|instanceID:mapID:x,y;x,y;...|...
--- Deduplicates positions (rounded to 3 decimal places) and groups by dungeon.
--- Returns: str, pointCount  (nil, 0 if nothing to export)
-function KwikTip:ExportLog()
-    if not KwikTipDB.mapIDLog or #KwikTipDB.mapIDLog == 0 then
-        return nil, 0
-    end
-
-    local groups    = {}  -- gKey → { instanceID, mapID, posSet, positions }
-    local groupOrder = {}
-
-    for _, entry in ipairs(KwikTipDB.mapIDLog) do
-        if entry.x and entry.y then
-            -- Use workingMapID when available: x/y are in that map's coordinate space.
-            local posMapID = entry.workingMapID or entry.mapID or 0
-            local gKey = (entry.instanceID or 0) .. ":" .. posMapID
-            if not groups[gKey] then
-                groups[gKey] = {
-                    instanceID = entry.instanceID or 0,
-                    mapID      = posMapID,
-                    posSet     = {},
-                    positions  = {},
-                }
-                table.insert(groupOrder, gKey)
-            end
-            local g  = groups[gKey]
-            local rx = string.format("%.3f", tonumber(entry.x))
-            local ry = string.format("%.3f", tonumber(entry.y))
-            local pk = rx .. "," .. ry
-            if not g.posSet[pk] then
-                g.posSet[pk] = true
-                table.insert(g.positions, pk)
-            end
-        end
-    end
-
-    local totalPoints = 0
-    local parts       = { "KT1" }
-    for _, gKey in ipairs(groupOrder) do
-        local g = groups[gKey]
-        if #g.positions > 0 then
-            table.insert(parts, g.instanceID .. ":" .. g.mapID .. ":" .. table.concat(g.positions, ";"))
-            totalPoints = totalPoints + #g.positions
-        end
-    end
-
-    if #parts == 1 then return nil, 0 end
-    return table.concat(parts, "|"), totalPoints
-end
-
--- Parse an export string and merge new positions into mapIDLog.
--- Returns: added (number), errMsg (string or nil)
-function KwikTip:ImportLog(str)
-    if not str or str == "" then return 0, "Empty string." end
-
-    local rest = str:match("^KT1|(.+)$")
-    if not rest then return 0, "Unrecognised format — expected a KT1 export string." end
-
-    -- Build a set of existing positions for deduplication
-    local existingSet = {}
-    for _, entry in ipairs(KwikTipDB.mapIDLog) do
-        if entry.x and entry.y then
-            local k = (entry.instanceID or 0) .. ":" .. (entry.mapID or 0) .. ":" .. entry.x .. ":" .. entry.y
-            existingSet[k] = true
-        end
-    end
-
-    local added = 0
-    for segment in rest:gmatch("[^|]+") do
-        local iID, mID, posPart = segment:match("^(%d+):(%d+):(.+)$")
-        if iID and mID and posPart then
-            iID = tonumber(iID)
-            mID = tonumber(mID)
-            for pos in posPart:gmatch("[^;]+") do
-                local x, y = pos:match("^([%d%.]+),([%d%.]+)$")
-                if x and y then
-                    local k = iID .. ":" .. mID .. ":" .. x .. ":" .. y
-                    if not existingSet[k] then
-                        existingSet[k] = true
-                        table.insert(KwikTipDB.mapIDLog, {
-                            mapID        = mID,
-                            instanceID   = iID,
-                            instanceName = "imported",
-                            instanceType = "party",
-                            time         = "imported",
-                            x            = x,
-                            y            = y,
-                        })
-                        added = added + 1
-                    end
-                end
-            end
-        end
-    end
-
-    -- Honour the existing cap using efficient slice
-    if #KwikTipDB.mapIDLog > 2000 then
-        KwikTipDB.mapIDLog = self:PruneArray(KwikTipDB.mapIDLog, 2000)
-    end
-
-    return added, nil
-end
-
--- ============================================================
 -- Slash commands
 -- ============================================================
 SLASH_KWIKTIP1 = "/kwiktip"
@@ -497,8 +395,6 @@ SlashCmdList["KWIKTIP"] = function(msg)
         print(string.format("  mapIDLog=%d  mobLog=%d",
             KwikTipDB.mapIDLog and #KwikTipDB.mapIDLog or 0,
             KwikTipDB.mobLog   and #KwikTipDB.mobLog   or 0))
-    elseif cmd == "export" then
-        KwikTip:ShowDataDialog()
     elseif cmd == "clearlog" then
         KwikTipDB.mapIDLog = {}
         KwikTipDB.mobLog   = {}
@@ -510,7 +406,6 @@ SlashCmdList["KWIKTIP"] = function(msg)
         print("  /kwik          — open settings")
         print("  /kwik move     — toggle move/lock mode")
         print("  /kwik debug    — print detection state and position")
-        print("  /kwik export   — open position data export/import dialog")
         print("  /kwik clearlog — clear mapIDLog and mobLog")
     end
 end
