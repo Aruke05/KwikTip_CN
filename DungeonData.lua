@@ -88,7 +88,7 @@ KwikTip.DUNGEONS = {
     {
         instanceID = 2825,  -- BigWigs, unverified in-game
         uiMapID    = 2514,
-        altMapIDs  = { 2564 },  -- 2564 = entrance/antechamber sub-zone
+        altMapIDs  = { 2564, 2513 },  -- 2564 = Dreamer's Passage/Heart of Rage; 2513 = Heart of Rage (confirmed in-game)
         name       = "Den of Nalorakk",
         location   = "Zul'Aman",
         season     = "midnight",
@@ -98,6 +98,11 @@ KwikTip.DUNGEONS = {
             { encounterID = 3207, name = "The Hoardmonger",    tip = "At 90%/60%/30%, boss retreats to empower; destroy Rotten Mushrooms before burst (Toxic Spores debuff); dodge frontals." },
             { encounterID = 3208, name = "Sentinel of Winter", tip = "Dodge Raging Squalls and Snowdrift pools; major healer CDs for Eternal Winter — sustained group damage and pushback." },
             { encounterID = 3209, name = "Nalorakk",           tip = "Fury of the War God: intercept charging echoes to protect Zul'jarra; spread when Echoing Maul marks you." },
+        },
+        areas = {
+            { subzone = "Enduring Winter",   tip = "Bridge after Hoardmonger: run straight across — do not engage the adds. When Rising Winds hits, hide behind the rocks; ensure knockback mobs are facing away from the group. Silence-casting birds in packs are a priority interrupt for casters and healers." },
+            { subzone = "Dreamer's Passage", tip = "Click the fire to teleport back to Nalorakk's entrance. Prioritise Loyal Saberfangs — they randomly fixate a party member." },
+            { subzone = "The Heart of Rage", bossIndex = 3 },  -- Nalorakk's arena; confirmed in-game (mapIDs 2564, 2513)
         },
     },
     {
