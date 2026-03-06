@@ -71,9 +71,6 @@ KwikTip.DUNGEONS = {
             { npcID = 232067, name = "Creeping Spindleweb", tip = "Poison Spray — use a personal defensive." },
         },
         areas = {
-            { subzone = "The Promenade",       tip = "Knock mobs out of Spellguard's Protection sphere — it makes them immune. Interrupt Spirit Bolt on Restless Stewards; use stops on Soul Torment." },
-            { subzone = "Vereesa's Repose",    tip = "Two wing bosses (Emberdawn and Derelict Duo) — Soul Conduit returns you to The Promenade to access the other wing after killing one. Clear both before heading up." },
-            { subzone = "Sylvanas's Quarters", tip = "Interrupt Phantasmal Mystic's Chain Lightning; kill or soothe before 50% (enrages nearby mobs). Stop Lingering Marauder's Gore Whirl. Dodge Swiftshot Archer Arrow Rain." },
             { subzone = "Windrunner Vault",    bossIndex = 3 },  -- Commander Kroluk's arena; confirmed in-game
             { subzone = "The Pinnacle",        bossIndex = 4 },  -- The Restless Heart; confirmed in-game
         },
@@ -115,8 +112,6 @@ KwikTip.DUNGEONS = {
             { encounterID = 3209, name = "Nalorakk",           tip = "Fury of the War God: intercept charging echoes to protect Zul'jarra; spread when Echoing Maul marks you." },
         },
         areas = {
-            { subzone = "Enduring Winter",   tip = "Bridge after Hoardmonger: run straight across — do not engage the adds. When Rising Winds hits, hide behind the rocks; ensure knockback mobs are facing away from the group. Silence-casting birds in packs are a priority interrupt for casters and healers." },
-            { subzone = "Dreamer's Passage", tip = "Click the fire to teleport back to Nalorakk's entrance. Prioritise Loyal Saberfangs — they randomly fixate a party member." },
             { subzone = "The Heart of Rage", bossIndex = 3 },  -- Nalorakk's arena; confirmed in-game (mapIDs 2564, 2513)
         },
     },
@@ -149,7 +144,6 @@ KwikTip.DUNGEONS = {
             { npcID = 249024, name = "Hollow Soulrender",  tip = "Interrupt Shadowfrost Blast. Step away from allies before Frost Nova hits — it chains to nearby players." },
         },
         areas = {
-            { subzone = "Wailing Depths",    tip = "Interrupt Ritual Hexxers (Hex) and Keen Headhunters (Hooked Snare) first. Never pull multiple Bramblemaw Bears — Crunch Armor stacks per bear. Stop Reanimated Warriors at 0 HP or they revive." },
             { subzone = "Dais of Suffering", bossIndex = 2 },  -- Vordaza's arena; confirmed in-game
             { subzone = "Echoing Span",      bossIndex = 3 },  -- Rak'tul's arena; gauntlet runs during the fight (spirit realm bridge); confirmed in-game
         },
@@ -174,11 +168,9 @@ KwikTip.DUNGEONS = {
             { encounterID = 3074, name = "Degentrius",        tip = "One player per quadrant soaks Void Essence as it bounces; miss = Void Destruction stack (wipe at 2). Never touch Void Torrent beams — they stun." },
         },
         areas = {
-            { subzone = "Arcane Atheneum",       tip = "Library Gauntlet — pulling Librarians teleports the whole group back to the entrance. Interrupt Blazing Pyromancers (CC immune). Dodge Animated Codex persistent AoE pulses." },
             { subzone = "Observation Grounds",   bossIndex = 1 },  -- Arcanotron Custos; confirmed in-game
             { subzone = "Grand Magister Asylum",  bossIndex = 2 },  -- Seranel Sunlash; confirmed in-game
             { subzone = "Constellarium",         bossIndex = 3 },  -- Gemellus; confirmed in-game
-            { subzone = "Tower of Theory",       tip = "Interrupt Shadowrift Voidcaller summon channels — adds multiply quickly. Devouring Tyrant applies healing absorbs; healer watch tank health." },
             { subzone = "Celestial Orrery",      bossIndex = 4 },  -- Degentrius; confirmed in-game
         },
     },
@@ -206,9 +198,6 @@ KwikTip.DUNGEONS = {
             { npcID = 251024, name = "Dreadflail",             tip = "Corewarden Nysarra add — kill before burning the boss; Lightscar wound opens the 18s vulnerability window after." },
         },
         areas = {
-            { subzone = "The Bazaar",            tip = "Central hub. Corespark Conduits grant an offensive buff — use with cooldowns, but manage the stacking DoT they apply." },
-            { subzone = "Corespark Engineway",   tip = "Interrupt Circuit Seers before they activate Mana Batteries (group DoT channel). Sidestep Erratic Surge skillshots. Interrupt Nexus Adepts' Umbra Bolt." },
-            { subzone = "Core Defense Nullward", tip = "Dodge Duskfright Herald's Dark Beckoning frontal — lethal. Interrupt Grand Nullifier. Tank: manage stacking Null Sunder from Shadowguard Defenders; control pull size." },
             { subzone = "The Nexus Core",        bossIndex = 3 },  -- Lothraxion's boss room; confirmed in-game
         },
     },

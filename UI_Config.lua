@@ -18,6 +18,11 @@ function KwikTip:CreateConfigWindow()
     cfg:SetScript("OnDragStart", cfg.StartMoving)
     cfg:SetScript("OnDragStop",  cfg.StopMovingOrSizing)
     cfg:SetClampedToScreen(true)
+    cfg:SetScript("OnHide", function()
+        if KwikTip.moveMode then
+            KwikTip:ToggleMoveMode()
+        end
+    end)
     cfg:Hide()
     self.Config = cfg
 
