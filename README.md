@@ -10,6 +10,8 @@ A World of Warcraft: Midnight addon that displays contextual tips for dungeons a
 
 Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 
+**[Download on CurseForge](https://www.curseforge.com/wow/addons/kwiktip)**
+
 ---
 
 ## Screenshots
