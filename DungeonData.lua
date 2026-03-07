@@ -38,6 +38,8 @@ local ADDON_NAME, KwikTip = ...
 --   areas       : optional list; if present, HUD switches to area-based tips
 --                 matched against GetSubZoneText() as the player moves through the dungeon
 --     subzone   : exact string returned by GetSubZoneText() for this area (verify in-game)
+--     mapID     : (optional) uiMapID match via C_Map.GetBestMapForUnit — fallback for areas
+--                 with no subzone text (e.g. arena-style dungeons). Fires on ZONE_CHANGED_NEW_AREA.
 --     tip       : contextual tip shown in HUD when the player is in this sub-zone
 --     bossIndex : (optional) 1-based index into dungeon.bosses; if set, the boss tip is
 --                 shown instead of `tip` — use for boss room sub-zones so the tip appears
@@ -255,6 +257,8 @@ KwikTip.DUNGEONS = {
         },
         areas = {
             { subzone = "The Den", bossIndex = 1 },  -- Taz'Rah's arena; confirmed in-game
+            { mapID = 2573,        bossIndex = 2 },  -- Atroxus; inferred from encounter order (unconfirmed)
+            { mapID = 2574,        bossIndex = 3 },  -- Charonus; inferred from encounter order (unconfirmed)
         },
     },
 

@@ -42,9 +42,11 @@ end
 -- Returns nil if the current sub-zone has no defined tip.
 local function FormatAreaContent(dungeon)
     local subzone = GetSubZoneText()
-    if not subzone or subzone == "" then return nil end
+    local mapID   = C_Map.GetBestMapForUnit("player")
     for _, a in ipairs(dungeon.areas) do
-        if a.subzone == subzone then
+        local match = (a.subzone and subzone ~= "" and a.subzone == subzone)
+                   or (a.mapID  and a.mapID  == mapID)
+        if match then
             if a.bossIndex then
                 local boss = dungeon.bosses[a.bossIndex]
                 if boss then
@@ -52,7 +54,7 @@ local function FormatAreaContent(dungeon)
                 end
             end
             return GOLD .. dungeon.name .. RESET .. "\n"
-                .. WHITE .. subzone .. RESET .. "\n"
+                .. WHITE .. (subzone ~= "" and subzone or "") .. RESET .. "\n"
                 .. GRAY .. (a.tip or "") .. RESET
         end
     end
