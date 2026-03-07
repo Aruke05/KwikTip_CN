@@ -62,63 +62,29 @@ local function FormatAreaContent(dungeon)
 end
 
 -- ============================================================
--- Debug sub-zone ticker
--- Logs when the player enters a new sub-zone inside an instance.
--- Fires on a 2 s poll as a safety net; ZONE_CHANGED events handle
--- most transitions and drive UpdateContent directly.
--- Gated on the debugLog setting.
--- ============================================================
-
-local debugTicker
-
-local function StopDebugTicker()
-    if debugTicker then
-        debugTicker:Cancel()
-        debugTicker = nil
-    end
-end
-
-local function StartDebugTicker()
-    if not KwikTipDB or not KwikTipDB.debugLog then return end
-    if debugTicker then return end
-    debugTicker = C_Timer.NewTicker(2, function()
-        local subzone = GetSubZoneText() or ""
-        local mapID   = C_Map.GetBestMapForUnit("player")
-        -- Skip if LogMapID (event-driven) already captured this exact state.
-        if subzone == KwikTip._lastSubzone and mapID == KwikTip._lastMapID then return end
-        local instanceName, instanceType, _, _, _, _, _, instanceID = GetInstanceInfo()
-        local dungeon = instanceID and KwikTip.DUNGEON_BY_INSTANCEID[instanceID]
-        print(string.format("|cff00ff00KwikTip|r subzone=%q  %s  mapID=%s  instanceID=%s",
-            subzone,
-            dungeon and dungeon.name or (instanceName or "unknown"),
-            tostring(mapID),
-            tostring(instanceID)))
-        table.insert(KwikTipDB.mapIDLog, {
-            mapID        = mapID,
-            instanceID   = instanceID,
-            instanceName = instanceName,
-            instanceType = instanceType,
-            subzone      = subzone,
-            time         = date("%Y-%m-%d %H:%M:%S"),
-        })
-        -- Update shared dedup state so LogMapID won't re-log this.
-        KwikTip._lastSubzone    = subzone
-        KwikTip._lastMapID      = mapID
-        KwikTip._lastInstanceID = instanceID
-        if #KwikTipDB.mapIDLog > 2000 then
-            KwikTipDB.mapIDLog = KwikTip:PruneArray(KwikTipDB.mapIDLog, 2000)
-        end
-    end)
-end
-
--- ============================================================
 -- Boss encounter state
 -- ============================================================
 
 -- Called by ENCOUNTER_START. Locks the HUD to the boss tip for the fight duration.
+-- Always logs the encounterID to encounterLog (not gated on debugLog) so legacy
+-- dungeon encounter IDs can be collected without enabling full debug mode.
 function KwikTip:OnEncounterStart(encounterID)
     self.bossActive = true
-    StopDebugTicker()
+
+    -- Always-on encounter logging — used to resolve encounterID = 0 stubs in DungeonData.
+    if KwikTipDB then
+        local _, instanceName, _, _, _, _, _, instanceID = GetInstanceInfo()
+        table.insert(KwikTipDB.encounterLog, {
+            encounterID  = encounterID,
+            instanceID   = instanceID,
+            instanceName = instanceName,
+            time         = date("%Y-%m-%d %H:%M:%S"),
+        })
+        if #KwikTipDB.encounterLog > 500 then
+            KwikTipDB.encounterLog = self:PruneArray(KwikTipDB.encounterLog, 500)
+        end
+    end
+
     local entry = KwikTip.BOSS_BY_ENCOUNTERID[encounterID]
     if entry then
         self:SetContent(FormatBossContent(entry.dungeon, entry.boss))
@@ -134,8 +100,7 @@ end
 function KwikTip:OnEncounterEnd(success)
     self.bossActive = false
     if success == 1 then
-        -- Boss killed — leave current tip up; resume debug ticker if needed.
-        StartDebugTicker()
+        -- Boss killed — leave current tip up until next natural trigger.
         self:UpdateVisibility()
     else
         -- Wipe or reset — clear and return to normal detection.
@@ -149,22 +114,28 @@ end
 -- ============================================================
 -- Mob logging
 -- ============================================================
--- Logs the NPC name, sub-zone, and instance context when targeting or
--- mousing over a hostile NPC, for future trash tip data collection.
+-- Logs the NPC name, sub-zone, instance context, level, and classification
+-- when targeting or mousing over a hostile NPC inside an instance.
+-- Only logs mobs not already present in TRASH_BY_NPCID or BOSS_BY_NPCID,
+-- keeping the log focused on genuinely undiscovered NPCs.
 
 local _lastLoggedNpcID = nil  -- deduplicate mouseover spam
 
 local function LogMobPosition(npcID, unitToken)
     if not KwikTipDB or not KwikTipDB.debugLog then return end
+    -- Skip mobs already covered in DungeonData — log is for discovery only.
+    if KwikTip.TRASH_BY_NPCID[npcID] or KwikTip.BOSS_BY_NPCID[npcID] then return end
     local instanceName, _, _, _, _, _, _, instanceID = GetInstanceInfo()
     table.insert(KwikTipDB.mobLog, {
-        npcID        = npcID,
-        npcName      = UnitName(unitToken),
-        mapID        = C_Map.GetBestMapForUnit("player"),
-        instanceID   = instanceID,
-        instanceName = instanceName,
-        subzone      = GetSubZoneText(),
-        time         = date("%Y-%m-%d %H:%M:%S"),
+        npcID              = npcID,
+        npcName            = UnitName(unitToken),
+        npcLevel           = UnitLevel(unitToken),
+        npcClassification  = UnitClassification(unitToken),
+        mapID              = C_Map.GetBestMapForUnit("player"),
+        instanceID         = instanceID,
+        instanceName       = instanceName,
+        subzone            = GetSubZoneText(),
+        time               = date("%Y-%m-%d %H:%M:%S"),
     })
     if #KwikTipDB.mobLog > 5000 then
         KwikTipDB.mobLog = KwikTip:PruneArray(KwikTipDB.mobLog, 5000)
@@ -262,7 +233,6 @@ function KwikTip:UpdateContent()
 
     local inInstance, instanceType = IsInInstance()
     if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then
-        StopDebugTicker()
         self.areaActive    = false
         self.dungeonActive = false
         self.trashActive   = false
@@ -289,13 +259,6 @@ function KwikTip:UpdateContent()
     if not dungeon then
         local mapID = C_Map.GetBestMapForUnit("player")
         dungeon = mapID and KwikTip.DUNGEON_BY_UIMAPID[mapID]
-    end
-
-    -- Manage debug ticker
-    if KwikTipDB and KwikTipDB.debugLog then
-        StartDebugTicker()
-    else
-        StopDebugTicker()
     end
 
     local prevAreaActive    = self.areaActive
@@ -395,10 +358,15 @@ SlashCmdList["KWIKTIP"] = function(msg)
     elseif cmd == "debug" then
         local inInstance, instanceType = IsInInstance()
         local mapID = C_Map.GetBestMapForUnit("player")
-        local _, _, _, _, _, _, _, instanceID = GetInstanceInfo()
+        local _, instanceName, _, _, _, _, _, instanceID = GetInstanceInfo()
         local dungeon = (instanceID and KwikTip.DUNGEON_BY_INSTANCEID[instanceID])
             or (mapID and KwikTip.DUNGEON_BY_UIMAPID[mapID])
         local subzone = GetSubZoneText()
+        local dungeonName = dungeon and dungeon.name or "none"
+        local mapIDCount     = KwikTipDB.mapIDLog     and #KwikTipDB.mapIDLog     or 0
+        local mobCount       = KwikTipDB.mobLog       and #KwikTipDB.mobLog       or 0
+        local encounterCount = KwikTipDB.encounterLog and #KwikTipDB.encounterLog or 0
+        local snapshotCount  = KwikTipDB.debugSnapshots and #KwikTipDB.debugSnapshots or 0
         print("|cff00ff00KwikTip|r debug:")
         print(string.format("  inInstance=%s  type=%s  boss=%s  bossTarget=%s  trash=%s  area=%s  dungeon=%s",
             tostring(inInstance), tostring(instanceType),
@@ -406,15 +374,40 @@ SlashCmdList["KWIKTIP"] = function(msg)
             tostring(KwikTip.trashActive),
             tostring(KwikTip.areaActive), tostring(KwikTip.dungeonActive)))
         print(string.format("  instanceID=%s  mapID=%s  dungeon=%s",
-            tostring(instanceID), tostring(mapID), dungeon and dungeon.name or "none"))
+            tostring(instanceID), tostring(mapID), dungeonName))
         print(string.format("  subzone=%q", subzone or ""))
-        print(string.format("  mapIDLog=%d  mobLog=%d",
-            KwikTipDB.mapIDLog and #KwikTipDB.mapIDLog or 0,
-            KwikTipDB.mobLog   and #KwikTipDB.mobLog   or 0))
+        print(string.format("  mapIDLog=%d  mobLog=%d  encounterLog=%d  snapshots=%d",
+            mapIDCount, mobCount, encounterCount, snapshotCount))
+        -- Save snapshot to SavedVariables for post-session inspection.
+        if KwikTipDB then
+            table.insert(KwikTipDB.debugSnapshots, {
+                time             = date("%Y-%m-%d %H:%M:%S"),
+                inInstance       = inInstance,
+                instanceType     = instanceType,
+                instanceID       = instanceID,
+                instanceName     = instanceName,
+                mapID            = mapID,
+                dungeon          = dungeonName,
+                subzone          = subzone,
+                bossActive       = KwikTip.bossActive,
+                bossTargetActive = KwikTip.bossTargetActive,
+                trashActive      = KwikTip.trashActive,
+                areaActive       = KwikTip.areaActive,
+                dungeonActive    = KwikTip.dungeonActive,
+                mapIDLogCount    = mapIDCount,
+                mobLogCount      = mobCount,
+                encounterLogCount = encounterCount,
+            })
+            if #KwikTipDB.debugSnapshots > 100 then
+                KwikTipDB.debugSnapshots = KwikTip:PruneArray(KwikTipDB.debugSnapshots, 100)
+            end
+        end
     elseif cmd == "clearlog" then
-        KwikTipDB.mapIDLog = {}
-        KwikTipDB.mobLog   = {}
-        print("|cff00ff00KwikTip|r mapIDLog and mobLog cleared.")
+        KwikTipDB.mapIDLog      = {}
+        KwikTipDB.mobLog        = {}
+        KwikTipDB.encounterLog  = {}
+        KwikTipDB.debugSnapshots = {}
+        print("|cff00ff00KwikTip|r mapIDLog, mobLog, encounterLog, and debugSnapshots cleared.")
     elseif cmd == "config" or cmd == "" then
         KwikTip:ToggleConfig()
     else
@@ -422,6 +415,6 @@ SlashCmdList["KWIKTIP"] = function(msg)
         print("  /kwik          — open settings")
         print("  /kwik move     — toggle move/lock mode")
         print("  /kwik debug    — print detection state and position")
-        print("  /kwik clearlog — clear mapIDLog and mobLog")
+        print("  /kwik clearlog — clear all debug logs")
     end
 end

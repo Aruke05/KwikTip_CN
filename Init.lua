@@ -14,6 +14,8 @@ KwikTip.DEFAULTS = {
     debugLog       = false,
     mapIDLog       = {},
     mobLog         = {},
+    encounterLog   = {},     -- always-on; records every ENCOUNTER_START encounterID seen
+    debugSnapshots = {},     -- written by /kwik debug; inspection log for post-session review
 }
 
 -- ============================================================
