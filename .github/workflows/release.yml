@@ -16,24 +16,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Package and upload to GitHub
+      - name: Package and upload to CurseForge, Wago, WoWInterface, and GitHub
         uses: BigWigsMods/packager@v2
         env:
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload to CurseForge
-        env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
-        run: |
-          ZIP=".release/KwikTip-${GITHUB_REF_NAME}.zip"
-          GAME_VERSION_ID=$(curl -s -H "X-Api-Token: $CF_API_KEY" \
-            "https://wow.curseforge.com/api/game/versions" | \
-            python3 -c "import sys,json; vs=json.load(sys.stdin); \
-            print(next(v['id'] for v in vs if v.get('apiVersion')=='120001'))")
-          echo "Uploading $ZIP to CurseForge (game version ID: $GAME_VERSION_ID)..."
-          RESULT=$(curl -s -X POST \
-            -H "X-Api-Token: $CF_API_KEY" \
-            -F "metadata={\"changelog\":\"\",\"gameVersions\":[$GAME_VERSION_ID],\"releaseType\":\"release\"}" \
-            -F "file=@$ZIP" \
-            "https://wow.curseforge.com/api/projects/1478824/upload-file")
-          echo "CurseForge response: $RESULT"
+          WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
+          WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
