@@ -9,6 +9,8 @@ KwikTip.DEFAULTS = {
     y              = -200,
     persistentHide = false,
     showInDungeon  = false,
+    showMinimapBtn = true,
+    minimapAngle   = 0,      -- radians; position around minimap
     debugLog       = false,
     mapIDLog       = {},
     mobLog         = {},
@@ -53,5 +55,6 @@ function KwikTip:OnLogin()
     if self.ApplySettings then self:ApplySettings() end
     if self.UpdateVisibility then self:UpdateVisibility() end
     if self.UpdateContent then self:UpdateContent() end
+    if self._PlaceMinimapBtn then self:_PlaceMinimapBtn() end
     print("|cff00ff00KwikTip|r loaded. Type /kwik for settings.")
 end

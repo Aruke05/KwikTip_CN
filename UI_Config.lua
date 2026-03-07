@@ -1,5 +1,90 @@
--- KwikTip: Config window
+-- KwikTip: Config window & minimap button
 local ADDON_NAME, KwikTip = ...
+
+-- ============================================================
+-- Minimap Button
+-- ============================================================
+local RADIUS = 80  -- orbit radius from minimap center
+
+function KwikTip:_PlaceMinimapBtn()
+    if self.MinimapBtn then return end
+    if not KwikTipDB.showMinimapBtn then return end
+
+    local btn = CreateFrame("Button", "KwikTipMinimapBtn", Minimap)
+    btn:SetSize(24, 24)
+    btn:SetFrameStrata("MEDIUM")
+    btn:SetFrameLevel(Minimap:GetFrameLevel() + 5)
+    btn:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+    btn:RegisterForDrag("LeftButton")
+
+    local tex = btn:CreateTexture(nil, "OVERLAY")
+    tex:SetTexture("Interface\\AddOns\\KwikTip\\assets\\ktmini.tga")
+    tex:SetBlendMode("BLEND")
+    tex:SetAllPoints(btn)
+
+    local function UpdatePosition()
+        local angle = KwikTipDB.minimapAngle or 0
+        local x = math.cos(angle) * RADIUS
+        local y = math.sin(angle) * RADIUS
+        btn:ClearAllPoints()
+        btn:SetPoint("CENTER", Minimap, "CENTER", x, y)
+    end
+
+    btn:SetScript("OnLoad", UpdatePosition)
+    btn:SetScript("OnShow", UpdatePosition)
+
+    btn:SetScript("OnClick", function(self, button)
+        if button == "LeftButton" then
+            KwikTip:ToggleConfig()
+        elseif button == "RightButton" then
+            KwikTip:ToggleMoveMode()
+        end
+    end)
+
+    btn:SetScript("OnDragStart", function(self)
+        self:LockHighlight()
+        self:SetScript("OnUpdate", function(frame)
+            local mx, my = Minimap:GetCenter()
+            local px, py = GetCursorPosition()
+            local scale = Minimap:GetEffectiveScale()
+            local dx = (px / scale - mx) / Minimap:GetWidth()
+            local dy = (py / scale - my) / Minimap:GetHeight()
+            KwikTipDB.minimapAngle = math.atan2(dy, dx)
+            UpdatePosition()
+        end)
+    end)
+
+    btn:SetScript("OnDragStop", function(self)
+        self:UnlockHighlight()
+        self:SetScript("OnUpdate", nil)
+    end)
+
+    btn:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+        GameTooltip:SetText("KwikTip", 1, 1, 1)
+        GameTooltip:AddLine("Left-click: Settings", 0.7, 0.7, 0.7)
+        GameTooltip:AddLine("Right-click: Move HUD", 0.7, 0.7, 0.7)
+        GameTooltip:AddLine("Drag: Reposition", 0.7, 0.7, 0.7)
+        GameTooltip:Show()
+    end)
+
+    btn:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
+
+    UpdatePosition()
+    self.MinimapBtn = btn
+end
+
+-- Called when showMinimapBtn setting changes.
+function KwikTip:_UpdateMinimapButton()
+    if not self.MinimapBtn then return end
+    if KwikTipDB.showMinimapBtn then
+        self.MinimapBtn:Show()
+    else
+        self.MinimapBtn:Hide()
+    end
+end
 
 -- ============================================================
 -- Config Window
@@ -98,10 +183,25 @@ function KwikTip:CreateConfigWindow()
     dispHeader:SetText("DISPLAY")
     dispHeader:SetTextColor(0.6, 0.6, 0.6)
 
+    -- Checkbox: Show Minimap Button
+    local minimapBtnCB = CreateFrame("CheckButton", "KwikTipMinimapBtnCB", cfg, "UICheckButtonTemplate")
+    minimapBtnCB:SetSize(24, 24)
+    minimapBtnCB:SetPoint("TOPLEFT", dispHeader, "BOTTOMLEFT", 0, -4)
+
+    local minimapBtnLbl = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    minimapBtnLbl:SetPoint("LEFT", minimapBtnCB, "RIGHT", 2, 0)
+    minimapBtnLbl:SetText("Show Minimap Button")
+
+    minimapBtnCB:SetScript("OnClick", function(self)
+        KwikTipDB.showMinimapBtn = self:GetChecked()
+        if KwikTip._PlaceMinimapBtn then KwikTip:_PlaceMinimapBtn() end
+        if KwikTip._UpdateMinimapButton then KwikTip:_UpdateMinimapButton() end
+    end)
+
     -- Checkbox: Hide Info Window
     local hideHUDCB = CreateFrame("CheckButton", "KwikTipHideHUDCB", cfg, "UICheckButtonTemplate")
     hideHUDCB:SetSize(24, 24)
-    hideHUDCB:SetPoint("TOPLEFT", dispHeader, "BOTTOMLEFT", 0, -4)
+    hideHUDCB:SetPoint("TOPLEFT", minimapBtnCB, "BOTTOMLEFT", 0, -2)
 
     local hideHUDLbl = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     hideHUDLbl:SetPoint("LEFT", hideHUDCB, "RIGHT", 2, 0)
@@ -265,6 +365,7 @@ function KwikTip:CreateConfigWindow()
 
     function self:PopulateConfig()
         local db = KwikTipDB
+        minimapBtnCB:SetChecked(db.showMinimapBtn ~= false)
         hideHUDCB:SetChecked(db.persistentHide)
         showInDungeonCB:SetChecked(db.showInDungeon)
         opacitySlider:SetValue(math.floor(db.alpha * 100 + 0.5))
