@@ -353,11 +353,7 @@ function KwikTip:CreateConfigWindow()
     previewBtn:SetPoint("TOPLEFT", debugLogCB, "BOTTOMLEFT", 0, -6)
     previewBtn:SetText("Preview Notes")
     previewBtn:SetScript("OnClick", function()
-        if KwikTip.previewActive then
-            KwikTip:ClearPreview()
-        else
-            KwikTip:ShowPreview()
-        end
+        KwikTip:TogglePreview()
     end)
 
     local cfgLogo = cfg:CreateTexture(nil, "ARTWORK")

@@ -52,25 +52,30 @@ local function FormatNotes(notes)
     return table.concat(lines, "\n")
 end
 
+-- Shared header: "Dungeon Name\nEntity Name"
+local function FormatHeader(dungeonName, entityName)
+    return GOLD .. dungeonName .. RESET .. "\n" .. WHITE .. entityName .. RESET
+end
+
 -- Build the HUD string for an active boss encounter.
 -- Uses structured notes if present; falls back to flat tip string.
 local function FormatBossContent(dungeon, boss)
-    local header = GOLD .. dungeon.name .. RESET .. "\n" .. WHITE .. boss.name .. RESET
     local body = FormatNotes(boss.notes)
     if not body and boss.tip and boss.tip ~= "" then
         body = GRAY .. boss.tip .. RESET
     end
+    local header = FormatHeader(dungeon.name, boss.name)
     return body and (header .. "\n" .. body) or header
 end
 
 -- Build the HUD string for a trash mob target.
 -- Uses structured notes if present; falls back to flat tip string.
 local function FormatTrashContent(dungeon, mob)
-    local header = GOLD .. dungeon.name .. RESET .. "\n" .. WHITE .. mob.name .. RESET
     local body = FormatNotes(mob.notes)
     if not body and mob.tip and mob.tip ~= "" then
         body = GRAY .. mob.tip .. RESET
     end
+    local header = FormatHeader(dungeon.name, mob.name)
     return body and (header .. "\n" .. body) or header
 end
 
@@ -389,21 +394,22 @@ end
 -- Preview (settings demo)
 -- ============================================================
 
+-- Static demo notes — module-scoped so ShowPreview doesn't reallocate on every call.
+local DEMO_NOTES = {
+    { role = "general",   text = "Avoid the red zones; use a personal defensive on the big hit." },
+    { role = "tank",      text = "Tank swap at 3 stacks of the debuff." },
+    { role = "healer",    text = "Major healing CDs after every Cataclysm cast." },
+    { role = "dps",       text = "Kill adds before switching back to the boss." },
+    { role = "interrupt", text = "Shadowbolt — interrupt every cast, no exceptions." },
+}
+
 -- Show a demo tip in the HUD with one note of every role category.
 -- Sets previewActive so UpdateContent won't override it while config is open.
 -- Call ClearPreview() (or close the config window) to dismiss.
 function KwikTip:ShowPreview()
     self.previewActive = true
     self:InitHUD()
-    local demoNotes = {
-        { role = "general",   text = "Avoid the red zones; use a personal defensive on the big hit." },
-        { role = "tank",      text = "Tank swap at 3 stacks of the debuff." },
-        { role = "healer",    text = "Major healing CDs after every Cataclysm cast." },
-        { role = "dps",       text = "Kill adds before switching back to the boss." },
-        { role = "interrupt", text = "Shadowbolt — interrupt every cast, no exceptions." },
-    }
-    local header = GOLD .. "Demo Dungeon" .. RESET .. "\n" .. WHITE .. "Example Boss" .. RESET
-    self:SetContent(header .. "\n" .. FormatNotes(demoNotes))
+    self:SetContent(FormatHeader("Demo Dungeon", "Example Boss") .. "\n" .. FormatNotes(DEMO_NOTES))
     self:UpdateVisibility()
 end
 
@@ -414,6 +420,15 @@ function KwikTip:ClearPreview()
     self:SetContent("")
     self:UpdateContent()
     self:UpdateVisibility()
+end
+
+-- Toggle preview on/off — single entry point for UI callers.
+function KwikTip:TogglePreview()
+    if self.previewActive then
+        self:ClearPreview()
+    else
+        self:ShowPreview()
+    end
 end
 
 -- ============================================================
