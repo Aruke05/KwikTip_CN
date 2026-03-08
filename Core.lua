@@ -13,25 +13,65 @@ frame:SetScript("OnEvent", function(self, event, ...)     if event == "PLAYER_EN
 
 local GOLD  = "|cffffcc00"
 local WHITE = "|cffffffff"
-local GRAY  = "|cff999999"
+local GRAY  = "|cffbbbbbb"
 local RESET = "|r"
 
+-- Role note rendering
+-- Colors
+local TANK_COLOR = "|cff0099ff"
+local HEAL_COLOR = "|cff33cc33"
+local DPS_COLOR  = "|cffff6633"
+-- Icons: Interface\Icons\ texture paths — same format as the confirmed-working interrupt icon
+local TANK_ICON = "|TInterface\\Icons\\Ability_Warrior_DefensiveStance:13:13|t"
+local HEAL_ICON = "|TInterface\\Icons\\Spell_Holy_Renew:13:13|t"
+local DPS_ICON  = "|TInterface\\Icons\\Ability_DualWield:13:13|t"
+local INT_ICON  = "|TInterface\\Icons\\Ability_Kick:13:13|t"
+
+local ROLE_FMT = {
+    tank      = { icon = TANK_ICON, color = TANK_COLOR },
+    healer    = { icon = HEAL_ICON, color = HEAL_COLOR },
+    dps       = { icon = DPS_ICON,  color = DPS_COLOR  },
+    interrupt = { icon = INT_ICON,  color = GOLD       },
+    general   = { icon = nil,       color = GRAY       },
+}
+
+-- Render a structured notes array into HUD text.
+-- Each entry: { role = "general"|"tank"|"healer"|"dps"|"interrupt", text = "..." }
+-- Returns nil if notes is nil or empty.
+local function FormatNotes(notes)
+    if not notes or #notes == 0 then return nil end
+    local lines = {}
+    for _, note in ipairs(notes) do
+        local fmt = ROLE_FMT[note.role] or ROLE_FMT.general
+        if fmt.icon then
+            table.insert(lines, fmt.icon .. " " .. fmt.color .. note.text .. RESET)
+        else
+            table.insert(lines, fmt.color .. note.text .. RESET)
+        end
+    end
+    return table.concat(lines, "\n")
+end
+
 -- Build the HUD string for an active boss encounter.
+-- Uses structured notes if present; falls back to flat tip string.
 local function FormatBossContent(dungeon, boss)
     local header = GOLD .. dungeon.name .. RESET .. "\n" .. WHITE .. boss.name .. RESET
-    if boss.tip and boss.tip ~= "" then
-        return header .. "\n" .. GRAY .. boss.tip .. RESET
+    local body = FormatNotes(boss.notes)
+    if not body and boss.tip and boss.tip ~= "" then
+        body = GRAY .. boss.tip .. RESET
     end
-    return header
+    return body and (header .. "\n" .. body) or header
 end
 
 -- Build the HUD string for a trash mob target.
+-- Uses structured notes if present; falls back to flat tip string.
 local function FormatTrashContent(dungeon, mob)
     local header = GOLD .. dungeon.name .. RESET .. "\n" .. WHITE .. mob.name .. RESET
-    if mob.tip and mob.tip ~= "" then
-        return header .. "\n" .. GRAY .. mob.tip .. RESET
+    local body = FormatNotes(mob.notes)
+    if not body and mob.tip and mob.tip ~= "" then
+        body = GRAY .. mob.tip .. RESET
     end
-    return header
+    return body and (header .. "\n" .. body) or header
 end
 
 -- Build the HUD string for the current sub-zone area.
@@ -229,7 +269,7 @@ end
 -- ZONE_CHANGED fires on sub-zone transitions so no polling ticker is needed
 -- for area updates — events drive UpdateContent directly.
 function KwikTip:UpdateContent()
-    if self.bossActive or self.bossTargetActive then return end
+    if self.bossActive or self.bossTargetActive or self.previewActive then return end
 
     local inInstance, instanceType = IsInInstance()
     if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then
@@ -343,6 +383,37 @@ function KwikTip:PruneArray(arr, maxLen)
         return newArr
     end
     return arr
+end
+
+-- ============================================================
+-- Preview (settings demo)
+-- ============================================================
+
+-- Show a demo tip in the HUD with one note of every role category.
+-- Sets previewActive so UpdateContent won't override it while config is open.
+-- Call ClearPreview() (or close the config window) to dismiss.
+function KwikTip:ShowPreview()
+    self.previewActive = true
+    self:InitHUD()
+    local demoNotes = {
+        { role = "general",   text = "Avoid the red zones; use a personal defensive on the big hit." },
+        { role = "tank",      text = "Tank swap at 3 stacks of the debuff." },
+        { role = "healer",    text = "Major healing CDs after every Cataclysm cast." },
+        { role = "dps",       text = "Kill adds before switching back to the boss." },
+        { role = "interrupt", text = "Shadowbolt — interrupt every cast, no exceptions." },
+    }
+    local header = GOLD .. "Demo Dungeon" .. RESET .. "\n" .. WHITE .. "Example Boss" .. RESET
+    self:SetContent(header .. "\n" .. FormatNotes(demoNotes))
+    self:UpdateVisibility()
+end
+
+-- Dismiss the preview and restore normal HUD state.
+function KwikTip:ClearPreview()
+    if not self.previewActive then return end
+    self.previewActive = false
+    self:SetContent("")
+    self:UpdateContent()
+    self:UpdateVisibility()
 end
 
 -- ============================================================

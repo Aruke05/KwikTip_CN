@@ -28,9 +28,11 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 
 - **Boss tips** — concise, actionable guidance for every boss in the Season 1 M+ rotation
 - **Trash tips** — tips appear automatically when you target a known notable mob
+- **Role-specific notes** — tips are categorized by role (tank, healer, DPS, general) and interrupt priority, each with a distinct color and icon so you can find what's relevant at a glance
 - **Sub-zone aware HUD** — tips update automatically as your group moves through each area; boss room tips surface on entry, before the encounter starts
 - **Keep Open Through Instance** — optionally keep the HUD visible throughout a run
 - **Resizable, draggable HUD** — drag to reposition, drag corners to resize; locks in place when done
+- **Preview Notes** — settings window includes a live preview of the role note format so you can check sizing and positioning outside of an instance
 
 ---
 

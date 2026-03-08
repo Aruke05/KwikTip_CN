@@ -107,6 +107,7 @@ function KwikTip:CreateConfigWindow()
         if KwikTip.moveMode then
             KwikTip:ToggleMoveMode()
         end
+        KwikTip:ClearPreview()
     end)
     cfg:Hide()
     self.Config = cfg
@@ -345,6 +346,18 @@ function KwikTip:CreateConfigWindow()
     debugLogCB:SetScript("OnClick", function(self)
         KwikTipDB.debugLog = self:GetChecked()
         KwikTip:UpdateContent()
+    end)
+
+    local previewBtn = CreateFrame("Button", "KwikTipPreviewBtn", cfg, "UIPanelButtonTemplate")
+    previewBtn:SetSize(130, 22)
+    previewBtn:SetPoint("TOPLEFT", debugLogCB, "BOTTOMLEFT", 0, -6)
+    previewBtn:SetText("Preview Notes")
+    previewBtn:SetScript("OnClick", function()
+        if KwikTip.previewActive then
+            KwikTip:ClearPreview()
+        else
+            KwikTip:ShowPreview()
+        end
     end)
 
     local cfgLogo = cfg:CreateTexture(nil, "ARTWORK")

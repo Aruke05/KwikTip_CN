@@ -30,11 +30,16 @@ local ADDON_NAME, KwikTip = ...
 --     npcID       : (optional) NPC ID from UnitGUID; enables tip on targeting before ENCOUNTER_START fires.
 --                   Source from Wowhead. Required for boss rooms with no subzone text.
 --     name        : boss name as shown in the game
---     tip         : short contextual tip shown in the HUD during the boss fight
+--     tip         : short contextual tip shown in the HUD during the boss fight (flat string; legacy/fallback)
+--     notes       : (optional) structured role-aware notes; if present, replaces `tip` in the HUD.
+--                   Each entry: { role = "general"|"tank"|"healer"|"dps"|"interrupt", text = "..." }
+--                   Rendered with role-colored icon prefixes (tank=blue, healer=green, dps=orange,
+--                   interrupt=gold). `tip` is kept alongside for reference during migration.
 --   trash       : optional list of notable trash mobs; PLAYER_TARGET_CHANGED shows tip on match
 --     npcID     : numeric NPC ID extracted from UnitGUID("target"):match("-(%d+)-%x+$")
 --     name      : mob display name
---     tip       : contextual tip shown in HUD when this mob is targeted
+--     tip       : contextual tip shown in HUD when this mob is targeted (flat string; legacy/fallback)
+--     notes     : (optional) structured role-aware notes; same format as boss notes above
 --   areas       : optional list; if present, HUD switches to area-based tips
 --                 matched against GetSubZoneText() as the player moves through the dungeon
 --     subzone   : exact string returned by GetSubZoneText() for this area (verify in-game)
@@ -92,7 +97,7 @@ KwikTip.DUNGEONS = {
         bosses = {
             { encounterID = 3101, name = "Kystia Manaheart",        tip = "Dispel Illicit Infusion from Nibbles for 15s stun + 100% dmg window — Kystia radiates Chaos AoE during this phase so healer CDs needed; dodge Nibbles' Fel Spray cone while she's hostile; interrupt Mirror Images." },
             { encounterID = 3102, name = "Zaen Bladesorrow",        tip = "Stand behind Forbidden Freight during Murder in a Row; move Fire Bomb away from freight (it destroys cover); Heartstop Poison halves tank max health — prioritize tank healing." },
-            { encounterID = 3103, name = "Xathuux the Annihilator", tip = "Dodge Axe Toss impact zones and the Fel Light left behind; stay mobile to avoid Burning Steps." },
+            { encounterID = 3103, name = "Xathuux the Annihilator", tip = "At 100 energy, Demonic Rage pulses heavy group AoE and buffs boss attack speed — use defensives and healer CDs. Dodge Axe Toss impact zones (Fel Light persists on ground); avoid Burning Steps hazards. Tank: Legion Strike applies 80% healing reduction — call for an external." },
             { encounterID = 3105, name = "Lithiel Cinderfury",      tip = "Kill Wild Imps before Malefic Wave reaches them (they gain haste if hit); use Gateways to avoid the wave; interrupt Chaos Bolt." },
         },
         areas = {
@@ -113,7 +118,7 @@ KwikTip.DUNGEONS = {
         mythicPlus = false,
         bosses = {
             { encounterID = 3207, name = "The Hoardmonger",    tip = "At 90%/60%/30%, boss retreats to empower; destroy Rotten Mushrooms before burst (Toxic Spores debuff); dodge frontals." },
-            { encounterID = 3208, name = "Sentinel of Winter", tip = "Dodge Raging Squalls and Snowdrift pools; major healer CDs for Eternal Winter — sustained group damage and pushback." },
+            { encounterID = 3208, name = "Sentinel of Winter", tip = "Dodge Raging Squalls and Snowdrift pools; at 100 energy boss channels Eternal Winter (shields self + heavy group damage) — use damage CDs to break the shield fast, healer CDs to survive." },
             { encounterID = 3209, name = "Nalorakk",           tip = "Fury of the War God: intercept charging echoes to protect Zul'jarra; spread when Echoing Maul marks you." },
         },
         areas = {
@@ -232,7 +237,7 @@ KwikTip.DUNGEONS = {
             { encounterID = 3199, name = "Lightblossom Trinity",   tip = "Block Lightblossom Beams to prevent Light-Gorged stacks on flowers before they detonate; interrupt Lightsower Dash to stop seed planting; all three bosses share damage." },
             { encounterID = 3200, name = "Ikuzz the Light Hunter", tip = "Destroy Bloodthorn Roots quickly — rooted players are also hit by Crushing Footfalls; Bloodthirsty Gaze fixates Ikuzz on a player for 10s — maintain distance or be Incised." },
             { encounterID = 3201, name = "Lightwarden Ruia",       tip = "Heal players to full to clear Grievous Thrash bleeds; at 40%, Ruia enters Haranir form (Spirits of the Vale) and rapidly cycles all abilities — tank rotate to avoid stacking Pulverizing Strikes damage-taken debuff." },
-            { encounterID = 3202, name = "Ziekket",                tip = "Position so Ziekket's Concentrated Lightbeam sweeps over Dormant Lashers to vaporize them; dodge the beam and avoid the Lightsap puddles it leaves behind." },
+            { encounterID = 3202, name = "Ziekket",                tip = "Intercept Lightbloom's Essence globules before the boss absorbs them — each absorbed globule grants a Florescent Outburst stack (stacking shield); touching them yourself grants Lightbloom's Might (+dmg/healing). Position boss's Lightbeam sweep over Dormant Lashers to vaporize them; dodge the beam and Lightsap puddles." },
         },
         areas = {
             { subzone = "The Luminous Garden",  bossIndex = 1 },  -- Lightblossom Trinity; confirmed in-game
