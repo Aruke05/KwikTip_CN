@@ -64,14 +64,14 @@ KwikTip.DUNGEONS = {
         type       = "level",
         mythicPlus = true,
         bosses = {
-            { encounterID = 3056, name = "Emberdawn",          tip = "Tank in corner; players hit by Flaming Updraft drop it near the corner and use a personal defensive; dodge Twisters spawned from puddles; healer major CDs on Burning Gale." },
-            { encounterID = 3057, name = "Derelict Duo",       tip = "Keep both at equal health — Broken Bond enrages the survivor if one dies first; interrupt Shadow Bolt and dispel Curse of Darkness; tank active mitigation for Bone Hack; Latch's Heaving Yank auto-cancels Kalis's Debilitating Shriek (you can't interrupt it yourself)." },
-            { encounterID = 3058, name = "Commander Kroluk",   tip = "Burn adds at 66%/33%; boss immune (Shield Wall) until warparty dies; stay grouped — Intimidating Shout fears isolated players." },
-            { encounterID = 3059, name = "The Restless Heart", tip = "Dodge Arrow Rain; sidestep targeted Bolt Gale; at 100 energy, boss fires wind arrow spawning expanding Billowing Wind rings — stay out; never touch Turbulent Arrows (knockup + removes Squall Leap)." },
+            { encounterID = 3056, name = "Emberdawn",          tip = "Drop Flaming Updraft puddles at the room's outer edges; play close to the boss during Burning Gale (16s) to minimize movement when dodging Twisters and Fire Breath frontals; healer major CDs on Burning Gale." },
+            { encounterID = 3057, name = "Derelict Duo",       tip = "Keep both at equal health — Broken Bond enrages the survivor; interrupt Shadow Bolt; dispel Curse of Darkness to despawn Dark Entity adds; tank defensive for Bone Hack and Splattering Spew (drops puddles — spread loosely); stand behind Kalis so Latch's Heaving Yank pulls her and cancels Debilitating Shriek." },
+            { encounterID = 3058, name = "Commander Kroluk",   tip = "Reckless Leap targets furthest player — stack in melee with one defensive player baiting it; stay near an ally or Intimidating Shout fears you; at 66%/33% kill adds (interrupt Phantasmal Mystic at 50% or it enrages the pull)." },
+            { encounterID = 3059, name = "The Restless Heart", tip = "Manage Squall Leap DoT stacks — step on Turbulent Arrows to clear them and to vault over Bullseye Windblast shockwave at 100 energy; dodge Bolt Gale frontal; tank use defensive for Tempest Slash knockback and damage-taken amp." },
         },
         trash = {
-            { npcID = 232070, name = "Restless Steward",   tip = "Interrupt Spirit Bolt; use stops on Soul Torment to cancel the channel." },
-            { npcID = 232113, name = "Spellguard Magus",   tip = "Defensives for Arcane Salvo; knock mobs out of Spellguard's Protection sphere — it makes them immune to damage." },
+            { npcID = 232070, name = "Restless Steward",   tip = "Interrupt Spirit Bolt; Magic dispel Soul Torment on debuffed players ASAP, then use defensives or focus healing for the remaining player." },
+            { npcID = 232113, name = "Spellguard Magus",   tip = "Defensives for Arcane Salvo; at 50% it drops a Spellguard's Protection zone (99% DR) — tank move the mob and any other mobs out of it immediately." },
             { npcID = 232067, name = "Creeping Spindleweb", tip = "Poison Spray — use a personal defensive." },
         },
         areas = {
@@ -130,7 +130,7 @@ KwikTip.DUNGEONS = {
         type       = "level",
         mythicPlus = true,
         bosses = {
-            { encounterID = 3212, name = "Muro'jin and Nekraxx",     tip = "Kill simultaneously — Muro'jin dies first: Nekraxx enrages (Bestial Wrath); Nekraxx dies first: Muro'jin revives him. Use Freezing Trap victims to interrupt Nekraxx's Carrion Swoop." },
+            { encounterID = 3212, name = "Muro'jin and Nekraxx",     tip = "Keep equal health — if Nekraxx dies first Muro'jin revives him at 35%; if Muro'jin dies first Nekraxx gains 20% dmg every 4s. Carrion Swoop target: step into a Freezing Trap to block the charge and stun Nekraxx 5s. Dispel Infected Pinions disease." },
             { encounterID = 3213, name = "Vordaza",                  tip = "Burst the Deathshroud shield during Necrotic Convergence with damage CDs; kite Unstable Phantoms into each other to detonate them — killing them directly applies Lingering Dread to the group; dodge Unmake line." },
             { encounterID = 3214, name = "Rak'tul, Vessel of Souls", tip = "In spirit realm: interrupt Malignant Souls for Spectral Residue (+25% dmg/heal/speed); avoid Restless Masses roots. Destroy Crush Souls totems before returning." },
         },
@@ -172,7 +172,7 @@ KwikTip.DUNGEONS = {
             { encounterID = 3071, name = "Arcanotron Custos", tip = "Intercept orbs before they reach the boss; avoid Arcane Residue zones left after the knockback." },
             { encounterID = 3072, name = "Seranel Sunlash",   tip = "At 100 energy, be inside a Suppression Zone or Wave of Silence pacifies you for 8s (unable to cast); also step into a zone to resolve Runic Mark (Feedback) — but zones purge your buffs." },
             { encounterID = 3073, name = "Gemellus",          tip = "All copies share health; touch correct clone to clear Neural Link." },
-            { encounterID = 3074, name = "Degentrius",        tip = "One player per quadrant soaks Void Essence as it bounces; miss = Void Destruction stack (wipe at 2). Never touch Void Torrent beams — they stun." },
+            { encounterID = 3074, name = "Degentrius",        tip = "One player per quadrant soaks Unstable Void Essence as it bounces — missing applies a 40s DoT to the group. Tank: step back out of melee for Hulking Fragment DoT dispel (drops a puddle). Never stand in Void Torrent beams — they stun." },
         },
         trash = {
             { npcID = 257644, name = "Arcane Magister",     tip = "Top interrupt priority — Polymorph targets a random player; dispel if it lands." },
@@ -200,19 +200,19 @@ KwikTip.DUNGEONS = {
         type       = "max",
         mythicPlus = true,
         bosses = {
-            { encounterID = 3328, name = "Chief Corewright Kasreth", tip = "Never cross active Leyline Arrays — lethal. When targeted by Reflux Charge, use it to destroy a nearby array for bonus damage." },
-            { encounterID = 3332, name = "Corewarden Nysarra",       tip = "Kill Null Vanguard adds before Lightscar Flare; then stand in the wound during 18s stun for 300% damage." },
+            { encounterID = 3328, name = "Chief Corewright Kasreth", tip = "Don't cross Leyline Arrays (damage + slow). When targeted by Reflux Charge, touch an array intersection to destroy it and open space. At full energy: Corespark Detonation hits a player with a massive knockback and healing absorb DoT — watch positioning to avoid being knocked into puddles." },
+            { encounterID = 3332, name = "Corewarden Nysarra",       tip = "Avoid Lothraxion's beam during Lightscar Flare; stand in the boss's frontal cone during the 18s stun for 300% damage amp (30% healing amp too). Kill Null Vanguard adds before the stun ends — surviving adds get consumed and buff the boss." },
             { encounterID = 3333, name = "Lothraxion",               tip = "At 100 energy, find and interrupt the real Lothraxion among his images — he's the only one without glowing horns; wrong target = Core Exposure (group damage + 20% increased Holy damage taken for 1 min)." },
         },
         trash = {
             { npcID = 241643, name = "Shadowguard Defender",  tip = "Null Sunder stacks per Defender active — control pull size; tank rotate or pop a cooldown on high-stack groups." },
-            { npcID = 241647, name = "Flux Engineer",          tip = "Interrupt Erratic Surge before it fires — random-target bolts that chain to nearby allies." },
+            { npcID = 241647, name = "Flux Engineer",          tip = "Suppression Field: spread to avoid cleaving the random target, then move as little as possible (movement increases damage taken). Drops a live Mana Battery on death — destroy it before it finishes its 12s cast." },
             { npcID = 248708, name = "Nexus Adept",            tip = "Interrupt Umbra Bolt — high-damage shadow nuke; use a stun or stop if interrupt is on cooldown." },
-            { npcID = 248373, name = "Circuit Seer",           tip = "Top interrupt priority — Mana Battery channel deals a sustained group DoT for its full duration." },
-            { npcID = 248706, name = "Cursed Voidcaller",      tip = "Interrupt the summon channel or kill quickly — Void Gate calls additional adds if it completes." },
-            { npcID = 251853, name = "Grand Nullifier",        tip = "Interrupt Null Pulse to prevent party-wide silence; its Nullification aura passively reduces healing output." },
-            { npcID = 241660, name = "Duskfright Herald",      tip = "Dark Beckoning frontal is lethal — step out of the cone the instant the cast begins." },
-            { npcID = 251024, name = "Dreadflail",             tip = "Corewarden Nysarra add — kill before burning the boss; Lightscar wound opens the 18s vulnerability window after." },
+            { npcID = 248373, name = "Circuit Seer",           tip = "Immune to CC. Defensives and healing CDs for Arcing Mana channel; avoid Erratic Zap and Power Flux circles; watch for nearby Mana Batteries it activates — swap and destroy them before the 12s cast completes." },
+            { npcID = 248706, name = "Cursed Voidcaller",      tip = "On death casts Creeping Void — brace for the hit and use Curse dispels to remove the lingering debuff." },
+            { npcID = 251853, name = "Grand Nullifier",        tip = "Interrupt Nullify every cast; avoid Dusk Frights fear zones; turns into a Smudge on death that awakens a nearby Dreadflail — CC or cleave it fast." },
+            { npcID = 241660, name = "Duskfright Herald",      tip = "Immune to CC. Entropic Leech channels on a random player and applies a healing absorb — use a combat drop or dispel the absorb to end it. Avoid pulsing projectiles from Dark Beckoning." },
+            { npcID = 251024, name = "Dreadflail",             tip = "Tank point away from group — Void Lash frontal tank buster; dodge Flailstorm AoE if fixated on you. Also spawned as a Corewarden Nysarra add — kill before the 18s stun ends." },
         },
         areas = {
             { subzone = "Corespark Engineway",    bossIndex = 1 },  -- Chief Corewright Kasreth; confirmed in-game
