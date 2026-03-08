@@ -4,13 +4,11 @@ local ADDON_NAME, KwikTip = ...
 -- ============================================================
 -- Minimap Button
 -- ============================================================
-local RADIUS = 80  -- orbit radius from minimap center
-
 function KwikTip:_PlaceMinimapBtn()
     if self.MinimapBtn then return end
     if not KwikTipDB.showMinimapBtn then return end
 
-    local btn = CreateFrame("Button", "KwikTipMinimapBtn", Minimap)
+    local btn = CreateFrame("Button", "KwikTipMinimapButton", Minimap)
     btn:SetSize(24, 24)
     btn:SetFrameStrata("MEDIUM")
     btn:SetFrameLevel(Minimap:GetFrameLevel() + 5)
@@ -23,14 +21,12 @@ function KwikTip:_PlaceMinimapBtn()
     tex:SetAllPoints(btn)
 
     local function UpdatePosition()
-        local angle = KwikTipDB.minimapAngle or 0
-        local x = math.cos(angle) * RADIUS
-        local y = math.sin(angle) * RADIUS
+        local angle  = KwikTipDB.minimapAngle or 0
+        local radius = (Minimap:GetWidth() / 2) + 5  -- edge of minimap + 5px; matches LibDBIcon behaviour
         btn:ClearAllPoints()
-        btn:SetPoint("CENTER", Minimap, "CENTER", x, y)
+        btn:SetPoint("CENTER", Minimap, "CENTER", math.cos(angle) * radius, math.sin(angle) * radius)
     end
 
-    btn:SetScript("OnLoad", UpdatePosition)
     btn:SetScript("OnShow", UpdatePosition)
 
     btn:SetScript("OnClick", function(self, button)
@@ -46,9 +42,9 @@ function KwikTip:_PlaceMinimapBtn()
         self:SetScript("OnUpdate", function(frame)
             local mx, my = Minimap:GetCenter()
             local px, py = GetCursorPosition()
-            local scale = Minimap:GetEffectiveScale()
-            local dx = (px / scale - mx) / Minimap:GetWidth()
-            local dy = (py / scale - my) / Minimap:GetHeight()
+            local scale  = UIParent:GetEffectiveScale()  -- GetCenter() is in UIParent virtual space
+            local dx = px / scale - mx
+            local dy = py / scale - my
             KwikTipDB.minimapAngle = math.atan2(dy, dx)
             UpdatePosition()
         end)
