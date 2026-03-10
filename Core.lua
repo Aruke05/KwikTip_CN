@@ -521,14 +521,17 @@ SlashCmdList["KWIKTIP"] = function(msg)
         print("|cff00ff00KwikTip|r Tips feel off? Open an issue at: https://github.com/postblink/KwikTip/issues")
     elseif cmd == "config" or cmd == "" then
         KwikTip:ToggleConfig()
-    else
+    elseif cmd == "help" then
         print("|cff00ff00KwikTip|r commands:")
         print("  /kwik           — open settings")
         print("  /kwik move      — toggle move/lock mode")
-        print("  /kwik debug     — print detection state to chat")
-        print("  /kwik debuglog  — toggle map/mob ID logging to SavedVariables")
         print("  /kwik preview   — toggle role notes preview in the HUD")
-        print("  /kwik clearlog  — clear all debug logs")
+        print("  /kwik debug     — print current detection state to chat")
+        print("  /kwik debuglog  — toggle map/mob ID logging to SavedVariables")
+        print("  /kwik clearlog  — clear all debug logs from SavedVariables")
         print("  /kwik feedback  — print the feedback/issue link")
+        print("  /kwik help      — show this command list")
+    else
+        print("|cff00ff00KwikTip|r unknown command. Type /kwik help for a list of commands.")
     end
 end

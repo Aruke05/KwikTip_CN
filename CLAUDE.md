@@ -93,6 +93,8 @@ See `DungeonData.lua` for the full data table.
 | `/kwik debuglog` | Toggle map/mob ID logging to SavedVariables |
 | `/kwik preview` | Toggle role notes preview in the HUD |
 | `/kwik clearlog` | Clear mapIDLog, mobLog, encounterLog, and debugSnapshots |
+| `/kwik feedback` | Print the GitHub issues link to chat |
+| `/kwik help` | Print all available commands to chat |
 
 A minimap button (when enabled in settings) provides quick access: left-click opens settings, right-click toggles move mode, drag to reposition.
 
