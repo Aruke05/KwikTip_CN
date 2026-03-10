@@ -517,6 +517,8 @@ SlashCmdList["KWIKTIP"] = function(msg)
         KwikTipDB.encounterLog  = {}
         KwikTipDB.debugSnapshots = {}
         print("|cff00ff00KwikTip|r mapIDLog, mobLog, encounterLog, and debugSnapshots cleared.")
+    elseif cmd == "feedback" then
+        print("|cff00ff00KwikTip|r Tips feel off? Open an issue at: https://github.com/postblink/KwikTip/issues")
     elseif cmd == "config" or cmd == "" then
         KwikTip:ToggleConfig()
     else
@@ -527,5 +529,6 @@ SlashCmdList["KWIKTIP"] = function(msg)
         print("  /kwik debuglog  — toggle map/mob ID logging to SavedVariables")
         print("  /kwik preview   — toggle role notes preview in the HUD")
         print("  /kwik clearlog  — clear all debug logs")
+        print("  /kwik feedback  — print the feedback/issue link")
     end
 end

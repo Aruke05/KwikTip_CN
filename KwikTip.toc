@@ -1,8 +1,8 @@
 ## Interface: 120001
 ## Title: KwikTip
-## Notes: A custom UI/HUD element addon
+## Notes: Contextual boss and trash tips for M+ dungeons. Tips feel off? https://github.com/postblink/KwikTip/issues
 ## Author:
-## Version: 1.5.12
+## Version: 1.5.13
 ## DefaultState: enabled
 ## OptionalDeps: LibSharedMedia-3.0
 

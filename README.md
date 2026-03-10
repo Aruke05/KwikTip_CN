@@ -85,6 +85,7 @@ All bosses across all listed dungeons have tips. Trash tips are filled in for th
 | `/kwik debuglog` | Toggle map/mob ID logging to SavedVariables |
 | `/kwik preview` | Toggle role notes preview in the HUD |
 | `/kwik clearlog` | Clear all debug logs from SavedVariables |
+| `/kwik feedback` | Print the feedback/issue link to chat |
 
 The HUD is hidden outside of instances. Use `/kwik move` to show and reposition it at any time.
 
