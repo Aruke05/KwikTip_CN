@@ -197,11 +197,23 @@ function KwikTip:ApplySettings()
     hud:SetBackdropColor(0, 0, 0, db.alpha)
     hud:ClearAllPoints()
     hud:SetPoint("CENTER", UIParent, "CENTER", db.x or 0, db.y or 0)
+    if db.borderEnabled ~= false then
+        hud:SetBackdropBorderColor(db.borderColorR or 0, db.borderColorG or 0, db.borderColorB or 0, db.borderColorA or 1)
+    else
+        hud:SetBackdropBorderColor(0, 0, 0, 0)
+    end
     if contentText then
         local LSM  = LibStub and LibStub("LibSharedMedia-3.0", true)
         local path = (LSM and db.fontName and LSM:Fetch("font", db.fontName))
                   or db.fontPath or "Fonts\\FRIZQT__.TTF"
-        contentText:SetFont(path, db.fontSize or 11, "")
+        contentText:SetFont(path, db.fontSize or 11, db.textOutline or "")
+        if db.textShadow then
+            contentText:SetShadowOffset(1, -1)
+            contentText:SetShadowColor(0, 0, 0, 1)
+        else
+            contentText:SetShadowOffset(0, 0)
+            contentText:SetShadowColor(0, 0, 0, 0)
+        end
     end
 end
 
@@ -247,7 +259,12 @@ function KwikTip:ToggleMoveMode()
         hud:SetBackdropBorderColor(1, 0.82, 0, 1)  -- gold outline = move mode active
     else
         hud:EnableMouse(false)
-        hud:SetBackdropBorderColor(0, 0, 0, 1)
+        local db = KwikTipDB
+        if db.borderEnabled ~= false then
+            hud:SetBackdropBorderColor(db.borderColorR or 0, db.borderColorG or 0, db.borderColorB or 0, db.borderColorA or 1)
+        else
+            hud:SetBackdropBorderColor(0, 0, 0, 0)
+        end
         SaveHUDLayout()
         self:UpdateContent()
         self:UpdateVisibility()

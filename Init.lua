@@ -20,6 +20,14 @@ KwikTip.DEFAULTS = {
     mobLog         = {},
     encounterLog   = {},     -- always-on; records every ENCOUNTER_START encounterID seen
     debugSnapshots = {},     -- written by /kwik debug; inspection log for post-session review
+    -- HUD appearance
+    borderEnabled  = true,
+    borderColorR   = 0,
+    borderColorG   = 0,
+    borderColorB   = 0,
+    borderColorA   = 1,
+    textOutline    = "",     -- "", "OUTLINE", "THICKOUTLINE"
+    textShadow     = false,
 }
 
 -- ============================================================

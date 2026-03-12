@@ -217,7 +217,7 @@ function KwikTip:OnTargetChanged()
     if self.bossActive then return end
 
     local inInstance, instanceType = IsInInstance()
-    if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then
+    if not inInstance or (instanceType ~= "party" and instanceType ~= "raid") then
         if self.trashActive or self.bossTargetActive then
             self.trashActive = false
             self.bossTargetActive = false
@@ -270,7 +270,7 @@ function KwikTip:OnMouseoverUnit()
     if self.bossActive then return end
 
     local inInstance, instanceType = IsInInstance()
-    if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then return end
+    if not inInstance or (instanceType ~= "party" and instanceType ~= "raid") then return end
 
     local guid = UnitGUID("mouseover")
     if not guid then return end
@@ -294,7 +294,7 @@ function KwikTip:UpdateContent()
     if self.bossActive or self.bossTargetActive or self.previewActive then return end
 
     local inInstance, instanceType = IsInInstance()
-    if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then
+    if not inInstance or (instanceType ~= "party" and instanceType ~= "raid") then
         self.areaActive    = false
         self.dungeonActive = false
         self.trashActive   = false
@@ -361,8 +361,8 @@ end
 function KwikTip:LogMapID()
     if not KwikTipDB or not KwikTipDB.debugLog then return end
     local inInstance, instanceType = IsInInstance()
-    if not inInstance or (instanceType ~= "party" and instanceType ~= "raid" and instanceType ~= "scenario") then return end
-    
+    if not inInstance or (instanceType ~= "party" and instanceType ~= "raid") then return end
+
     local mapID = C_Map.GetBestMapForUnit("player")
     local instanceName, _, _, _, _, _, _, instanceID = GetInstanceInfo()
     local subzone = GetSubZoneText()
