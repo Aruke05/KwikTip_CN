@@ -8,3 +8,6 @@ Thumbs.db
 # Editor
 .vscode/
 *.swp
+
+# Source monitor state and report (local only)
+tools/.monitor/

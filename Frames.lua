@@ -283,10 +283,17 @@ end
 -- ============================================================
 -- Set the text displayed inside the HUD box.
 -- Guards against redundant SetText calls when content hasn't changed.
+-- Auto-expands the frame height if the rendered text is taller than the
+-- user's saved height, then restores it when content fits again.
+-- SaveHUDLayout is NOT called here — the auto-expansion is transient.
 function KwikTip:SetContent(str)
     str = str or ""
     if self._lastContent == str then return end
     self._lastContent = str
     if not contentText then self:InitHUD() end
     contentText:SetText(str)
+
+    local savedH  = KwikTipDB.height or 80
+    local needed  = contentText:GetStringHeight() + 12  -- 6px top + 6px bottom inset
+    hud:SetHeight(math.max(savedH, needed))
 end

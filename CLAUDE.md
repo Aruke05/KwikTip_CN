@@ -22,8 +22,9 @@ Two concerns are handled separately: **game data** (IDs, names) and **tip conten
 
 ### Tip Content — what to write in `tip` fields
 **M+ dungeons** (Magisters' Terrace, Windrunner Spire, Maisara Caverns, Nexus-Point Xenas + legacy four):
-1. **method.gg** — primary. M+-focused, practical, high-end perspective. Best source for positioning cues, pull priorities, and mechanic callouts.
-2. **Icy Veins** — secondary. Structured tank/healer/DPS notes; useful for completeness and cross-verification.
+1. **Tactyks YouTube (@Tactyks)** — tier 1. Tactyks is the author of the method.gg dungeon guides; his YouTube videos are the upstream source and may reflect post-season updates before the written guides are revised. Check here first for season-start content or when guides may be stale.
+2. **method.gg** — tier 1. Written form of Tactyks' guides; M+-focused, practical, high-end perspective. Best for positioning cues, pull priorities, and mechanic callouts.
+3. **Icy Veins** — secondary. Structured tank/healer/DPS notes; useful for completeness and cross-verification.
 
 **Non-M+ dungeons** (Murder Row, Den of Nalorakk, The Blinding Vale, Voidscar Arena):
 1. **Icy Veins** — primary. method.gg does not cover non-M+ dungeons.

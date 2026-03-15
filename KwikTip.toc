@@ -2,7 +2,7 @@
 ## Title: KwikTip
 ## Notes: Contextual boss and trash tips for M+ dungeons. Tips feel off? https://github.com/postblink/KwikTip/issues
 ## Author:
-## Version: 1.5.22
+## Version: 1.5.23
 ## DefaultState: enabled
 ## OptionalDeps: LibSharedMedia-3.0
 
@@ -14,6 +14,7 @@
 
 Init.lua
 DungeonData.lua
+DungeonData_Timewalking.lua
 Core.lua
 Frames.lua
 UI_Config.lua
