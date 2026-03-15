@@ -437,7 +437,7 @@ function KwikTip:LogMapID()
     local mapID = C_Map.GetBestMapForUnit("player")
     local instanceName, _, _, _, _, _, _, instanceID = GetInstanceInfo()
     local subzone = GetSubZoneText()
-    
+
     -- Deduplication to prevent redundant GC thrashing on ZONE_CHANGED
     if self._lastMapID == mapID and self._lastInstanceID == instanceID and self._lastSubzone == subzone then
         return
@@ -458,7 +458,7 @@ function KwikTip:LogMapID()
         noSubzone    = (subzone == "") or nil,  -- flag transitions where subzone text is absent; omitted when false to keep log tidy
         time         = date("%Y-%m-%d %H:%M:%S"),
     })
-    
+
     -- Cap log size to avoid SavedVariables bloat
     if #KwikTipDB.mapIDLog > 2000 then
         KwikTipDB.mapIDLog = self:PruneArray(KwikTipDB.mapIDLog, 2000)
