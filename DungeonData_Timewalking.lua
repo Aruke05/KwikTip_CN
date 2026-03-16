@@ -1424,8 +1424,16 @@ end
 KwikTip.BOSS_BY_NPCID = {}
 for _, dungeon in ipairs(KwikTip.DUNGEONS) do
     for _, boss in ipairs(dungeon.bosses) do
+        local entry = { dungeon = dungeon, boss = boss }
         if boss.npcID and boss.npcID ~= 0 then
-            KwikTip.BOSS_BY_NPCID[boss.npcID] = { dungeon = dungeon, boss = boss }
+            KwikTip.BOSS_BY_NPCID[boss.npcID] = entry
+        end
+        if boss.altNpcIDs then
+            for _, id in ipairs(boss.altNpcIDs) do
+                if id ~= 0 then
+                    KwikTip.BOSS_BY_NPCID[id] = entry
+                end
+            end
         end
     end
 end

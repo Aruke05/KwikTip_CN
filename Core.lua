@@ -7,8 +7,10 @@ frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 frame:RegisterEvent("ZONE_CHANGED")
 frame:RegisterEvent("ENCOUNTER_START")
 frame:RegisterEvent("ENCOUNTER_END")
--- PLAYER_TARGET_CHANGED, UPDATE_MOUSEOVER_UNIT, and UNIT_SPELLCAST_START are registered
--- dynamically inside UpdateContent() only while the player is inside a supported instance.
+-- NOTE: In Midnight 12.x, UnitGUID() for hostile NPCs returns a tainted "secret value" —
+-- COMBAT_LOG_EVENT_UNFILTERED is also a protected event and cannot be registered.
+-- NPC-based trash tip detection is impossible; detection uses subzone/area events only.
+-- UNIT_SPELLCAST_START is registered dynamically for debug spell logging only.
 frame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" or event == "ZONE_CHANGED" then
         KwikTip:UpdateContent()
@@ -20,10 +22,6 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "ENCOUNTER_END" then
         local _, _, _, _, success = ...
         KwikTip:OnEncounterEnd(success)
-    elseif event == "PLAYER_TARGET_CHANGED" then
-        KwikTip:OnTargetChanged()
-    elseif event == "UPDATE_MOUSEOVER_UNIT" then
-        KwikTip:OnMouseoverUnit()
     elseif event == "UNIT_SPELLCAST_START" then
         local unit, _, spellID = ...
         KwikTip:OnSpellCastStart(unit, spellID)
@@ -96,17 +94,6 @@ local function FormatBossContent(dungeon, boss)
     return body and (header .. "\n" .. body) or header
 end
 
--- Build the HUD string for a trash mob target.
--- Uses structured notes if present; falls back to flat tip string.
-local function FormatTrashContent(dungeon, mob)
-    local body = FormatNotes(mob.notes)
-    if not body and mob.tip and mob.tip ~= "" then
-        body = GRAY .. mob.tip .. RESET
-    end
-    local header = FormatHeader(dungeon.name, mob.name)
-    return body and (header .. "\n" .. body) or header
-end
-
 -- Build the HUD string for the current sub-zone area.
 -- Matches GetSubZoneText() against dungeon.areas[].subzone.
 -- If the area entry has a bossIndex field, the boss tip is shown instead
@@ -172,134 +159,13 @@ function KwikTip:OnEncounterEnd(success)
     self.bossActive = false
     if success == 1 then
         -- Boss killed — leave current tip up until next natural trigger.
-        self.bossTargetActive = false
         self:UpdateVisibility()
     else
         -- Wipe or reset — clear and return to normal detection.
-        self.bossTargetActive = false
         self:SetContent("")
         self:UpdateContent()
         self:UpdateVisibility()
     end
-end
-
--- ============================================================
--- Mob logging
--- ============================================================
--- Logs the NPC name, sub-zone, instance context, level, and classification
--- when targeting or mousing over a hostile NPC inside an instance.
--- Only logs mobs not already present in TRASH_BY_NPCID or BOSS_BY_NPCID,
--- keeping the log focused on genuinely undiscovered NPCs.
-
-local _lastLoggedNpcID = nil  -- deduplicate mouseover spam
-
-local function LogMobPosition(npcID, unitToken)
-    if not KwikTipDB or not KwikTipDB.debugLog then return end
-    -- Skip mobs already covered in DungeonData — log is for discovery only.
-    if KwikTip.TRASH_BY_NPCID[npcID] or KwikTip.BOSS_BY_NPCID[npcID] then return end
-    local instanceName, _, _, _, _, _, _, instanceID = GetInstanceInfo()
-    local mapID = C_Map.GetBestMapForUnit("player")
-    local pos   = mapID and C_Map.GetPlayerMapPosition(mapID, "player")
-    table.insert(KwikTipDB.mobLog, {
-        npcID              = npcID,
-        npcName            = UnitName(unitToken),
-        npcLevel           = UnitLevel(unitToken),
-        npcClassification  = UnitClassification(unitToken),
-        mapID              = mapID,
-        x                  = pos and pos.x,
-        y                  = pos and pos.y,
-        instanceID         = instanceID,
-        instanceName       = instanceName,
-        subzone            = GetSubZoneText(),
-        time               = date("%Y-%m-%d %H:%M:%S"),
-    })
-    if #KwikTipDB.mobLog > 5000 then
-        KwikTipDB.mobLog = KwikTip:PruneArray(KwikTipDB.mobLog, 5000)
-    end
-    _lastLoggedNpcID = npcID
-end
-
--- ============================================================
--- Trash target state
--- ============================================================
-
--- Called by PLAYER_TARGET_CHANGED. Logs the mob and shows a tip if known.
--- Logging always runs (regardless of areaActive) so mob data is collected even
--- in named sub-zones. The HUD display is still gated: area tips take priority
--- over trash tips and trashActive is only set when no area tip is shown.
-function KwikTip:OnTargetChanged()
-    local guid = UnitGUID("target")
-    if self.bossActive then return end
-
-    local inInstance, instanceType = IsInInstance()
-    if not IsSupportedInstance(inInstance, instanceType) then
-        if self.trashActive or self.bossTargetActive then
-            self.trashActive = false
-            self.bossTargetActive = false
-            self:UpdateVisibility()
-        end
-        return
-    end
-    if guid then
-        -- pcall required: GUIDs obtained during tainted execution (e.g. mouse-click path via
-        -- CameraOrSelectOrMoveStop) are "secret values" — truthy but rejected by GetCreatureID.
-        -- A nil check alone is NOT sufficient. Do not replace with a direct call.
-        local ok, npcID = pcall(C_CreatureInfo.GetCreatureID, guid)
-        if not ok then return end
-        if npcID and npcID ~= 0 then
-            LogMobPosition(npcID, "target")  -- log dead or alive; areaActive must not gate this
-        end
-        if npcID and npcID ~= 0 and UnitCanAttack("player", "target") then
-            -- Boss NPC check — shows tip before ENCOUNTER_START fires (e.g. rooms with no subzone text).
-            local bossEntry = KwikTip.BOSS_BY_NPCID[npcID]
-            if bossEntry then
-                self.bossTargetActive = true
-                self.trashActive = false
-                self:SetContent(FormatBossContent(bossEntry.dungeon, bossEntry.boss))
-                self:UpdateVisibility()
-                return
-            end
-            if not self.areaActive then
-                local entry = KwikTip.TRASH_BY_NPCID[npcID]
-                if entry then
-                    self.bossTargetActive = false
-                    self.trashActive = true
-                    self:SetContent(FormatTrashContent(entry.dungeon, entry.mob))
-                    self:UpdateVisibility()
-                    return
-                end
-            end
-        end
-    end
-
-    -- No known target — clear boss target and trash state.
-    if self.trashActive or self.bossTargetActive then
-        self.trashActive = false
-        self.bossTargetActive = false
-        self:SetContent("")
-        self:UpdateContent()
-        self:UpdateVisibility()
-    end
-end
-
--- Called by UPDATE_MOUSEOVER_UNIT. Logs NPC; deduplicates against last logged npcID.
-function KwikTip:OnMouseoverUnit()
-    if not KwikTipDB or not KwikTipDB.debugLog then return end
-    if self.bossActive then return end
-
-    local inInstance, instanceType = IsInInstance()
-    if not IsSupportedInstance(inInstance, instanceType) then return end
-
-    local guid = UnitGUID("mouseover")
-    if not guid then return end
-    -- pcall required: see OnTargetChanged comment — tainted GUIDs are truthy but rejected by GetCreatureID.
-    local ok, npcID = pcall(C_CreatureInfo.GetCreatureID, guid)
-    if not ok then return end
-    if not npcID or npcID == 0 then return end
-    if not UnitCanAttack("player", "mouseover") then return end
-    if npcID == _lastLoggedNpcID then return end
-
-    LogMobPosition(npcID, "mouseover")
 end
 
 -- ============================================================
@@ -323,7 +189,7 @@ function KwikTip:OnSpellCastStart(unit, spellID)
 
     local guid = UnitGUID("target")
     if not guid then return end
-    -- pcall required: see OnTargetChanged comment — tainted GUIDs are truthy but rejected by GetCreatureID.
+    -- pcall required: in Midnight 12.x hostile NPC GUIDs are tainted secret values — GetCreatureID rejects them at the C level.
     local ok, npcID = pcall(C_CreatureInfo.GetCreatureID, guid)
     if not ok then return end
     if not npcID or npcID == 0 then return end
@@ -360,17 +226,14 @@ end
 -- ZONE_CHANGED fires on sub-zone transitions so no polling ticker is needed
 -- for area updates — events drive UpdateContent directly.
 function KwikTip:UpdateContent()
-    if self.bossActive or self.bossTargetActive or self.previewActive then return end
+    if self.bossActive or self.previewActive then return end
 
     local inInstance, instanceType = IsInInstance()
     if not IsSupportedInstance(inInstance, instanceType) then
         self.areaActive    = false
         self.dungeonActive = false
-        self.trashActive   = false
         self:SetContent("")
         if self._targetEventsRegistered then
-            frame:UnregisterEvent("PLAYER_TARGET_CHANGED")
-            frame:UnregisterEvent("UPDATE_MOUSEOVER_UNIT")
             frame:UnregisterEvent("UNIT_SPELLCAST_START")
             self._targetEventsRegistered = false
         end
@@ -378,8 +241,6 @@ function KwikTip:UpdateContent()
     end
 
     if not self._targetEventsRegistered then
-        frame:RegisterEvent("PLAYER_TARGET_CHANGED")
-        frame:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
         frame:RegisterEvent("UNIT_SPELLCAST_START")
         self._targetEventsRegistered = true
     end
@@ -397,18 +258,12 @@ function KwikTip:UpdateContent()
     local prevAreaActive    = self.areaActive
     local prevDungeonActive = self.dungeonActive
 
-    -- DungeonData area tips take priority. Trash target info is a secondary
-    -- fallback used only when no area tip is defined for the current sub-zone.
     local areaContent = dungeon and dungeon.areas and FormatAreaContent(dungeon)
 
     if areaContent then
-        self.trashActive   = false
         self.areaActive    = true
         self.dungeonActive = false
         self:SetContent(areaContent)
-    elseif self.trashActive then
-        -- Known trash target is already displayed; nothing to update.
-        return
     elseif dungeon and KwikTipDB.showInDungeon then
         -- No area match and no trash — keep HUD open with a holding message.
         self.areaActive    = false
@@ -547,10 +402,9 @@ SlashCmdList["KWIKTIP"] = function(msg)
         local spellCount     = KwikTipDB.spellLog     and #KwikTipDB.spellLog     or 0
         local snapshotCount  = KwikTipDB.debugSnapshots and #KwikTipDB.debugSnapshots or 0
         print("|cff00ff00KwikTip|r debug:")
-        print(string.format("  inInstance=%s  type=%s  boss=%s  bossTarget=%s  trash=%s  area=%s  dungeon=%s",
+        print(string.format("  inInstance=%s  type=%s  boss=%s  area=%s  dungeon=%s",
             tostring(inInstance), tostring(instanceType),
-            tostring(KwikTip.bossActive), tostring(KwikTip.bossTargetActive),
-            tostring(KwikTip.trashActive),
+            tostring(KwikTip.bossActive),
             tostring(KwikTip.areaActive), tostring(KwikTip.dungeonActive)))
         print(string.format("  instanceID=%s  mapID=%s  dungeon=%s",
             tostring(instanceID), tostring(mapID), dungeonName))
@@ -569,8 +423,6 @@ SlashCmdList["KWIKTIP"] = function(msg)
                 dungeon          = dungeonName,
                 subzone          = subzone,
                 bossActive       = KwikTip.bossActive,
-                bossTargetActive = KwikTip.bossTargetActive,
-                trashActive      = KwikTip.trashActive,
                 areaActive       = KwikTip.areaActive,
                 dungeonActive    = KwikTip.dungeonActive,
                 mapIDLogCount     = mapIDCount,

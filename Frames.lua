@@ -228,9 +228,9 @@ function KwikTip:_UpdatePrintBtn()
 end
 
 -- Show the HUD when any active state warrants it, or when move mode is active.
---   bossActive  : ENCOUNTER_START is in progress
---   trashActive : player is targeting a known trash mob
---   areaActive  : player is inside a named area bounding box
+--   bossActive    : ENCOUNTER_START is in progress
+--   areaActive    : player is inside a named sub-zone with a defined tip
+--   dungeonActive : player is in a known dungeon with showInDungeon enabled
 -- Respects the persistentHide flag set from the config window.
 function KwikTip:UpdateVisibility()
     if KwikTipDB.persistentHide and not self.moveMode then
@@ -238,7 +238,7 @@ function KwikTip:UpdateVisibility()
         return
     end
 
-    if self.moveMode or self.previewActive or self.bossActive or self.bossTargetActive or self.trashActive or self.areaActive or self.dungeonActive then
+    if self.moveMode or self.previewActive or self.bossActive or self.areaActive or self.dungeonActive then
         self:InitHUD()
         hud:Show()
     else
