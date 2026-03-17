@@ -123,9 +123,13 @@ KwikTip.DUNGEONS = {
             },
         },
         trash = {
-            { npcID = 232070, name = "Restless Steward",   tip = "Interrupt Spirit Bolt; Magic dispel Soul Torment on debuffed players ASAP, then use defensives or focus healing for the remaining player." },
-            { npcID = 232113, name = "Spellguard Magus",   tip = "Defensives for Arcane Salvo; at 50% it drops a Spellguard's Protection zone (99% DR) — tank move the mob and any other mobs out of it immediately." },
-            { npcID = 232067, name = "Creeping Spindleweb", tip = "Poison Spray — use a personal defensive." },
+            { npcID = 232070, name = "Restless Steward",      tip = "Interrupt Spirit Bolt; Magic dispel Soul Torment on debuffed players ASAP, then use defensives or focus healing for the remaining player." },
+            { npcID = 232113, name = "Spellguard Magus",      tip = "Defensives for Arcane Salvo; at 50% it drops a Spellguard's Protection zone (99% DR) — tank move the mob and any other mobs out of it immediately." },
+            { npcID = 232067, name = "Creeping Spindleweb",   tip = "Poison Spray — use a personal defensive." },
+            { npcID = 232097, name = "Territorial Dragonhawk", tip = "Interrupt Fire Spit; purge Bolstering Flames buff when it applies." },
+            { npcID = 232094, name = "Bloated Lasher",         tip = "Interrupt Fungal Bolt — top priority. Spore Dispersal on death buffs nearby mobs' melee damage — position kills away from other packs." },
+            { npcID = 231616, name = "Ardent Cutthroat",       tip = "Interrupt every Poison Blades cast — each uninterrupted stack bleeds the tank." },
+            { npcID = 231615, name = "Devoted Woebringer",     tip = "CC-immune. Interrupt Shadow Bolt; break the Pulsing Shriek shield to interrupt the channel." },
         },
         areas = {
             { subzone = "The Promenade",       tip = "Interrupt Spirit Bolt from Restless Stewards — dispel Soul Torment on debuffed players immediately. Use a personal defensive for Creeping Spindleweb's Poison Spray." },
@@ -282,11 +286,11 @@ KwikTip.DUNGEONS = {
                 encounterID = 3214,
                 npcID       = 248605,
                 name        = "Rak'tul, Vessel of Souls",
-                tip         = "In spirit realm: interrupt Malignant Souls for Spectral Residue (+25% dmg/heal/speed) — kill the first 5 quickly, then delay the 6th soul to maximize buff duration back in the boss phase; avoid Restless Masses roots; cleave Crush Souls totems before returning.",
+                tip         = "Interrupt all 6 Malignant Souls in the spirit realm — each interrupt grants a stacking Spectral Residue buff (+25% dmg/heal/speed) back in the boss phase. Avoid Restless Masses roots; cleave Crush Souls totems before returning. Boss phase: Spiritbreaker — position against braziers to negate knockback.",
                 notes = {
-                    { role = "general",   text = "In spirit realm: kill first 5 Malignant Souls quickly, then delay the 6th to maximize Spectral Residue buff duration on return." },
-                    { role = "general",   text = "Avoid Restless Masses roots; cleave Crush Souls totems before returning." },
-                    { role = "interrupt", text = "Malignant Souls (spirit realm) — grants Spectral Residue (+25% dmg/heal/speed)." },
+                    { role = "interrupt", text = "All 6 Malignant Souls in the spirit realm — each grants stacking Spectral Residue (+25% dmg/heal/speed)." },
+                    { role = "general",   text = "Avoid Restless Masses roots; cleave Crush Souls totems before returning to boss phase." },
+                    { role = "tank",      text = "Spiritbreaker combo: channel + puddle + knockback — position against braziers to negate the knockback." },
                 },
             },
         },
@@ -377,15 +381,16 @@ KwikTip.DUNGEONS = {
             { npcID = 251917, name = "Animated Codex",      tip = "Arcane Volley pulses constant AoE — limit pull size and prepare healing cooldowns." },
             { npcID = 257161, name = "Blazing Pyromancer",  tip = "Interrupt every Pyroblast; use defensives during Ignition; avoid Flamestrike." },
             { npcID = 24761,  name = "Brightscale Wyrm",    tip = "Stagger kills — Energy Release fires on death; killing simultaneously overwhelms the group." },
-            { npcID = 234068, name = "Shadowrift Voidcaller", tip = "Use healing cooldowns or line of sight when it casts Consuming Shadows; kill spawned adds from Call of the Void." },
+            { npcID = 234068, name = "Shadowrift Voidcaller", tip = "CC-immune. Line of sight Consuming Shadows — break line before the channel completes; kill spawned adds from Call of the Void." },
             { npcID = 249086, name = "Void Infuser",        tip = "Interrupt Terror Wave every cast; dispel or use a defensive for Consuming Void debuff." },
-            { npcID = 234066, name = "Devouring Tyrant",    tip = "Tank uses defensive and self-healing for Devouring Strike (healing absorb); all players defensive for Void Bomb absorb." },
+            { npcID = 234066, name = "Devouring Tyrant",    tip = "CC-immune. Tank defensive for Devouring Strike (large healing absorb). Void Bomb targets a random player — that player and nearby allies use defensives for the absorb." },
         },
         areas = {
             { subzone = "Arcane Atheneum",        tip = "Interrupt Arcane Magisters' Polymorph first — targets a random player. Limit Animated Codex pulls — Arcane Volley is sustained group AoE. Dispel Holy Fire from Lightward Healers." },
             { subzone = "Observation Grounds",    bossIndex = 1 },  -- Arcanotron Custos; confirmed in-game
             { subzone = "Grand Magister Asylum",  bossIndex = 2 },  -- Seranel Sunlash; confirmed in-game
             { subzone = "Tower of Theory",        tip = "Interrupt Terror Wave from Void Infusers every cast. Stagger Brightscale Wyrm kills — simultaneous deaths chain Energy Release through the group. Line of sight Consuming Shadows from Shadowrift Voidcallers." },
+            { subzone = "Constellarium",          bossIndex = 3 },  -- Gemellus; confirmed in-game
             { subzone = "Celestial Orrery",       bossIndex = 4 },  -- Degentrius; confirmed in-game
         },
     },
@@ -1079,35 +1084,36 @@ KwikTip.DUNGEONS = {
                 encounterID = 3176,  -- BigWigs; unverified in-game
                 npcID       = 240435,
                 name        = "Imperator Averzian",
-                tip         = "Soak Umbral Collapse circles on Abyssal Voidshapers to block tile claims — 3 tiles claimed in a row triggers March of the Endless (massive raid damage). Dodge Oblivion's Wrath ground zones. Tanks: Blackening Wounds stacks reduce max HP — swap before they stack high.",
+                tip         = "Stack to soak Umbral Collapse near Abyssal Voidshapers — soaking near a voidshaper blocks its tile claim. 3 adjacent claimed tiles triggers March of the Endless (wipe). Avoid claimed tiles — boss gains near-immunity (Imperator's Glory) near them. Tanks: Blackening Wounds stacks reduce max HP and draw adds — swap before stacks peak.",
                 notes = {
-                    { role = "general",   text = "Soak Umbral Collapse circles on Abyssal Voidshapers — block their tile claims. 3 tiles in a row triggers March of the Endless." },
-                    { role = "general",   text = "Dodge Oblivion's Wrath ground zones; avoid claimed tiles (Imperator gains immunity near them)." },
-                    { role = "tank",      text = "Swap on Blackening Wounds — stacks reduce your max HP." },
+                    { role = "general",   text = "Stack to soak Umbral Collapse near Abyssal Voidshapers — blocks their tile claim. 3 adjacent tiles triggers March of the Endless." },
+                    { role = "general",   text = "Avoid claimed tiles — Imperator's Glory grants near-immunity near claimed territory. Dodge Oblivion's Wrath ground zones." },
+                    { role = "tank",      text = "Swap on Blackening Wounds — stacks reduce max HP and the highest-stack tank draws adds." },
                 },
             },
             {
                 encounterID = 3177,  -- BigWigs; unverified in-game
                 npcID       = 240434,
                 name        = "Vorasius",
-                tip         = "Kill Blistercreep adds before they explode — use Blisterburst detonations to destroy Void Crystals. Always keep a player in melee (Overpowering Pulse hits hard with no melee). Primordial Roar pulls in then knocks back — brace with a personal. Tanks: swap on Smashed stacks from Shadowclaw Slam.",
+                tip         = "Dodge Void Breath — the sweeping laser is lethal. Kill Blistercreep adds near crystal walls — Blisterburst detonations destroy the walls. Primordial Roar pulls in then knocks back — brace with a personal. Tanks: Tank 1 intentionally takes 2 Shadowclaw Slam stacks (Smashed = 150% phys damage taken), then swap; wait for Smashed to fall off before swapping back.",
                 notes = {
-                    { role = "general",   text = "Kill Blistercreep fixates before they reach you — Blisterburst detonations destroy Void Crystals from Shadowclaw Slam." },
-                    { role = "general",   text = "Always keep a player in melee — Overpowering Pulse hits hard with no melee presence." },
-                    { role = "general",   text = "Primordial Roar pulls in then knocks back — brace with a personal defensive." },
-                    { role = "tank",      text = "Swap on Smashed stacks (Shadowclaw Slam)." },
+                    { role = "general",   text = "Dodge Void Breath — sweeping lethal laser; move to the safe side." },
+                    { role = "general",   text = "Kill Blistercreep fixates near crystal walls — Blisterburst explosions destroy the walls." },
+                    { role = "general",   text = "Primordial Roar pulls in then knocks back — brace with a personal. Primordial Power stacks up — healing pressure escalates." },
+                    { role = "tank",      text = "Tank 1 intentionally takes 2 Shadowclaw Slam stacks (Smashed = 150% phys damage taken), then swap. Tank 2 holds until Smashed falls off." },
                 },
             },
             {
                 encounterID = 3179,  -- BigWigs; unverified in-game
                 npcID       = 240432,
                 name        = "Fallen-King Salhadaar",
-                tip         = "At 100 energy: Entropic Unraveling — boss takes 25% increased damage for 20s; use offensive CDs and Bloodlust. Intercept Void Convergence orbs before boss absorbs them (each absorption = massive raid damage). Interrupt Fractured Projection shadow attacks from mirror images. Tanks: swap on Destabilizing Strikes.",
+                tip         = "Intercept Void Convergence orbs — boss absorbing one (Void Infusion) wipes the raid. At 100 energy: Entropic Unraveling — dodge rotating beams; boss takes 25% increased damage for 20s. Interrupt Shadow Fracture from Fractured Images. Tanks: swap on Destabilizing Strikes; aim Shattering Twilight away from the raid.",
                 notes = {
-                    { role = "general",   text = "Intercept Void Convergence orbs — boss absorbing one deals massive raid damage." },
-                    { role = "dps",       text = "At 100 energy: Entropic Unraveling — boss takes 25% increased damage for 20s; use offensive CDs and Bloodlust." },
-                    { role = "tank",      text = "Swap on Destabilizing Strikes stacks." },
-                    { role = "interrupt", text = "Fractured Projection shadow attacks (mirror images)." },
+                    { role = "general",   text = "Intercept Void Convergence orbs — boss absorbing one (Void Infusion) wipes the raid." },
+                    { role = "general",   text = "Despotic Command: place timed puddle circles at room edges." },
+                    { role = "dps",       text = "At 100 energy: Entropic Unraveling — dodge rotating beams; boss takes 25% increased damage for 20s." },
+                    { role = "tank",      text = "Swap on Destabilizing Strikes stacks. Aim Shattering Twilight arrows away from raid and boss." },
+                    { role = "interrupt", text = "Shadow Fracture cast by Fractured Images adds." },
                 },
             },
             {
@@ -1115,12 +1121,13 @@ KwikTip.DUNGEONS = {
                 npcID       = 242056,
                 altNpcIDs   = { 244552 },  -- Ezzorak
                 name        = "Vaelgor & Ezzorak",
-                tip         = "Keep both within 10% HP — Twilight Bond amplifies their damage by 100% if they diverge; surviving dragon gains stacking Twilight Fury if one dies. At 100 energy (Midnight Flames): heavy raid-wide shadow damage — healer CDs. Vaelgor: dodge Nullbeam frontal; Dread Breath fears. Tank swap for Vaelwing (Vaelgor) and Rakfang (Ezzorak) stacks.",
+                tip         = "Keep both within 10% HP and within 15 yards — Twilight Bond gives 100% increased damage if either condition fails. Vaelgor: Dread Breath fears — targeted player steps away from raid, then dispel. Midnight Flames intermission: stack in Radiant Barrier; kill Manifestation of Midnight. Tanks: Nullbeam (Vaelgor) is intentional — stack ~8 stacks then reposition. Swap on Vaelwing and Rakfang (Ezzorak — Impale stuns).",
                 notes = {
-                    { role = "general",   text = "Keep both within 10% HP — Twilight Bond amplifies their damage by 100% if health diverges." },
-                    { role = "general",   text = "Vaelgor: dodge Nullbeam frontal; Dread Breath fears — face away from raid." },
-                    { role = "healer",    text = "Major CDs during Midnight Flames (100 energy) — simultaneous raid-wide shadow damage from both dragons." },
-                    { role = "tank",      text = "Swap on Vaelwing (Vaelgor) and Rakfang (Ezzorak) stacks." },
+                    { role = "general",   text = "Keep both within 10% HP and within 15 yards — Twilight Bond: 100% increased damage if either condition fails." },
+                    { role = "general",   text = "Dread Breath (Vaelgor): targeted player steps to the side, face away from raid — dispel the fear." },
+                    { role = "general",   text = "Gloom (Ezzorak): up to 5 players soak the moving orb to shrink its Gloomfield." },
+                    { role = "healer",    text = "Midnight Flames intermission: stack in Radiant Barrier; kill Manifestation of Midnight before it empowers the dragons." },
+                    { role = "tank",      text = "Nullbeam (Vaelgor): intentional soak — stack ~8 stacks then reposition. Swap on Vaelwing (Vaelgor) and Rakfang (Ezzorak — Impale stuns)." },
                 },
             },
             {
@@ -1128,12 +1135,12 @@ KwikTip.DUNGEONS = {
                 npcID       = 240431,
                 altNpcIDs   = { 240437, 240438 },  -- Lightblood, Senn
                 name        = "Lightblinded Vanguard",
-                tip         = "Three-boss encounter: Bellamy, Lightblood, and Senn rotate paladin aura states (Wrath, Devotion, Peace). Execution Sentence: stack on the targeted player to share the soak. Watch for Avenger's Shield DoT debuff. React to rotating Judgement types — Final Verdict (red) and Shield of the Righteous (blue) require different positioning.",
+                tip         = "Three paladins: Bellamy (Devotion), Venel (Wrath), Senn (Peace). At 100 energy: boss applies aura buffing the other two — pull boss to edge; consecration drops when aura ends. Execution Sentence: each marked player forms their own separate stack — do NOT merge circles. Senn: burn Sacred Shield then interrupt Blinding Light. Tanks: swap immediately after Judgment lands (follow-up hits 200% harder).",
                 notes = {
-                    { role = "general",   text = "Rotating aura states (Wrath, Devotion, Peace) change which mechanics are active — track BigWigs timers." },
-                    { role = "general",   text = "Execution Sentence: stack on the targeted player to share the soak." },
-                    { role = "general",   text = "React to Judgement type — Final Verdict (red) and Shield of the Righteous (blue) require different positioning." },
-                    { role = "tank",      text = "Avenger's Shield applies a DoT debuff — communicate with co-tank." },
+                    { role = "general",   text = "Aura order: Bellamy → Venel → Senn. Each aura buffs the other two — tank the near-100-energy boss to the arena edge." },
+                    { role = "general",   text = "Execution Sentence: each marked player needs their own separate stack — do NOT merge the circles." },
+                    { role = "general",   text = "Senn: burn Sacred Shield fast, then interrupt Blinding Light — missed interrupt = raid-wide disorientation." },
+                    { role = "tank",      text = "Swap immediately after Judgment lands — the follow-up hit deals 200% more damage." },
                 },
             },
             {
@@ -1141,11 +1148,11 @@ KwikTip.DUNGEONS = {
                 npcID       = 240430,
                 altNpcIDs   = { 243805, 243810, 243811 },  -- Morium, Demiar, Vorelus
                 name        = "Crown of the Cosmos",
-                tip         = "3-stage fight. Stage 1: kill Morium, Demiar, and Vorelus adds around Alleria. Dodge Grasp of Emptiness and Null Corona ground effects. Stage 2: handle Volatile Fissure and Ranger Captain's Mark mechanics. Follow BigWigs callouts for intermission transitions.",
+                tip         = "Multi-stage encounter. No published guide as of Season 1 launch — ability names unverified. Stage 1: kill three adds around Alleria; dodge ground effects. Follow BigWigs callouts for intermission transitions.",  -- TODO: verify ability names in-raid; method.gg/Wowhead guide not live at launch
                 notes = {
-                    { role = "general",   text = "Stage 1: kill Morium, Demiar, and Vorelus adds. Dodge Grasp of Emptiness and Null Corona." },
-                    { role = "general",   text = "Stage 2: handle Volatile Fissure positioning and Ranger Captain's Mark mechanics." },
-                    { role = "general",   text = "Follow BigWigs callouts for Crushing Singularity and Shattering Singularity intermissions." },
+                    { role = "general",   text = "Multi-stage encounter — follow BigWigs callouts. No finalized guide available at Season 1 launch." },
+                    { role = "general",   text = "Stage 1: kill three adds around Alleria; dodge ground effects." },
+                    { role = "general",   text = "Ability names unverified — check method.gg after week 1." },
                 },
             },
         },
@@ -1165,22 +1172,24 @@ KwikTip.DUNGEONS = {
                 encounterID = 3182,  -- BigWigs; unverified in-game
                 npcID       = 240387,
                 name        = "Belo'ren, Child of Al'ar",
-                tip         = "Stage 1: you receive a Light or Void alignment — match your color to corresponding dive attacks (Light Dive / Void Dive) and quill mechanics. Cross-color exposure deals heavily increased damage. Stage 2 (Ashen Shell): focus Incubation of Flames eggs before they hatch.",
+                tip         = "Stage 1: you receive Light or Void feather — soak only matching-color dives, intercept matching-color quills; wrong color = severe debuff. Interrupt Light/Void Eruption from Embers — only matching-color players can interrupt. Stage 2 (Ashen Shell): burn the egg before the 30s rebirth timer; each rebirth stacks Ashen Benediction (10% healing reduction).",
                 notes = {
-                    { role = "general",   text = "Stage 1: you receive Light or Void — match your color to dive attacks and quill mechanics. Cross-color exposure deals heavily increased damage." },
-                    { role = "dps",       text = "Stage 2: destroy Incubation of Flames eggs before they hatch." },
-                    { role = "healer",    text = "Eternal Burns (Holy Burn / Void Burn) — rotate CDs based on which is active." },
+                    { role = "general",   text = "You receive Light or Void feather — only soak matching-color dives and intercept matching-color quills. Cross-color exposure = severe debuff." },
+                    { role = "interrupt", text = "Light/Void Eruption from Embers — only matching-color players can interrupt." },
+                    { role = "dps",       text = "Stage 2: burn the egg (= boss HP) before the 30s rebirth timer. Each Ashen Benediction stack = 10% healing reduction." },
+                    { role = "healer",    text = "Burning Heart pulses every 3s; doubles during egg phase. Each Ashen Benediction stack reduces healing 10%." },
                 },
             },
             {
                 encounterID = 3183,  -- BigWigs; unverified in-game
                 npcID       = 240391,
                 name        = "Midnight Falls",
-                tip         = "Complex multi-stage encounter. Key casts: Grim Symphony (long channel — interrupt or mitigate), Dark Rune positionals. Stage transitions triggered by Dawnlight Barrier and Light's End. Follow BigWigs timers — mechanic overlap is heavy throughout.",
+                tip         = "Destroy Midnight Crystals before they explode (Cosmic Fracture — massive AoE + DoT). Heal Dusk Crystals to create Dawn Crystals — Torchbearers carry them for a 12-yd protective aura and Dawnlight Barrier (99% DR dome, 6s). Death's Dirge: position rune marks carefully before the laser sweep. Intermission: dodge Extinction Rays reflecting off mirrors.",
                 notes = {
-                    { role = "general",   text = "Grim Symphony is a long channel — interrupt or mitigate with major defensives." },
-                    { role = "general",   text = "Dark Rune positionals — watch for overlapping placement requirements." },
-                    { role = "general",   text = "Stage transitions at Dawnlight Barrier and Light's End — follow BigWigs callouts." },
+                    { role = "general",   text = "Destroy Midnight Crystals before they detonate (Cosmic Fracture — massive AoE + DoT)." },
+                    { role = "general",   text = "Heal Dusk Crystals to Dawn Crystals; Torchbearers provide 12-yd protective aura and Dawnlight Barrier (99% DR dome, 6s)." },
+                    { role = "general",   text = "Death's Dirge: position rune marks carefully — laser sweep triggers Dark Toll or Dissonant Dirge." },
+                    { role = "general",   text = "Intermission: dodge Extinction Rays reflecting off Oblivion's Mirrors." },
                 },
             },
         },
@@ -1200,12 +1209,12 @@ KwikTip.DUNGEONS = {
                 encounterID = 3306,  -- BigWigs; unverified in-game
                 npcID       = 245569,
                 name        = "Chimaerus the Undreamt God",
-                tip         = "Stage 1: split into two groups — one soaks Alndust Upheaval (tank-targeted split soak), other stays on boss. Rift Emergence: break absorb shields on adds before they reach the boss — adds reaching boss deal massive raid damage and empower him. Dispel Consuming Miasma puddles. Stage 2: Corrupted Devastation and Ravenous Dive — maintain positioning.",
+                tip         = "Alternate groups soaking Alndust Upheaval — soaked players gain Alnsight and must break Alnshroud shields on Manifestations (only Alnsighted players can). Manifestations reaching the boss = massive damage + 100% boss damage buff. Dispel Consuming Miasma (player debuff) while standing in Alndust puddles to remove them. Intermission (To the Skies): dodge Corrupted Devastation breath lines; all Manifestations die before Ravenous Dive.",
                 notes = {
-                    { role = "general",   text = "Stage 1: split — one group soaks Alndust Upheaval (tank-targeted), other stays on boss." },
-                    { role = "general",   text = "Rift Emergence: break absorb shields on adds before they reach the boss — adds reaching boss deal massive raid damage." },
-                    { role = "healer",    text = "Dispel Consuming Miasma puddles to clear ground space." },
-                    { role = "general",   text = "Stage 2 (To the Skies): reposition for Corrupted Devastation and Ravenous Dive." },
+                    { role = "general",   text = "Two groups alternate Alndust Upheaval soaks. Soaked group gains Alnsight — only they can break Alnshroud shields on Manifestations." },
+                    { role = "general",   text = "Manifestations must never reach the boss — Insatiable: raid damage + 200% HP heal + 100% damage buff per add eaten." },
+                    { role = "healer",    text = "Dispel Consuming Miasma (player debuff) while standing in ground puddles — dispelling removes the puddle. Avoid stacking dispel splash." },
+                    { role = "general",   text = "Intermission (To the Skies): dodge Corrupted Devastation breath lines; all Manifestations must die before Ravenous Dive." },  -- TODO: verify dodge vs spread in-raid
                 },
             },
         },
