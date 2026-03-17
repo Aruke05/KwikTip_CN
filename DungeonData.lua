@@ -245,8 +245,10 @@ KwikTip.DUNGEONS = {
             },
         },
         areas = {
-            { subzone = "Enduring Winter",   bossIndex = 1 },  -- first two bosses share this subzone (Hoardmonger + Sentinel of Winter); confirmed in-game (mapID 2514); bossIndex=1 shows Hoardmonger tip on entry — ENCOUNTER_START overrides for Sentinel of Winter
-            { subzone = "The Heart of Rage", bossIndex = 3 },  -- Nalorakk's arena; confirmed in-game (mapIDs 2564, 2513)
+            { subzone = "Enduring Winter",    bossIndex = 1 },  -- first two bosses share this subzone (Hoardmonger + Sentinel of Winter); confirmed in-game (mapID 2514); bossIndex=1 shows Hoardmonger tip on entry — ENCOUNTER_START overrides for Sentinel of Winter
+            { subzone = "The Foraging",       tip = "Beasts patrol this area — pull carefully." },  -- confirmed in-game (mapID 2514); between first two bosses and Dreamer's Passage
+            { subzone = "Dreamer's Passage",  bossIndex = 3 },  -- transition to Nalorakk; confirmed in-game (mapID 2564)
+            { subzone = "The Heart of Rage",  bossIndex = 3 },  -- Nalorakk's arena; confirmed in-game (mapIDs 2564, 2513)
         },
     },
     {
@@ -525,7 +527,7 @@ KwikTip.DUNGEONS = {
         mythicPlus = false,
         bosses = {
             {
-                encounterID = 3285,
+                encounterID = 3285,  -- confirmed in-game
                 npcID       = 238887,
                 name        = "Taz'Rah",
                 tip         = "Stay out of Dark Rift gravity pull; kill Ethereal Shades quickly to stop Nether Dash chain lines.",
@@ -535,7 +537,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 3286,
+                encounterID = 3286,  -- confirmed in-game
                 npcID       = 239008,
                 name        = "Atroxus",
                 tip         = "Avoid Noxious Breath frontal; when Toxic Creepers fixate on a player, spread out to avoid the 8-yard toxic aura. Tank: defensive for Hulking Claw — applies a 10s nature DoT.",
@@ -546,7 +548,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 3287,
+                encounterID = 3287,  -- confirmed in-game
                 npcID       = 248015,
                 name        = "Charonus",
                 tip         = "Lead Gravitic Orbs into Singularities to consume them before stacks get too high; avoid the gravity well. Cosmic Blast hits the whole group — healer CDs.",
