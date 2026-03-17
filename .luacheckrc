@@ -47,6 +47,10 @@ read_globals = {
     "C_Map",
     "C_CreatureInfo",
     "C_Spell",
+    "C_ChallengeMode",
+
+    -- Role / group API
+    "UnitGroupRolesAssigned",
 
     -- Font objects used as SetFontObject arguments
     "GameFontNormal",

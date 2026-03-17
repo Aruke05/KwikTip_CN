@@ -20,6 +20,7 @@ KwikTip.DEFAULTS = {
     mapIDLog       = {},
     mobLog         = {},
     encounterLog   = {},     -- always-on; records every ENCOUNTER_START encounterID seen
+    keystoneLog    = {},     -- always-on; records M+ keystone info (level, affixes) on CHALLENGE_MODE_START
     spellLog       = {},     -- debug-gated; records hostile NPC spell casts (feeds interrupt/mechanic tips)
     debugSnapshots = {},     -- written by /kwik debug; inspection log for post-session review
     -- HUD appearance

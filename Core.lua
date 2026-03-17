@@ -7,6 +7,10 @@ frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 frame:RegisterEvent("ZONE_CHANGED")
 frame:RegisterEvent("ENCOUNTER_START")
 frame:RegisterEvent("ENCOUNTER_END")
+frame:RegisterEvent("PLAYER_ROLES_ASSIGNED")
+frame:RegisterEvent("CHALLENGE_MODE_START")
+frame:RegisterEvent("CHALLENGE_MODE_RESET")
+frame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 -- NOTE: In Midnight 12.x, UnitGUID() for hostile NPCs returns a tainted "secret value" —
 -- COMBAT_LOG_EVENT_UNFILTERED is also a protected event and cannot be registered.
 -- NPC-based trash tip detection is impossible; detection uses subzone/area events only.
@@ -22,6 +26,13 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "ENCOUNTER_END" then
         local _, _, _, _, success = ...
         KwikTip:OnEncounterEnd(success)
+    elseif event == "PLAYER_ROLES_ASSIGNED" then
+        KwikTip:UpdateContent()
+    elseif event == "CHALLENGE_MODE_START" then
+        KwikTip:OnChallengeModeStart()
+    elseif event == "CHALLENGE_MODE_RESET" or event == "CHALLENGE_MODE_COMPLETED" then
+        KwikTip:UpdateContent()
+        KwikTip:UpdateVisibility()
     elseif event == "UNIT_SPELLCAST_START" then
         local unit, _, spellID = ...
         KwikTip:OnSpellCastStart(unit, spellID)
@@ -41,6 +52,16 @@ local GOLD  = "|cffffcc00"
 local WHITE = "|cffffffff"
 local GRAY  = "|cffbbbbbb"
 local RESET = "|r"
+
+-- Returns the player's current assigned role as a lowercase string matching the
+-- notes role keys ("tank", "healer", "dps"), or nil if unassigned/solo.
+local function GetPlayerRole()
+    local r = UnitGroupRolesAssigned("player")
+    if r == "TANK"    then return "tank"   end
+    if r == "HEALER"  then return "healer" end
+    if r == "DAMAGER" then return "dps"    end
+    return nil
+end
 
 -- Role note rendering
 -- Colors
@@ -63,18 +84,27 @@ local ROLE_FMT = {
 
 -- Render a structured notes array into HUD text.
 -- Each entry: { role = "general"|"tank"|"healer"|"dps"|"interrupt", text = "..." }
--- Returns nil if notes is nil or empty.
-local function FormatNotes(notes)
+-- filterRole: if provided, only notes of that role + "general" + "interrupt" are shown.
+-- Pass nil to show all notes (used for preview and flat-tip fallback).
+-- Returns nil if notes is nil, empty, or all entries are filtered out.
+local function FormatNotes(notes, filterRole)
     if not notes or #notes == 0 then return nil end
     local lines = {}
     for _, note in ipairs(notes) do
-        local fmt = ROLE_FMT[note.role] or ROLE_FMT.general
-        if fmt.icon then
-            table.insert(lines, fmt.icon .. " " .. fmt.color .. note.text .. RESET)
-        else
-            table.insert(lines, fmt.color .. note.text .. RESET)
+        if not filterRole
+            or note.role == "general"
+            or note.role == "interrupt"
+            or note.role == filterRole
+        then
+            local fmt = ROLE_FMT[note.role] or ROLE_FMT.general
+            if fmt.icon then
+                table.insert(lines, fmt.icon .. " " .. fmt.color .. note.text .. RESET)
+            else
+                table.insert(lines, fmt.color .. note.text .. RESET)
+            end
         end
     end
+    if #lines == 0 then return nil end
     return table.concat(lines, "\n")
 end
 
@@ -83,10 +113,53 @@ local function FormatHeader(dungeonName, entityName)
     return GOLD .. dungeonName .. RESET .. "\n" .. WHITE .. entityName .. RESET
 end
 
+-- Build a compact single-line affix bar for appending to boss/area tips.
+-- Returns nil when not in an active M+ run.
+-- Format: "+7  Tyrannical  ·  Bolstering"
+local function FormatAffixBar()
+    if not C_ChallengeMode then return nil end
+    local level, affixes = C_ChallengeMode.GetActiveKeystoneInfo()
+    if not level or not affixes or #affixes == 0 then return nil end
+    local names = {}
+    for _, id in ipairs(affixes) do
+        local data = KwikTip.AFFIXES and KwikTip.AFFIXES[id]
+        local info = C_ChallengeMode.GetAffixInfo(id)
+        local name = (data and data.name) or (info and info.name) or ("Affix#"..id)
+        table.insert(names, name)
+    end
+    return GRAY .. "+" .. level .. "  " .. GOLD .. table.concat(names, "  ·  ") .. RESET
+end
+
+-- Build the full affix tip block for the M+ holding screen.
+-- Returns nil when not in an active M+ run.
+local function FormatAffixDetails()
+    if not C_ChallengeMode then return nil end
+    local level, affixes = C_ChallengeMode.GetActiveKeystoneInfo()
+    if not level or not affixes or #affixes == 0 then return nil end
+    local lines = { GOLD .. "+" .. level .. " Active Affixes" .. RESET }
+    for _, id in ipairs(affixes) do
+        local data = KwikTip.AFFIXES and KwikTip.AFFIXES[id]
+        local info = C_ChallengeMode.GetAffixInfo(id)
+        local name = (data and data.name) or (info and info.name) or ("Affix#"..id)
+        local tip  = data and data.tip
+        if tip then
+            table.insert(lines, GOLD .. name .. RESET .. ": " .. GRAY .. tip .. RESET)
+        else
+            -- Fall back to in-game description; truncate if long
+            local desc = info and info.description
+            if desc and #desc > 80 then desc = desc:sub(1, 77) .. "..." end
+            table.insert(lines, GOLD .. name .. RESET .. (desc and (": " .. GRAY .. desc .. RESET) or ""))
+        end
+    end
+    return table.concat(lines, "\n")
+end
+
 -- Build the HUD string for an active boss encounter.
--- Uses structured notes if present; falls back to flat tip string.
+-- Filters structured notes to the player's assigned role (+ general + interrupt).
+-- Falls back to the flat tip string if no notes are defined.
 local function FormatBossContent(dungeon, boss)
-    local body = FormatNotes(boss.notes)
+    local role = GetPlayerRole()
+    local body = FormatNotes(boss.notes, role)
     if not body and boss.tip and boss.tip ~= "" then
         body = GRAY .. boss.tip .. RESET
     end
@@ -137,6 +210,7 @@ function KwikTip:OnEncounterStart(encounterID, encounterName)
             encounterName = encounterName,
             instanceID    = instanceID,
             instanceName  = instanceName,
+            mapID         = C_Map.GetBestMapForUnit("player"),
             time          = date("%Y-%m-%d %H:%M:%S"),
         })
         if #KwikTipDB.encounterLog > 500 then
@@ -148,7 +222,9 @@ function KwikTip:OnEncounterStart(encounterID, encounterName)
     if not entry then return end
 
     self.bossActive = true
-    self:SetContent(FormatBossContent(entry.dungeon, entry.boss))
+    local content = FormatBossContent(entry.dungeon, entry.boss)
+    local bar = entry.dungeon.mythicPlus and FormatAffixBar()
+    self:SetContent(bar and (content .. "\n" .. bar) or content)
     self:UpdateVisibility()
 end
 
@@ -166,6 +242,35 @@ function KwikTip:OnEncounterEnd(success)
         self:UpdateContent()
         self:UpdateVisibility()
     end
+end
+
+-- Called by CHALLENGE_MODE_START. Logs the keystone and refreshes content so
+-- the affix bar/details appear in the HUD immediately on entering the key.
+function KwikTip:OnChallengeModeStart()
+    if KwikTipDB and C_ChallengeMode then
+        local level, affixes = C_ChallengeMode.GetActiveKeystoneInfo()
+        if level then
+            local _, _, _, _, _, _, _, instanceID = GetInstanceInfo()
+            local affixData = {}
+            if affixes then
+                for _, id in ipairs(affixes) do
+                    local info = C_ChallengeMode.GetAffixInfo(id)
+                    table.insert(affixData, { id = id, name = info and info.name or "unknown" })
+                end
+            end
+            table.insert(KwikTipDB.keystoneLog, {
+                level      = level,
+                affixes    = affixData,
+                instanceID = instanceID,
+                time       = date("%Y-%m-%d %H:%M:%S"),
+            })
+            if #KwikTipDB.keystoneLog > 200 then
+                KwikTipDB.keystoneLog = self:PruneArray(KwikTipDB.keystoneLog, 200)
+            end
+        end
+    end
+    self:UpdateContent()
+    self:UpdateVisibility()
 end
 
 -- ============================================================
@@ -263,12 +368,18 @@ function KwikTip:UpdateContent()
     if areaContent then
         self.areaActive    = true
         self.dungeonActive = false
-        self:SetContent(areaContent)
+        local bar = dungeon.mythicPlus and FormatAffixBar()
+        self:SetContent(bar and (areaContent .. "\n" .. bar) or areaContent)
     elseif dungeon and KwikTipDB.showInDungeon then
-        -- No area match and no trash — keep HUD open with a holding message.
+        -- No area match — show M+ affix details if active, otherwise a holding message.
         self.areaActive    = false
         self.dungeonActive = true
-        self:SetContent(GRAY .. "Waiting for relevant encounter..." .. RESET)
+        local affixDetails = dungeon.mythicPlus and FormatAffixDetails()
+        if affixDetails then
+            self:SetContent(GOLD .. dungeon.name .. RESET .. "\n" .. affixDetails)
+        else
+            self:SetContent(GRAY .. "Waiting for relevant encounter..." .. RESET)
+        end
     else
         self.areaActive    = false
         self.dungeonActive = false
@@ -399,8 +510,11 @@ SlashCmdList["KWIKTIP"] = function(msg)
         local mapIDCount     = KwikTipDB.mapIDLog     and #KwikTipDB.mapIDLog     or 0
         local mobCount       = KwikTipDB.mobLog       and #KwikTipDB.mobLog       or 0
         local encounterCount = KwikTipDB.encounterLog and #KwikTipDB.encounterLog or 0
+        local keystoneCount  = KwikTipDB.keystoneLog  and #KwikTipDB.keystoneLog  or 0
         local spellCount     = KwikTipDB.spellLog     and #KwikTipDB.spellLog     or 0
         local snapshotCount  = KwikTipDB.debugSnapshots and #KwikTipDB.debugSnapshots or 0
+        local keyLevel, keyAffixes
+        if C_ChallengeMode then keyLevel, keyAffixes = C_ChallengeMode.GetActiveKeystoneInfo() end
         print("|cff00ff00KwikTip|r debug:")
         print(string.format("  inInstance=%s  type=%s  boss=%s  area=%s  dungeon=%s",
             tostring(inInstance), tostring(instanceType),
@@ -408,26 +522,32 @@ SlashCmdList["KWIKTIP"] = function(msg)
             tostring(KwikTip.areaActive), tostring(KwikTip.dungeonActive)))
         print(string.format("  instanceID=%s  mapID=%s  dungeon=%s",
             tostring(instanceID), tostring(mapID), dungeonName))
-        print(string.format("  subzone=%q", subzone or ""))
-        print(string.format("  mapIDLog=%d  mobLog=%d  encounterLog=%d  spellLog=%d  snapshots=%d",
-            mapIDCount, mobCount, encounterCount, spellCount, snapshotCount))
+        print(string.format("  subzone=%q  role=%s", subzone or "", tostring(GetPlayerRole())))
+        if keyLevel then
+            print(string.format("  keystone=+%d  affixes=%d", keyLevel, keyAffixes and #keyAffixes or 0))
+        end
+        print(string.format("  mapIDLog=%d  mobLog=%d  encounterLog=%d  keystoneLog=%d  spellLog=%d  snapshots=%d",
+            mapIDCount, mobCount, encounterCount, keystoneCount, spellCount, snapshotCount))
         -- Save snapshot to SavedVariables for post-session inspection.
         if KwikTipDB then
             table.insert(KwikTipDB.debugSnapshots, {
-                time             = date("%Y-%m-%d %H:%M:%S"),
-                inInstance       = inInstance,
-                instanceType     = instanceType,
-                instanceID       = instanceID,
-                instanceName     = instanceName,
-                mapID            = mapID,
-                dungeon          = dungeonName,
-                subzone          = subzone,
-                bossActive       = KwikTip.bossActive,
-                areaActive       = KwikTip.areaActive,
-                dungeonActive    = KwikTip.dungeonActive,
+                time              = date("%Y-%m-%d %H:%M:%S"),
+                inInstance        = inInstance,
+                instanceType      = instanceType,
+                instanceID        = instanceID,
+                instanceName      = instanceName,
+                mapID             = mapID,
+                dungeon           = dungeonName,
+                subzone           = subzone,
+                role              = GetPlayerRole(),
+                keystoneLevel     = keyLevel,
+                bossActive        = KwikTip.bossActive,
+                areaActive        = KwikTip.areaActive,
+                dungeonActive     = KwikTip.dungeonActive,
                 mapIDLogCount     = mapIDCount,
                 mobLogCount       = mobCount,
                 encounterLogCount = encounterCount,
+                keystoneLogCount  = keystoneCount,
                 spellLogCount     = spellCount,
             })
             if #KwikTipDB.debugSnapshots > 100 then
@@ -444,10 +564,11 @@ SlashCmdList["KWIKTIP"] = function(msg)
         KwikTipDB.mapIDLog       = {}
         KwikTipDB.mobLog         = {}
         KwikTipDB.encounterLog   = {}
+        KwikTipDB.keystoneLog    = {}
         KwikTipDB.spellLog       = {}
         KwikTipDB.debugSnapshots = {}
         _loggedSpells = {}
-        print("|cff00ff00KwikTip|r mapIDLog, mobLog, encounterLog, spellLog, and debugSnapshots cleared.")
+        print("|cff00ff00KwikTip|r mapIDLog, mobLog, encounterLog, keystoneLog, spellLog, and debugSnapshots cleared.")
     elseif cmd == "feedback" then
         print("|cff00ff00KwikTip|r Tips feel off? Open an issue at: https://github.com/postblink/KwikTip/issues")
     elseif cmd == "config" or cmd == "" then

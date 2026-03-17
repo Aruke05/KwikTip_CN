@@ -1223,5 +1223,30 @@ KwikTip.DUNGEONS = {
     },
 }
 
+-- ============================================================
+-- M+ Affix Data
+-- ============================================================
+-- tip fields: concise strategic callouts for the HUD.
+-- Affixes not listed here fall back to C_ChallengeMode.GetAffixInfo() description.
+-- IDs are stable across expansions. Season 1 specific affix IDs should be added
+-- once confirmed in-game via keystoneLog.
+KwikTip.AFFIXES = {
+    [3]   = { name = "Volcanic",     tip = "Volcanic plumes erupt under players — move immediately; never stand still while casting." },
+    [6]   = { name = "Raging",       tip = "Trash enrages at 30% HP — use Enrage dispels or kite; save a defensive for the enrage window." },
+    [7]   = { name = "Bolstering",   tip = "Nearby trash gains 20% HP when any mob dies — stagger kills; never let multiple mobs die simultaneously." },
+    [8]   = { name = "Sanguine",     tip = "Dead trash leaves healing pools — tank kite surviving mobs out of pools immediately." },
+    [9]   = { name = "Tyrannical",   tip = "Bosses have 30% more HP and deal 15% more damage. Save major CDs for bosses." },
+    [10]  = { name = "Fortified",    tip = "Trash has 20% more HP and deals 30% more damage. Control pull size carefully." },
+    [11]  = { name = "Bursting",     tip = "Trash explodes on death — stagger kills and dispel Burst stacks; never chain-kill multiple mobs." },
+    [12]  = { name = "Grievous",     tip = "Grievous Wound stacks during combat — heal players to full to remove; dispel early." },
+    [13]  = { name = "Explosive",    tip = "Explosive Orbs spawn during combat — kill within 6s or they deal lethal group damage." },
+    [14]  = { name = "Quaking",      tip = "Quake interrupts casters and silences — spread during big pulls to reduce overlap damage." },
+    [123] = { name = "Spiteful",     tip = "Spiteful Shades fixate a random player on mob death — CC, kite, or burst before they reach their target." },
+    [124] = { name = "Storming",     tip = "Tornadoes move randomly — dodge on sight; contact silences for 3s." },
+    [134] = { name = "Entangling",   tip = "Vines root random players — break free immediately; don't let roots lock you in AoE zones." },
+    [135] = { name = "Afflicted",    tip = "Afflicted Souls spawn — instantly dispel their Poison, Curse, or Disease; missing reduces healer output for 10s." },
+    [136] = { name = "Incorporeal",  tip = "Incorporeal Beings spawn — CC immediately (Banish, Imprison, Freeze, etc.); they reduce all stats while active." },
+}
+
 -- Runtime lookups are built in DungeonData_Timewalking.lua, which loads after
 -- this file, so that timewalking dungeon entries are included in all tables.
