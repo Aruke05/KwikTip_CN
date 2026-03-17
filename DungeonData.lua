@@ -88,11 +88,12 @@ KwikTip.DUNGEONS = {
                 npcID       = 231626,  -- Kalis
                 altNpcIDs   = { 231629 },  -- Latch
                 name        = "Derelict Duo",
-                tip         = "Keep both at equal health — Broken Bond enrages the survivor; interrupt Shadow Bolt; dispel Curse of Darkness to despawn Dark Entity adds; tank defensive for Bone Hack and Splattering Spew (drops puddles — spread loosely); stand behind Kalis so Latch's Heaving Yank pulls her and cancels Debilitating Shriek.",
+                tip         = "Keep both at equal health — Broken Bond enrages the survivor; interrupt Shadow Bolt; dispel Curse of Darkness to despawn Dark Entity adds; tank defensive for Bone Hack; drop Splattering Spew puddles along walls and overlap them to conserve space; stand behind Kalis so Latch's Heaving Yank pulls her and interrupts Debilitating Shriek.",
                 notes = {
                     { role = "general",   text = "Keep both at equal health — Broken Bond enrages the survivor." },
-                    { role = "general",   text = "Stand behind Kalis so Latch's Heaving Yank cancels Debilitating Shriek." },
-                    { role = "tank",      text = "Defensive for Bone Hack and Splattering Spew (spread loosely — drops puddles)." },
+                    { role = "general",   text = "Drop Splattering Spew puddles along walls and overlap them to conserve space." },
+                    { role = "general",   text = "Stand behind Kalis so Latch's Heaving Yank interrupts Debilitating Shriek." },
+                    { role = "tank",      text = "Defensive for Bone Hack." },
                     { role = "healer",    text = "Dispel Curse of Darkness — despawns Dark Entity adds." },
                     { role = "interrupt", text = "Shadow Bolt." },
                 },
@@ -101,23 +102,23 @@ KwikTip.DUNGEONS = {
                 encounterID = 3058,  -- confirmed in-game
                 npcID       = 231631,
                 name        = "Commander Kroluk",
-                tip         = "Reckless Leap targets furthest player — stack in melee with one defensive player baiting it; stay near an ally or Intimidating Shout fears you; at 66%/33% kill adds (interrupt Phantasmal Mystic at 50% or it enrages the pull).",
+                tip         = "Stack near melee. Rallying Bellow gives the boss 70%/40%/10% damage reduction while adds are alive — kill them fast (interrupt Phantasmal Mystic or it enrages). Bladestorm fixates a player — kite the boss. Stay near an ally or Intimidating Shout fears you. Reckless Leap (second) targets furthest player — one player with a defensive runs out.",
                 notes = {
-                    { role = "general",   text = "Stack in melee — Reckless Leap targets the furthest player; one player baits it with a defensive." },
-                    { role = "general",   text = "Stay near an ally or Intimidating Shout fears you." },
-                    { role = "dps",       text = "At 66%/33% kill adds fast." },
-                    { role = "interrupt", text = "Phantasmal Mystic adds at 50% — interrupt or they enrage." },
+                    { role = "general",   text = "Stack near melee. Stay near an ally or Intimidating Shout fears you." },
+                    { role = "general",   text = "Bladestorm fixates a player — kite the boss while killing adds." },
+                    { role = "dps",       text = "Kill adds fast — Rallying Bellow gives boss 70%/40%/10% damage reduction while adds are alive." },
+                    { role = "interrupt", text = "Phantasmal Mystic adds — interrupt or they enrage." },
                 },
             },
             {
                 encounterID = 3059,  -- confirmed in-game
                 npcID       = 231636,
                 name        = "The Restless Heart",
-                tip         = "Manage Squall Leap DoT stacks — step on Turbulent Arrows to clear them and to vault over Bullseye Windblast shockwave at 100 energy; dodge Bolt Gale frontal; tank use defensive for Tempest Slash knockback and damage-taken amp.",
+                tip         = "Step on Turbulent Arrows to clear Squall Leap stacks. At 100 energy (Billowing Wind), step on arrows to vault over the expanding shockwave. Overlap Gust Shot ground pools to clear space. Tempest Slash knocks you back — try to land near arrows to clear your debuff. Tank: defensive for Tempest Slash.",
                 notes = {
-                    { role = "general",   text = "Step on Turbulent Arrows to clear Squall Leap DoT stacks and to vault over Bullseye Windblast shockwave at 100 energy." },
-                    { role = "general",   text = "Dodge Bolt Gale frontal." },
-                    { role = "tank",      text = "Defensive for Tempest Slash — knockback + damage-taken amp." },
+                    { role = "general",   text = "Step on Turbulent Arrows to clear Squall Leap stacks; at 100 energy (Billowing Wind) step on arrows to vault over the expanding shockwave." },
+                    { role = "general",   text = "Overlap Gust Shot ground pools to clear space." },
+                    { role = "tank",      text = "Defensive for Tempest Slash — knockback; try to land near arrows to clear your debuff." },
                 },
             },
         },
@@ -647,22 +648,24 @@ KwikTip.DUNGEONS = {
                 npcID       = 36476,  -- Ick
                 altNpcIDs   = { 36477 },  -- Krick
                 name        = "Ick & Krick",
-                tip         = "Interrupt Death Bolt (Krick). Phase 1: cleave Shade Shift adds before they explode; avoid Blight Smash and Plague Explosion puddles. Phase 2 (50%): kite Ick during 'Get 'em, Ick!' fixation.",
+                tip         = "Interrupt Death Bolt (Krick) — always. Keep Ick near Shade Shift adds to cleave them down. Drop Plague Explosion near walls or existing puddles to consolidate. Blight Smash: defensive, drop near existing puddles. Phase 2 (50%): kite Ick during 'Get 'em, Ick!' fixation.",
                 notes = {
-                    { role = "general",   text = "Phase 1: cleave Shade Shift adds before they explode; avoid Blight Smash and Plague Explosion puddles." },
+                    { role = "general",   text = "Keep Ick near Shade Shift adds to cleave them; drop Plague Explosion near walls or existing puddles to consolidate." },
                     { role = "general",   text = "Phase 2 (50%): kite Ick during 'Get 'em, Ick!' fixation." },
-                    { role = "interrupt", text = "Death Bolt (Krick)." },
+                    { role = "tank",      text = "Defensive for Blight Smash — drop it near existing puddles." },
+                    { role = "interrupt", text = "Death Bolt (Krick) — always." },
                 },
             },
             {
                 encounterID = 2000,  -- confirmed in-game
                 npcID       = 36658,
                 name        = "Scourgelord Tyrannus",
-                tip         = "Rime Blast targets players — cleave them into bone piles to freeze piles and prevent Army of the Dead spawns. Kill Plaguespreader adds fast (interrupt Plague Bolt). Healer: dispel Rotting Strikes disease from tank.",
+                tip         = "Rime Blast targets a player — stand over a buffed bone pile so the beam freezes it (prevents Army of the Dead). Scourgelord's Brand: defensive, save a movement ability for the knockback, then move to remaining unfrozen piles to aggro Plaguespreaders. Kill Plaguespreader adds fast (interrupt Plague Bolt). Festering Pulse pulses AoE damage every 2s while adds are up.",
                 notes = {
-                    { role = "general",   text = "Rime Blast targets players — cleave them into bone piles to freeze the piles and prevent Army of the Dead spawns." },
-                    { role = "dps",       text = "Kill Plaguespreader adds immediately." },
-                    { role = "healer",    text = "Dispel Rotting Strikes disease stacks from the tank." },
+                    { role = "general",   text = "Rime Blast targets a player — stand over a buffed (green-lit) bone pile so the beam freezes it and prevents Army of the Dead spawns." },
+                    { role = "general",   text = "After Scourgelord's Brand knockback, move to any remaining unfrozen bone piles to aggro Plaguespreaders." },
+                    { role = "dps",       text = "Kill Plaguespreader adds fast — Festering Pulse deals AoE damage every 2s while they're alive." },
+                    { role = "tank",      text = "Defensive for Scourgelord's Brand — save a movement ability for after the knockback." },
                     { role = "interrupt", text = "Plague Bolt (Plaguespreader adds)." },
                 },
             },
@@ -687,11 +690,12 @@ KwikTip.DUNGEONS = {
                 npcID       = 122313,
                 name        = "Zuraal the Ascended",
                 -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
-                tip         = "Kill Coalesced Void adds before they reach Zuraal — each one empowers his abilities. Spread for Decimate to minimise pool overlap. Tank: face Null Palm away from the group.",
+                tip         = "Keep boss away from Coalesced Void adds — they despawn on contact with him. Decimate: bait the pool but not too far (puddles persist and stack). At 100 energy, Crashing Void — defensive and avoid being knocked back into pools. CC and kill Oozing Slam adds before Crashing Void hits. Tank: face Null Palm away from group; defensive for Void Slash.",
                 notes = {
-                    { role = "dps",       text = "Kill Coalesced Void adds immediately — each one that reaches Zuraal empowers his abilities." },
-                    { role = "general",   text = "Spread for Decimate to minimise void pool overlap." },
-                    { role = "tank",      text = "Face Null Palm away from the group." },
+                    { role = "general",   text = "Keep boss away from Coalesced Void adds — they despawn on contact with him." },
+                    { role = "general",   text = "Decimate: bait the pool but not too far — puddles persist and proximity makes the next one worse." },
+                    { role = "dps",       text = "CC and kill Oozing Slam adds before Crashing Void hits at 100 energy." },
+                    { role = "tank",      text = "Defensive for Void Slash and Crashing Void (100 energy) — avoid being knocked back into pools." },
                 },
             },
             {
@@ -699,10 +703,12 @@ KwikTip.DUNGEONS = {
                 npcID       = 122316,
                 name        = "Saprish",
                 -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
-                tip         = "Kill Darkfang before Saprish hits 100 energy. Spread Void Bombs — at 100 energy Overload ignites all of them simultaneously.",
+                tip         = "Boss and pets share health — stay stacked for cleave. Interrupt Dread Screech (Duskwing) every cast. Phase Dash: overlap and clear all Void Bombs. Overload is a damage check — successive casts hit harder. Shadow Pounce applies a strong 5s bleed.",
                 notes = {
-                    { role = "dps",       text = "Burn Darkfang down — Saprish is weakened without his raptor." },
-                    { role = "general",   text = "Spread Void Bombs so Overload doesn't chain-detonate a stack." },
+                    { role = "general",   text = "Boss and pets share health — stay stacked to cleave all three simultaneously." },
+                    { role = "general",   text = "Phase Dash: overlap and clear all Void Bombs. Overload hits harder each successive cast — it's a damage check." },
+                    { role = "healer",    text = "Shadow Pounce applies a strong 5s bleed; Overload damage increases each cast." },
+                    { role = "interrupt", text = "Dread Screech (Duskwing) — interrupt every cast." },
                 },
             },
             {
@@ -710,10 +716,12 @@ KwikTip.DUNGEONS = {
                 npcID       = 124309,
                 name        = "Viceroy Nezhar",
                 -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
-                tip         = "Move out of Collapsing Void rings before they become Void Storm. Kill Umbral Tentacles to stop Mind Flay.",
+                tip         = "Interrupt Mind Blast — top priority. At 100 energy, Collapsing Void: run under the boss to avoid the storm. Kill Umbral Tentacles fast (Mind Flay fixates a player). Mass Void Infusion cannot be dispelled — use a defensive.",
                 notes = {
-                    { role = "general",   text = "Move out of Collapsing Void rings immediately — they expand into an inescapable Void Storm." },
-                    { role = "dps",       text = "Kill Umbral Tentacles — their Mind Flay deals continuous damage to a fixated target." },
+                    { role = "general",   text = "At 100 energy (Collapsing Void): run under the boss to avoid the storm; if a player is caught, move to them." },
+                    { role = "dps",       text = "Kill Umbral Tentacles fast — Mind Flay deals continuous damage to a fixated player." },
+                    { role = "tank",      text = "Defensive for Mass Void Infusion — cannot be dispelled." },
+                    { role = "interrupt", text = "Mind Blast — top priority." },
                 },
             },
             {
@@ -721,10 +729,12 @@ KwikTip.DUNGEONS = {
                 npcID       = 214650,
                 name        = "L'ura",
                 -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
-                tip         = "Don't overlap Notes of Despair — their Dirge of Despair zones stack. Discordant Beam silences them; once all are silenced, Alleria destroys them with Shattering Shot.",
+                tip         = "Spread Notes of Despair — Grim Chorus zones stack. Discordant Blast: align with Notes of Despair to silence them. Once all are silenced, boss casts Siphon Void — interrupt it for a 25% damage taken window; use Bloodlust here. Defensive for Abyssal Lancer (3 stacks).",
                 notes = {
-                    { role = "general",   text = "Spread Notes of Despair — overlapping Dirge of Despair zones stack damage." },
-                    { role = "general",   text = "Discordant Beam silences Notes of Despair. Once all are silenced, Alleria destroys them — don't just burn the adds." },
+                    { role = "general",   text = "Spread Notes of Despair — Grim Chorus zones stack damage." },
+                    { role = "general",   text = "Discordant Blast: align with Notes of Despair to silence them — don't burn the adds directly." },
+                    { role = "dps",       text = "Once all Notes are silenced, interrupt Siphon Void — boss takes 25% increased damage; use Bloodlust here." },
+                    { role = "tank",      text = "Defensive for Abyssal Lancer at 3 stacks." },
                 },
             },
         },
