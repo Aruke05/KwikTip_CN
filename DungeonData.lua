@@ -574,20 +574,24 @@ KwikTip.DUNGEONS = {
                 encounterID = 2563,  -- confirmed in-game
                 npcID       = 196482,
                 name        = "Overgrown Ancient",
-                tip         = "Dodge Burst Pods; free allies from Germinate roots; interrupt Lumbering Swipe.",
+                tip         = "Interrupt Healing Touch from Ancient Branch adds — top priority. At 100 energy, Burst Forth activates Hungry Lashers. Stand in Abundance circles on add death to auto-cleanse. Stack during Germinate. Tank: defensive for Barkbreaker.",
                 notes = {
-                    { role = "general",   text = "Dodge Burst Pods; free allies from Germinate roots." },
-                    { role = "interrupt", text = "Lumbering Swipe." },
+                    { role = "general",   text = "At 100 energy, Burst Forth activates Hungry Lashers — use stuns/slows. Stand in Abundance circles on add death to auto-cleanse." },
+                    { role = "general",   text = "Stack during Germinate channel; free allies from roots." },
+                    { role = "tank",      text = "Defensive for Barkbreaker — physical damage amp." },
+                    { role = "interrupt", text = "Healing Touch (Ancient Branch adds) — highest priority." },
                 },
             },
             {
                 encounterID = 2564,  -- confirmed in-game
                 npcID       = 191736,
                 name        = "Crawth",
-                tip         = "Interrupt Screech; spread for quill barrage; kill wind adds quickly.",
+                tip         = "Ruinous Winds at 75% and 45%: grab balls and throw into the goals. At 45%, Firestorm begins — 12s damage amp; save offensive CDs and Bloodlust for this window. Spread loosely for Deafening Screech. Tank: defensive for Savage Peck.",
                 notes = {
-                    { role = "general",   text = "Spread for quill barrage; kill wind adds quickly." },
-                    { role = "interrupt", text = "Screech." },
+                    { role = "general",   text = "Ruinous Winds at 75% and 45%: grab balls and throw into the goals." },
+                    { role = "general",   text = "Spread loosely for Deafening Screech." },
+                    { role = "tank",      text = "Defensive for Savage Peck." },
+                    { role = "dps",       text = "Firestorm at 45% — 12s damage amp with pulsing damage; use offensive CDs and Bloodlust here." },
                 },
             },
             {
@@ -631,9 +635,11 @@ KwikTip.DUNGEONS = {
                 encounterID = 1999,  -- confirmed in-game
                 npcID       = 36494,
                 name        = "Forgemaster Garfrost",
-                tip         = "LoS boss behind ice boulders to shed Permafrost stacks before they stack too high.",
+                tip         = "Throw Saronite places ore chunks — position yourself near them to LoS Glacial Overload (full-energy channel: massive damage + 75% frost vulnerability). Dispel Cryostomp (magic: slow + 50% more frost damage taken). Tank: defensive for Orebreaker.",
                 notes = {
-                    { role = "general",   text = "LoS boss behind ice boulders to shed Permafrost stacks before they stack too high." },
+                    { role = "general",   text = "Throw Saronite places ore chunks on players — stay near an ore to LoS Glacial Overload at full energy." },
+                    { role = "healer",    text = "Dispel Cryostomp (magic) — slow + 50% increased frost damage taken." },
+                    { role = "tank",      text = "Defensive for Orebreaker." },
                 },
             },
             {
@@ -641,18 +647,23 @@ KwikTip.DUNGEONS = {
                 npcID       = 36476,  -- Ick
                 altNpcIDs   = { 36477 },  -- Krick
                 name        = "Ick & Krick",
-                tip         = "Run from Ick during Pursuit; spread for Explosive Barrage.",
+                tip         = "Interrupt Death Bolt (Krick). Phase 1: cleave Shade Shift adds before they explode; avoid Blight Smash and Plague Explosion puddles. Phase 2 (50%): kite Ick during 'Get 'em, Ick!' fixation.",
                 notes = {
-                    { role = "general",   text = "Run from Ick during Pursuit; spread for Explosive Barrage." },
+                    { role = "general",   text = "Phase 1: cleave Shade Shift adds before they explode; avoid Blight Smash and Plague Explosion puddles." },
+                    { role = "general",   text = "Phase 2 (50%): kite Ick during 'Get 'em, Ick!' fixation." },
+                    { role = "interrupt", text = "Death Bolt (Krick)." },
                 },
             },
             {
                 encounterID = 2000,  -- confirmed in-game
                 npcID       = 36658,
                 name        = "Scourgelord Tyrannus",
-                tip         = "Dodge Overlord's Brand; spread to avoid chained Unholy Power debuffs.",
+                tip         = "Rime Blast targets players — cleave them into bone piles to freeze piles and prevent Army of the Dead spawns. Kill Plaguespreader adds fast (interrupt Plague Bolt). Healer: dispel Rotting Strikes disease from tank.",
                 notes = {
-                    { role = "general",   text = "Dodge Overlord's Brand; spread to avoid chained Unholy Power debuffs." },
+                    { role = "general",   text = "Rime Blast targets players — cleave them into bone piles to freeze the piles and prevent Army of the Dead spawns." },
+                    { role = "dps",       text = "Kill Plaguespreader adds immediately." },
+                    { role = "healer",    text = "Dispel Rotting Strikes disease stacks from the tank." },
+                    { role = "interrupt", text = "Plague Bolt (Plaguespreader adds)." },
                 },
             },
         },
@@ -672,7 +683,7 @@ KwikTip.DUNGEONS = {
         mythicPlus = true,
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 2065,  -- confirmed via LittleWigs Legion/SeatOfTheTriumvirate; Midnight mod:Retail() block present
                 npcID       = 122313,
                 name        = "Zuraal the Ascended",
                 -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
@@ -684,7 +695,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 2066,  -- confirmed via LittleWigs Legion/SeatOfTheTriumvirate
                 npcID       = 122316,
                 name        = "Saprish",
                 -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
@@ -695,7 +706,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 2067,  -- confirmed via LittleWigs Legion/SeatOfTheTriumvirate
                 npcID       = 124309,
                 name        = "Viceroy Nezhar",
                 -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
@@ -706,7 +717,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 2068,  -- confirmed via LittleWigs Legion/SeatOfTheTriumvirate
                 npcID       = 214650,
                 name        = "L'ura",
                 -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
