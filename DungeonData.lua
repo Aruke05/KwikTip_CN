@@ -1056,6 +1056,160 @@ KwikTip.DUNGEONS = {
             { subzone = "The Overlook",       bossIndex = 3 },  -- Rukhran; confirmed in-game
         },
     },
+
+    -- --------------------------------------------------------
+    -- MIDNIGHT SEASON 1 RAID — Three wings, same season
+    -- instanceIDs from BigWigs Midnight/ raid directories (unverified in-game).
+    -- encounterIDs from BigWigs SetEncounterID() calls (unverified in-game).
+    -- uiMapIDs all 0 — verify in-game; primary detection is instanceID.
+    -- Mechanic data from BigWigs Lua + Wowhead + method.gg (pre-launch sourcing).
+    -- --------------------------------------------------------
+
+    -- Wing 1: The Voidspire (6 bosses)
+    {
+        instanceID = 2912,  -- BigWigs Midnight/TheVoidspire/; unverified in-game
+        uiMapID    = 0,     -- TODO: verify in-game
+        name       = "The Voidspire",
+        location   = "Quel'Thalas",
+        season     = "midnight",
+        type       = "raid",
+        mythicPlus = false,
+        bosses = {
+            {
+                encounterID = 3176,  -- BigWigs; unverified in-game
+                npcID       = 240435,
+                name        = "Imperator Averzian",
+                tip         = "Soak Umbral Collapse circles on Abyssal Voidshapers to block tile claims — 3 tiles claimed in a row triggers March of the Endless (massive raid damage). Dodge Oblivion's Wrath ground zones. Tanks: Blackening Wounds stacks reduce max HP — swap before they stack high.",
+                notes = {
+                    { role = "general",   text = "Soak Umbral Collapse circles on Abyssal Voidshapers — block their tile claims. 3 tiles in a row triggers March of the Endless." },
+                    { role = "general",   text = "Dodge Oblivion's Wrath ground zones; avoid claimed tiles (Imperator gains immunity near them)." },
+                    { role = "tank",      text = "Swap on Blackening Wounds — stacks reduce your max HP." },
+                },
+            },
+            {
+                encounterID = 3177,  -- BigWigs; unverified in-game
+                npcID       = 240434,
+                name        = "Vorasius",
+                tip         = "Kill Blistercreep adds before they explode — use Blisterburst detonations to destroy Void Crystals. Always keep a player in melee (Overpowering Pulse hits hard with no melee). Primordial Roar pulls in then knocks back — brace with a personal. Tanks: swap on Smashed stacks from Shadowclaw Slam.",
+                notes = {
+                    { role = "general",   text = "Kill Blistercreep fixates before they reach you — Blisterburst detonations destroy Void Crystals from Shadowclaw Slam." },
+                    { role = "general",   text = "Always keep a player in melee — Overpowering Pulse hits hard with no melee presence." },
+                    { role = "general",   text = "Primordial Roar pulls in then knocks back — brace with a personal defensive." },
+                    { role = "tank",      text = "Swap on Smashed stacks (Shadowclaw Slam)." },
+                },
+            },
+            {
+                encounterID = 3179,  -- BigWigs; unverified in-game
+                npcID       = 240432,
+                name        = "Fallen-King Salhadaar",
+                tip         = "At 100 energy: Entropic Unraveling — boss takes 25% increased damage for 20s; use offensive CDs and Bloodlust. Intercept Void Convergence orbs before boss absorbs them (each absorption = massive raid damage). Interrupt Fractured Projection shadow attacks from mirror images. Tanks: swap on Destabilizing Strikes.",
+                notes = {
+                    { role = "general",   text = "Intercept Void Convergence orbs — boss absorbing one deals massive raid damage." },
+                    { role = "dps",       text = "At 100 energy: Entropic Unraveling — boss takes 25% increased damage for 20s; use offensive CDs and Bloodlust." },
+                    { role = "tank",      text = "Swap on Destabilizing Strikes stacks." },
+                    { role = "interrupt", text = "Fractured Projection shadow attacks (mirror images)." },
+                },
+            },
+            {
+                encounterID = 3178,  -- BigWigs; unverified in-game
+                npcID       = 242056,
+                altNpcIDs   = { 244552 },  -- Ezzorak
+                name        = "Vaelgor & Ezzorak",
+                tip         = "Keep both within 10% HP — Twilight Bond amplifies their damage by 100% if they diverge; surviving dragon gains stacking Twilight Fury if one dies. At 100 energy (Midnight Flames): heavy raid-wide shadow damage — healer CDs. Vaelgor: dodge Nullbeam frontal; Dread Breath fears. Tank swap for Vaelwing (Vaelgor) and Rakfang (Ezzorak) stacks.",
+                notes = {
+                    { role = "general",   text = "Keep both within 10% HP — Twilight Bond amplifies their damage by 100% if health diverges." },
+                    { role = "general",   text = "Vaelgor: dodge Nullbeam frontal; Dread Breath fears — face away from raid." },
+                    { role = "healer",    text = "Major CDs during Midnight Flames (100 energy) — simultaneous raid-wide shadow damage from both dragons." },
+                    { role = "tank",      text = "Swap on Vaelwing (Vaelgor) and Rakfang (Ezzorak) stacks." },
+                },
+            },
+            {
+                encounterID = 3180,  -- BigWigs; unverified in-game
+                npcID       = 240431,
+                altNpcIDs   = { 240437, 240438 },  -- Lightblood, Senn
+                name        = "Lightblinded Vanguard",
+                tip         = "Three-boss encounter: Bellamy, Lightblood, and Senn rotate paladin aura states (Wrath, Devotion, Peace). Execution Sentence: stack on the targeted player to share the soak. Watch for Avenger's Shield DoT debuff. React to rotating Judgement types — Final Verdict (red) and Shield of the Righteous (blue) require different positioning.",
+                notes = {
+                    { role = "general",   text = "Rotating aura states (Wrath, Devotion, Peace) change which mechanics are active — track BigWigs timers." },
+                    { role = "general",   text = "Execution Sentence: stack on the targeted player to share the soak." },
+                    { role = "general",   text = "React to Judgement type — Final Verdict (red) and Shield of the Righteous (blue) require different positioning." },
+                    { role = "tank",      text = "Avenger's Shield applies a DoT debuff — communicate with co-tank." },
+                },
+            },
+            {
+                encounterID = 3181,  -- BigWigs; unverified in-game
+                npcID       = 240430,
+                altNpcIDs   = { 243805, 243810, 243811 },  -- Morium, Demiar, Vorelus
+                name        = "Crown of the Cosmos",
+                tip         = "3-stage fight. Stage 1: kill Morium, Demiar, and Vorelus adds around Alleria. Dodge Grasp of Emptiness and Null Corona ground effects. Stage 2: handle Volatile Fissure and Ranger Captain's Mark mechanics. Follow BigWigs callouts for intermission transitions.",
+                notes = {
+                    { role = "general",   text = "Stage 1: kill Morium, Demiar, and Vorelus adds. Dodge Grasp of Emptiness and Null Corona." },
+                    { role = "general",   text = "Stage 2: handle Volatile Fissure positioning and Ranger Captain's Mark mechanics." },
+                    { role = "general",   text = "Follow BigWigs callouts for Crushing Singularity and Shattering Singularity intermissions." },
+                },
+            },
+        },
+    },
+
+    -- Wing 2: March on Quel'Danas (2 bosses)
+    {
+        instanceID = 2913,  -- BigWigs Midnight/MarchOnQuelDanas/; unverified in-game
+        uiMapID    = 0,     -- TODO: verify in-game
+        name       = "March on Quel'Danas",
+        location   = "Isle of Quel'Danas",
+        season     = "midnight",
+        type       = "raid",
+        mythicPlus = false,
+        bosses = {
+            {
+                encounterID = 3182,  -- BigWigs; unverified in-game
+                npcID       = 240387,
+                name        = "Belo'ren, Child of Al'ar",
+                tip         = "Stage 1: you receive a Light or Void alignment — match your color to corresponding dive attacks (Light Dive / Void Dive) and quill mechanics. Cross-color exposure deals heavily increased damage. Stage 2 (Ashen Shell): focus Incubation of Flames eggs before they hatch.",
+                notes = {
+                    { role = "general",   text = "Stage 1: you receive Light or Void — match your color to dive attacks and quill mechanics. Cross-color exposure deals heavily increased damage." },
+                    { role = "dps",       text = "Stage 2: destroy Incubation of Flames eggs before they hatch." },
+                    { role = "healer",    text = "Eternal Burns (Holy Burn / Void Burn) — rotate CDs based on which is active." },
+                },
+            },
+            {
+                encounterID = 3183,  -- BigWigs; unverified in-game
+                npcID       = 240391,
+                name        = "Midnight Falls",
+                tip         = "Complex multi-stage encounter. Key casts: Grim Symphony (long channel — interrupt or mitigate), Dark Rune positionals. Stage transitions triggered by Dawnlight Barrier and Light's End. Follow BigWigs timers — mechanic overlap is heavy throughout.",
+                notes = {
+                    { role = "general",   text = "Grim Symphony is a long channel — interrupt or mitigate with major defensives." },
+                    { role = "general",   text = "Dark Rune positionals — watch for overlapping placement requirements." },
+                    { role = "general",   text = "Stage transitions at Dawnlight Barrier and Light's End — follow BigWigs callouts." },
+                },
+            },
+        },
+    },
+
+    -- Wing 3: The Dreamrift (1 boss)
+    {
+        instanceID = 2939,  -- BigWigs Midnight/TheDreamrift/; unverified in-game
+        uiMapID    = 0,     -- TODO: verify in-game
+        name       = "The Dreamrift",
+        location   = "The Dreamrift",
+        season     = "midnight",
+        type       = "raid",
+        mythicPlus = false,
+        bosses = {
+            {
+                encounterID = 3306,  -- BigWigs; unverified in-game
+                npcID       = 245569,
+                name        = "Chimaerus the Undreamt God",
+                tip         = "Stage 1: split into two groups — one soaks Alndust Upheaval (tank-targeted split soak), other stays on boss. Rift Emergence: break absorb shields on adds before they reach the boss — adds reaching boss deal massive raid damage and empower him. Dispel Consuming Miasma puddles. Stage 2: Corrupted Devastation and Ravenous Dive — maintain positioning.",
+                notes = {
+                    { role = "general",   text = "Stage 1: split — one group soaks Alndust Upheaval (tank-targeted), other stays on boss." },
+                    { role = "general",   text = "Rift Emergence: break absorb shields on adds before they reach the boss — adds reaching boss deal massive raid damage." },
+                    { role = "healer",    text = "Dispel Consuming Miasma puddles to clear ground space." },
+                    { role = "general",   text = "Stage 2 (To the Skies): reposition for Corrupted Devastation and Ravenous Dive." },
+                },
+            },
+        },
+    },
 }
 
 -- Runtime lookups are built in DungeonData_Timewalking.lua, which loads after
