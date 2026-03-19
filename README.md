@@ -27,9 +27,10 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 ## Features
 
 - **Boss tips** — concise, actionable guidance for every boss in the Season 1 M+ rotation
-- **Trash tips** — tips appear automatically when you target a known notable mob
+- **Sub-zone aware HUD** — the HUD updates automatically as your group moves through each area; boss room tips surface on entry before the encounter starts, and trash sections in supported dungeons get their own contextual tips
 - **Role-specific notes** — tips are categorized by role (tank, healer, DPS, general) and interrupt priority, each with a distinct color and icon so you can find what's relevant at a glance
-- **Sub-zone aware HUD** — tips update automatically as your group moves through each area; boss room tips surface on entry, before the encounter starts
+- **M+ affix display** — active keystone affix names and tips are shown in the HUD while waiting between encounters
+- **Delve support** — opt-in boss tips for Midnight delves (enable in settings)
 - **Keep Open Through Instance** — optionally keep the HUD visible throughout a run
 - **Resizable, draggable HUD** — drag to reposition, drag corners to resize; locks in place when done
 - **LibSharedMedia-3.0 support** — font picker lists all fonts registered by your other addons if LSM is present; falls back to three built-in WoW fonts otherwise
@@ -38,7 +39,7 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 
 ## Dungeon Coverage
 
-All bosses across all listed dungeons have tips. Trash tips are filled in for the M+ dungeons. Area-based tip switching is live for Nexus-Point Xenas and Voidscar Arena, with more dungeons to follow as sub-zone strings are confirmed in-game.
+All bosses across all listed dungeons have tips. Full area tip coverage — boss rooms and trash sections — is live for all eight Midnight dungeons and three of the four legacy M+ dungeons (Algeth'ar Academy, Pit of Saron, Skyreach). Seat of the Triumvirate coverage is in progress pending in-game verification.
 
 ### Season 1 Mythic+ Rotation
 
@@ -61,6 +62,10 @@ All bosses across all listed dungeons have tips. Trash tips are filled in for th
 | Den of Nalorakk | Level-up (81–88) |
 | The Blinding Vale | Max level |
 | Voidscar Arena | Max level |
+
+### Delves (opt-in)
+
+Boss tips for all Midnight delves. Enable in settings — off by default.
 
 ---
 

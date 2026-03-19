@@ -500,7 +500,7 @@ KwikTip.DUNGEONS = {
             {
                 encounterID = 3202,  -- confirmed in-game
                 npcID       = 247676,
-                name        = "Ziekket",
+                name        = "Ziekett",
                 tip         = "Intercept Lightbloom's Essence globules before the boss absorbs them — each absorbed globule grants a Florescent Outburst stack (stacking shield); touching them yourself grants Lightbloom's Might (+dmg/healing). Position boss's Lightbeam sweep over Dormant Lashers to vaporize them; dodge the beam and Lightsap puddles. Tank: defensive on Thornspike — stacking impale + bleed.",
                 notes = {
                     { role = "general",   text = "Intercept Lightbloom's Essence globules — each one the boss absorbs grants a stacking shield (Florescent Outburst); touching them yourself grants Lightbloom's Might." },
@@ -513,7 +513,7 @@ KwikTip.DUNGEONS = {
             { subzone = "The Luminous Garden",  bossIndex = 1 },  -- Lightblossom Trinity; confirmed in-game
             { subzone = "The Gilded Tangle",    bossIndex = 2 },  -- Ikuzz the Light Hunter; confirmed in-game
             { subzone = "Warden's Retreat",     bossIndex = 3 },  -- Lightwarden Ruia; confirmed in-game
-            { subzone = "Conviction's Crucible", bossIndex = 4 }, -- Ziekket; confirmed in-game
+            { subzone = "Conviction's Crucible", bossIndex = 4 }, -- Ziekett; confirmed in-game
         },
     },
     {
