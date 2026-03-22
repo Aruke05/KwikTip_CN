@@ -291,6 +291,13 @@ function KwikTip:CreateConfigWindow()
     local showInDungeonCB = MakeCheckbox("KwikTipShowInDungeonCB", cfg, hideHUDCB, "Keep Open Through Instance")
     local delveCB      = MakeCheckbox("KwikTipDelveCB",        cfg, showInDungeonCB, "Enable in Delves")
 
+    local delveCaution = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    delveCaution:SetPoint("TOPLEFT", delveCB, "BOTTOMLEFT", 26, -2)
+    delveCaution:SetText("CAUTION: Preliminary Release")
+    delveCaution:SetTextColor(1, 0.8, 0, 1)
+
+    local raidCB       = MakeCheckbox("KwikTipRaidCB",         cfg, delveCaution,    "Enable in Raids")
+
     minimapBtnCB:SetScript("OnClick", function(self)
         KwikTipDB.showMinimapBtn = self:GetChecked()
         if KwikTip._PlaceMinimapBtn    then KwikTip:_PlaceMinimapBtn()    end
@@ -310,16 +317,16 @@ function KwikTip:CreateConfigWindow()
         KwikTip:UpdateContent()
         KwikTip:UpdateVisibility()
     end)
-
-    local delveCaution = cfg:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    delveCaution:SetPoint("TOPLEFT", delveCB, "BOTTOMLEFT", 26, -2)
-    delveCaution:SetText("CAUTION: Preliminary Release")
-    delveCaution:SetTextColor(1, 0.8, 0, 1)
+    raidCB:SetScript("OnClick", function(self)
+        KwikTipDB.raids = self:GetChecked()
+        KwikTip:UpdateContent()
+        KwikTip:UpdateVisibility()
+    end)
 
     -- ============================================================
     -- SEND TO CHAT
     -- ============================================================
-    local chatHeader = MakeSectionHeader("SEND TO CHAT", delveCaution)
+    local chatHeader = MakeSectionHeader("SEND TO CHAT", raidCB)
 
     local CHAT_OPTIONS = {
         { label = "None",     value = "NONE"          },
@@ -672,6 +679,7 @@ function KwikTip:CreateConfigWindow()
         hideHUDCB:SetChecked(db.persistentHide)
         showInDungeonCB:SetChecked(db.showInDungeon)
         delveCB:SetChecked(db.delves)
+        raidCB:SetChecked(db.raids ~= false)
         SetChatChannel(db.printChannel or "NONE")
         opacitySlider:SetValue(math.floor(db.alpha * 100 + 0.5))
         SetFont(db.fontName or "Friz Quadrata")

@@ -21,8 +21,8 @@ frame:SetScript("OnEvent", function(self, event, ...)
         KwikTip:UpdateVisibility()
         KwikTip:LogMapID()
     elseif event == "ENCOUNTER_START" then
-        local encounterID, encounterName = ...
-        KwikTip:OnEncounterStart(encounterID, encounterName)
+        local encounterID, encounterName, difficultyID, groupSize = ...
+        KwikTip:OnEncounterStart(encounterID, encounterName, difficultyID, groupSize)
     elseif event == "ENCOUNTER_END" then
         local _, _, _, _, success = ...
         KwikTip:OnEncounterEnd(success)
@@ -36,14 +36,24 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "UNIT_SPELLCAST_START" then
         local unit, _, spellID = ...
         KwikTip:OnSpellCastStart(unit, spellID)
+    elseif event == "ENCOUNTER_TIMELINE_EVENT_ADDED" then
+        local eventInfo = ...
+        KwikTip:OnTimelineEventAdded(eventInfo)
+    elseif event == "ENCOUNTER_TIMELINE_EVENT_REMOVED" then
+        local eventInfo = ...
+        KwikTip:OnTimelineEventRemoved(eventInfo)
     end
 end)
 
 -- Returns true if the current instance type should be handled by KwikTip.
+-- Raids are opt-in via KwikTipDB.raids (default true).
 -- Delves return instanceType "scenario" and are opt-in via KwikTipDB.delves.
 local function IsSupportedInstance(inInstance, instanceType)
     if not inInstance then return false end
-    if instanceType == "party" or instanceType == "raid" then return true end
+    if instanceType == "party" then return true end
+    if instanceType == "raid" then
+        return not KwikTipDB or KwikTipDB.raids ~= false
+    end
     if instanceType == "scenario" and KwikTipDB and KwikTipDB.delves then return true end
     return false
 end
@@ -156,15 +166,49 @@ end
 
 -- Build the HUD string for an active boss encounter.
 -- Filters structured notes to the player's assigned role (+ general + interrupt).
+-- If boss.difficulties[difficultyID] exists, its tip/notes override the base ones.
 -- Falls back to the flat tip string if no notes are defined.
-local function FormatBossContent(dungeon, boss)
+local function FormatBossContent(dungeon, boss, difficultyID)
+    local override = difficultyID and boss.difficulties and boss.difficulties[difficultyID]
+    local src  = override or boss
     local role = GetPlayerRole()
-    local body = FormatNotes(boss.notes, role)
-    if not body and boss.tip and boss.tip ~= "" then
-        body = GRAY .. boss.tip .. RESET
+    local body = FormatNotes(src.notes, role)
+    if not body and src.tip and src.tip ~= "" then
+        body = GRAY .. src.tip .. RESET
+    end
+    -- Fall back to base boss if override has neither tip nor notes
+    if not body and override then
+        body = FormatNotes(boss.notes, role)
+        if not body and boss.tip and boss.tip ~= "" then
+            body = GRAY .. boss.tip .. RESET
+        end
     end
     local header = FormatHeader(dungeon.name, boss.name)
     return body and (header .. "\n" .. body) or header
+end
+
+-- Build the HUD string for a timeline-triggered phase window.
+-- phase is a boss.phases[spellID] entry and may define its own tip/notes.
+-- Falls back to the difficulty-aware base boss content if the phase defines neither.
+local function FormatPhaseContent(dungeon, boss, phase, difficultyID)
+    local role = GetPlayerRole()
+    local body = FormatNotes(phase.notes, role)
+    if not body and phase.tip and phase.tip ~= "" then
+        body = GRAY .. phase.tip .. RESET
+    end
+    if not body then
+        -- Fall back to base boss content (difficulty-aware)
+        local override = difficultyID and boss.difficulties and boss.difficulties[difficultyID]
+        local src = override or boss
+        body = FormatNotes(src.notes, role)
+        if not body and src.tip and src.tip ~= "" then
+            body = GRAY .. src.tip .. RESET
+        end
+    end
+    local header = FormatHeader(dungeon.name, boss.name)
+    local label  = phase.label and (GOLD .. phase.label .. RESET .. "\n") or ""
+    if not body then return header end
+    return header .. "\n" .. label .. body
 end
 
 -- Build the HUD string for the current sub-zone area.
@@ -173,7 +217,7 @@ end
 -- of a generic area tip — used for boss room sub-zones so the tip appears
 -- as the group enters, before ENCOUNTER_START fires.
 -- Returns nil if the current sub-zone has no defined tip.
-local function FormatAreaContent(dungeon)
+local function FormatAreaContent(dungeon, difficultyID)
     local subzone = GetSubZoneText()
     local mapID   = C_Map.GetBestMapForUnit("player")
     for _, a in ipairs(dungeon.areas) do
@@ -183,7 +227,7 @@ local function FormatAreaContent(dungeon)
             if a.bossIndex then
                 local boss = dungeon.bosses[a.bossIndex]
                 if boss then
-                    return FormatBossContent(dungeon, boss)
+                    return FormatBossContent(dungeon, boss, difficultyID)
                 end
             end
             return GOLD .. dungeon.name .. RESET .. "\n"
@@ -201,13 +245,15 @@ end
 -- Called by ENCOUNTER_START. Locks the HUD to the boss tip for the fight duration.
 -- Always logs the encounterID to encounterLog (not gated on debugLog) so legacy
 -- dungeon encounter IDs can be collected without enabling full debug mode.
-function KwikTip:OnEncounterStart(encounterID, encounterName)
+function KwikTip:OnEncounterStart(encounterID, encounterName, difficultyID, groupSize)
     -- Always-on encounter logging — used to resolve encounterID = 0 stubs in DungeonData.
     if KwikTipDB then
         local instanceName, _, _, _, _, _, _, instanceID = GetInstanceInfo()
         table.insert(KwikTipDB.encounterLog, {
             encounterID   = encounterID,
             encounterName = encounterName,
+            difficultyID  = difficultyID,
+            groupSize     = groupSize,
             instanceID    = instanceID,
             instanceName  = instanceName,
             mapID         = C_Map.GetBestMapForUnit("player"),
@@ -218,11 +264,29 @@ function KwikTip:OnEncounterStart(encounterID, encounterName)
         end
     end
 
+    -- Register timeline events for every encounter: debug logging + phase detection.
+    self._activeEncounterID = encounterID
+    if not self._timelineEventsRegistered then
+        frame:RegisterEvent("ENCOUNTER_TIMELINE_EVENT_ADDED")
+        frame:RegisterEvent("ENCOUNTER_TIMELINE_EVENT_REMOVED")
+        self._timelineEventsRegistered = true
+    end
+
+    self._activeBossEntry    = nil
+    self._activePhaseSpellID = nil
+    self._activeDifficultyID = difficultyID
+
+    -- Guard HUD update against disabled instance types (raids off, delves off, etc.).
+    -- Logging and timeline registration above are intentionally unconditional.
+    local inInstance, instanceType = IsInInstance()
+    if not IsSupportedInstance(inInstance, instanceType) then return end
+
     local entry = KwikTip.BOSS_BY_ENCOUNTERID[encounterID]
     if not entry then return end
 
+    self._activeBossEntry = entry
     self.bossActive = true
-    local content = FormatBossContent(entry.dungeon, entry.boss)
+    local content = FormatBossContent(entry.dungeon, entry.boss, difficultyID)
     local bar = entry.dungeon.mythicPlus and FormatAffixBar()
     self:SetContent(bar and (content .. "\n" .. bar) or content)
     self:UpdateVisibility()
@@ -232,6 +296,15 @@ end
 -- next natural tip trigger (area change, trash target, or new encounter).
 -- On a wipe/reset, restores normal area/trash detection immediately.
 function KwikTip:OnEncounterEnd(success)
+    self._activeBossEntry    = nil
+    self._activeEncounterID  = nil
+    self._activePhaseSpellID = nil
+    self._activeDifficultyID = nil
+    if self._timelineEventsRegistered then
+        frame:UnregisterEvent("ENCOUNTER_TIMELINE_EVENT_ADDED")
+        frame:UnregisterEvent("ENCOUNTER_TIMELINE_EVENT_REMOVED")
+        self._timelineEventsRegistered = false
+    end
     self.bossActive = false
     if success == 1 then
         -- Boss killed — leave current tip up until next natural trigger.
@@ -242,6 +315,59 @@ function KwikTip:OnEncounterEnd(success)
         self:UpdateContent()
         self:UpdateVisibility()
     end
+end
+
+-- Called by ENCOUNTER_TIMELINE_EVENT_ADDED.
+-- Logs all timeline events when debugLog is on (use this to discover phase spellIDs).
+-- When the boss has a phases[spellID] entry, switches the HUD to the phase-specific tip.
+function KwikTip:OnTimelineEventAdded(eventInfo)
+    if not eventInfo then return end
+
+    -- Debug logging — records every timeline event during an encounter so phase
+    -- spellIDs can be identified and added to boss.phases in DungeonData.lua.
+    if KwikTipDB and KwikTipDB.debugLog then
+        local _, _, _, _, _, _, _, instanceID = GetInstanceInfo()
+        table.insert(KwikTipDB.timelineLog, {
+            spellID     = eventInfo.spellID,
+            spellName   = eventInfo.spellName,
+            severity    = eventInfo.severity,
+            duration    = eventInfo.duration,
+            encounterID = self._activeEncounterID,
+            instanceID  = instanceID,
+            time        = date("%Y-%m-%d %H:%M:%S"),
+        })
+        if #KwikTipDB.timelineLog > 2000 then
+            KwikTipDB.timelineLog = self:PruneArray(KwikTipDB.timelineLog, 2000)
+        end
+    end
+
+    -- Phase tip switching — only for known bosses with phase definitions.
+    if not self.bossActive then return end
+    local spellID = eventInfo.spellID
+    if not spellID or spellID == 0 then return end
+    local entry = self._activeBossEntry
+    if not entry or not entry.boss.phases then return end
+    local phase = entry.boss.phases[spellID]
+    if not phase then return end
+
+    self._activePhaseSpellID = spellID
+    local content = FormatPhaseContent(entry.dungeon, entry.boss, phase, self._activeDifficultyID)
+    local bar = entry.dungeon.mythicPlus and FormatAffixBar()
+    self:SetContent(bar and (content .. "\n" .. bar) or content)
+end
+
+-- Called by ENCOUNTER_TIMELINE_EVENT_REMOVED.
+-- If the removed event was driving the current phase tip, reverts to the base boss tip.
+function KwikTip:OnTimelineEventRemoved(eventInfo)
+    if not self.bossActive then return end
+    if not eventInfo or eventInfo.spellID ~= self._activePhaseSpellID then return end
+
+    self._activePhaseSpellID = nil
+    local entry = self._activeBossEntry
+    if not entry then return end
+    local content = FormatBossContent(entry.dungeon, entry.boss, self._activeDifficultyID)
+    local bar = entry.dungeon.mythicPlus and FormatAffixBar()
+    self:SetContent(bar and (content .. "\n" .. bar) or content)
 end
 
 -- Called by CHALLENGE_MODE_START. Logs the keystone and refreshes content so
@@ -351,7 +477,7 @@ function KwikTip:UpdateContent()
     end
 
     -- Primary lookup: instanceID from GetInstanceInfo()
-    local _, _, _, _, _, _, _, instanceID = GetInstanceInfo()
+    local _, _, difficultyID, _, _, _, _, instanceID = GetInstanceInfo()
     local dungeon = instanceID and KwikTip.DUNGEON_BY_INSTANCEID[instanceID]
 
     -- Fallback: uiMapID for dungeons with instanceID = 0
@@ -363,7 +489,7 @@ function KwikTip:UpdateContent()
     local prevAreaActive    = self.areaActive
     local prevDungeonActive = self.dungeonActive
 
-    local areaContent = dungeon and dungeon.areas and FormatAreaContent(dungeon)
+    local areaContent = dungeon and dungeon.areas and FormatAreaContent(dungeon, difficultyID)
 
     if areaContent then
         self.areaActive    = true
@@ -512,6 +638,7 @@ SlashCmdList["KWIKTIP"] = function(msg)
         local encounterCount = KwikTipDB.encounterLog and #KwikTipDB.encounterLog or 0
         local keystoneCount  = KwikTipDB.keystoneLog  and #KwikTipDB.keystoneLog  or 0
         local spellCount     = KwikTipDB.spellLog     and #KwikTipDB.spellLog     or 0
+        local timelineCount  = KwikTipDB.timelineLog  and #KwikTipDB.timelineLog  or 0
         local snapshotCount  = KwikTipDB.debugSnapshots and #KwikTipDB.debugSnapshots or 0
         local keyLevel, keyAffixes
         if C_ChallengeMode then keyLevel, keyAffixes = C_ChallengeMode.GetActiveKeystoneInfo() end
@@ -526,8 +653,8 @@ SlashCmdList["KWIKTIP"] = function(msg)
         if keyLevel then
             print(string.format("  keystone=+%d  affixes=%d", keyLevel, keyAffixes and #keyAffixes or 0))
         end
-        print(string.format("  mapIDLog=%d  mobLog=%d  encounterLog=%d  keystoneLog=%d  spellLog=%d  snapshots=%d",
-            mapIDCount, mobCount, encounterCount, keystoneCount, spellCount, snapshotCount))
+        print(string.format("  mapIDLog=%d  mobLog=%d  encounterLog=%d  keystoneLog=%d  spellLog=%d  timelineLog=%d  snapshots=%d",
+            mapIDCount, mobCount, encounterCount, keystoneCount, spellCount, timelineCount, snapshotCount))
         -- Save snapshot to SavedVariables for post-session inspection.
         if KwikTipDB then
             table.insert(KwikTipDB.debugSnapshots, {
@@ -549,6 +676,7 @@ SlashCmdList["KWIKTIP"] = function(msg)
                 encounterLogCount = encounterCount,
                 keystoneLogCount  = keystoneCount,
                 spellLogCount     = spellCount,
+                timelineLogCount  = timelineCount,
             })
             if #KwikTipDB.debugSnapshots > 100 then
                 KwikTipDB.debugSnapshots = KwikTip:PruneArray(KwikTipDB.debugSnapshots, 100)
@@ -566,9 +694,10 @@ SlashCmdList["KWIKTIP"] = function(msg)
         KwikTipDB.encounterLog   = {}
         KwikTipDB.keystoneLog    = {}
         KwikTipDB.spellLog       = {}
+        KwikTipDB.timelineLog    = {}
         KwikTipDB.debugSnapshots = {}
         _loggedSpells = {}
-        print("|cff00ff00KwikTip|r mapIDLog, mobLog, encounterLog, keystoneLog, spellLog, and debugSnapshots cleared.")
+        print("|cff00ff00KwikTip|r mapIDLog, mobLog, encounterLog, keystoneLog, spellLog, timelineLog, and debugSnapshots cleared.")
     elseif cmd == "feedback" then
         print("|cff00ff00KwikTip|r Tips feel off? Open an issue at: https://github.com/postblink/KwikTip/issues")
     elseif cmd == "config" or cmd == "" then

@@ -34,6 +34,13 @@ local ADDON_NAME, KwikTip = ...
 --     name        : boss name as shown in the game
 --     tip         : short contextual tip shown in the HUD during the boss fight (flat string; legacy/fallback)
 --     notes       : (optional) structured role-aware notes; if present, replaces `tip` in the HUD.
+--     phases      : (optional) sparse table keyed by spellID; entries override the HUD tip when
+--                   ENCOUNTER_TIMELINE_EVENT_ADDED fires for that spell — useful for phase-transition
+--                   callouts or major mechanic windows. Discover spellIDs by enabling debugLog during
+--                   a fight and inspecting KwikTipDB.timelineLog afterward.
+--       label     : (optional) short phase label shown above the phase tip (e.g. "Phase 2")
+--       tip       : flat tip string for the phase (fallback if no notes)
+--       notes     : (optional) role-filtered notes, same format as boss notes above
 --                   Each entry: { role = "general"|"tank"|"healer"|"dps"|"interrupt", text = "..." }
 --                   Rendered with role-colored icon prefixes (tank=blue, healer=green, dps=orange,
 --                   interrupt=gold). `tip` is kept alongside for reference during migration.
@@ -76,10 +83,11 @@ KwikTip.DUNGEONS = {
                 encounterID = 3056,  -- confirmed in-game
                 npcID       = 231606,
                 name        = "Emberdawn",
-                tip         = "Drop Flaming Updraft puddles at the room's outer edges; play close to the boss during Burning Gale (16s) to minimize movement when dodging Twisters and Fire Breath frontals; healer major CDs on Burning Gale.",
+                tip         = "Drop Flaming Updraft puddles at the room's outer edges; play close to the boss during Burning Gale (16s) to minimize movement when dodging Twisters and Fire Breath frontals; healer major CDs on Burning Gale. Tank: defensive for Searing Beak — initial hit + DoT.",
                 notes = {
                     { role = "general",   text = "Drop Flaming Updraft puddles at the room's outer edges." },
                     { role = "general",   text = "During Burning Gale (16s) stay close to the boss — dodge Twisters and Fire Breath frontals." },
+                    { role = "tank",      text = "Defensive for Searing Beak — initial hit + DoT component." },
                     { role = "healer",    text = "Major CDs on Burning Gale." },
                 },
             },
@@ -114,10 +122,11 @@ KwikTip.DUNGEONS = {
                 encounterID = 3059,  -- confirmed in-game
                 npcID       = 231636,
                 name        = "The Restless Heart",
-                tip         = "Step on Turbulent Arrows to clear Squall Leap stacks. At 100 energy (Billowing Wind), step on arrows to vault over the expanding shockwave. Overlap Gust Shot ground pools to clear space. Tempest Slash knocks you back — try to land near arrows to clear your debuff. Tank: defensive for Tempest Slash.",
+                tip         = "Step on Turbulent Arrows to clear Squall Leap stacks. At 100 energy (Billowing Wind), step on arrows to vault over the expanding shockwave. Overlap Gust Shot ground pools to clear space. Tempest Slash knocks you back — try to land near arrows. Bolt Gale: frontal channel on a random player — stand still if targeted, use a defensive or combat drop to stop it.",
                 notes = {
                     { role = "general",   text = "Step on Turbulent Arrows to clear Squall Leap stacks; at 100 energy (Billowing Wind) step on arrows to vault over the expanding shockwave." },
                     { role = "general",   text = "Overlap Gust Shot ground pools to clear space." },
+                    { role = "general",   text = "Bolt Gale: frontal channel on a random player — stand still if targeted; use a defensive or combat drop to stop the channel." },
                     { role = "tank",      text = "Defensive for Tempest Slash — knockback; try to land near arrows to clear your debuff." },
                 },
             },
@@ -265,11 +274,12 @@ KwikTip.DUNGEONS = {
                 npcID       = 247570,  -- Muro'jin
                 altNpcIDs   = { 247572 },  -- Nekraxx
                 name        = "Muro'jin and Nekraxx",
-                tip         = "Keep equal health — if Nekraxx dies first Muro'jin revives him at 35%; if Muro'jin dies first Nekraxx gains 20% dmg every 4s (stacking). Carrion Swoop target: step into a Freezing Trap to block the charge and stun Nekraxx 5s. Barrage: targeted player stand still. Dispel Infected Pinions disease.",
+                tip         = "Keep equal health — if Nekraxx dies first Muro'jin revives him at 35%; if Muro'jin dies first Nekraxx gains 20% dmg every 4s (stacking). Carrion Swoop target: step into a Freezing Trap to block the charge and stun Nekraxx 5s. Barrage: targeted player stand still. Dispel Infected Pinions disease. Tank: defensive or bleed cleanse for Flanking Spear.",
                 notes = {
                     { role = "general",   text = "Keep equal health — if Nekraxx dies first Muro'jin revives him at 35%; if Muro'jin dies first Nekraxx gains +20% damage every 4s (continuously stacking)." },
                     { role = "general",   text = "Carrion Swoop target: step into a Freezing Trap to block the charge and stun Nekraxx 5s." },
                     { role = "general",   text = "Barrage targets a player — that player stands still." },
+                    { role = "tank",      text = "Defensive or bleed cleanse for Flanking Spear." },
                     { role = "healer",    text = "Dispel Infected Pinions disease." },
                 },
             },
@@ -277,11 +287,12 @@ KwikTip.DUNGEONS = {
                 encounterID = 3213,
                 npcID       = 248595,
                 name        = "Vordaza",
-                tip         = "Burst the Deathshroud shield during Necrotic Convergence with damage CDs; kite Unstable Phantoms into each other to detonate them — killing them directly applies Lingering Dread to the group; dodge Unmake line. Tank: defensive for Drain Soul channel.",
+                tip         = "Interrupt Necrotic Convergence — if missed, burst the Deathshroud shield with damage CDs. Kite Unstable Phantoms into each other to detonate them — killing directly applies Lingering Dread to the group; dodge Unmake line. Tank: defensive for Drain Soul channel.",
                 notes = {
                     { role = "general",   text = "Kite Unstable Phantoms into each other to detonate — killing directly applies Lingering Dread to the group; dodge Unmake line." },
                     { role = "dps",       text = "Burst the Deathshroud shield during Necrotic Convergence with damage CDs." },
                     { role = "tank",      text = "Defensive for Drain Soul channel." },
+                    { role = "interrupt", text = "Necrotic Convergence — interrupting prevents the Deathshroud shield entirely." },
                 },
             },
             {
@@ -335,22 +346,24 @@ KwikTip.DUNGEONS = {
                 encounterID = 3071,  -- confirmed in-game
                 npcID       = 231861,
                 name        = "Arcanotron Custos",
-                tip         = "Intercept orbs before they reach the boss — boss is 20% more vulnerable during intermission; save offensive CDs for this window. Avoid Arcane Residue zones; tank defensive for Repulsing Slam.",
+                tip         = "Intercept orbs before they reach the boss — boss is 20% more vulnerable during intermission; save offensive CDs for this window. Avoid Arcane Residue zones; tank defensive for Repulsing Slam. Magic dispel Ethereal Shackles from two players.",
                 notes = {
                     { role = "general",   text = "Intercept orbs before they reach the boss; avoid Arcane Residue zones." },
                     { role = "dps",       text = "Boss takes 20% increased damage during intermission — save offensive CDs for this window." },
-                    { role = "tank",      text = "Defensive for Repulsing Slam." },
+                    { role = "tank",      text = "Defensive for Repulsing Slam — knockback; position near terrain edges to stop it." },
+                    { role = "healer",    text = "Magic dispel Ethereal Shackles from two random players." },
                 },
             },
             {
                 encounterID = 3072,  -- confirmed in-game
                 npcID       = 231863,
                 name        = "Seranel Sunlash",
-                tip         = "Purge Hastening Ward magic buff from the boss when it appears. At 100 energy, step inside a Suppression Zone before Wave of Silence finishes or you're pacified for 8s. Step into a zone to resolve Runic Mark (Feedback) — but zones purge your buffs.",
+                tip         = "Purge Hastening Ward magic buff from the boss when it appears. At 100 energy, step inside a Suppression Zone before Wave of Silence finishes or you're pacified for 8s. Step into a zone to resolve Runic Mark (Feedback) — but zones purge your buffs. Null Reaction: two players targeted take a combo hit — use a defensive.",
                 notes = {
                     { role = "general",   text = "At 100 energy, be inside a Suppression Zone before Wave of Silence finishes or you're pacified for 8s." },
                     { role = "general",   text = "Step into a zone to resolve Runic Mark (Feedback) — zones purge your buffs." },
                     { role = "general",   text = "Purge Hastening Ward from the boss." },
+                    { role = "general",   text = "Null Reaction: two players targeted take a combo hit — use a defensive." },
                 },
             },
             {
@@ -420,10 +433,12 @@ KwikTip.DUNGEONS = {
                 encounterID = 3332,  -- confirmed in-game
                 npcID       = 254227,
                 name        = "Corewarden Nysarra",
-                tip         = "Avoid Lothraxion's beam during Lightscar Flare; stand in the boss's frontal cone during the 18s stun for 300% damage amp (30% healing amp too). Kill Null Vanguard adds before the stun ends — add kill order: Dreadflail first, then interrupt Grand Nullifiers (Nullify), then cleave Haunting Grunts.",
+                tip         = "Lightscar Flare: dodge the initial beam, then stand in the light cone for 300% damage amp during the 18s stun. Kill Null Vanguard adds before the stun ends — Dreadflail first (tank face away from group), then interrupt Grand Nullifiers (Nullify), then cleave Haunting Grunts. Eclipsing Step hits two players — spread to avoid cleaving allies, use a defensive. Tank: defensive for Umbral Lash channel.",
                 notes = {
-                    { role = "general",   text = "Avoid Lothraxion's beam during Lightscar Flare." },
-                    { role = "dps",       text = "Stand in the boss's frontal cone during the 18s stun for 300% damage amp; kill adds before stun ends — Dreadflail → interrupt Grand Nullifiers → cleave Haunting Grunts." },
+                    { role = "general",   text = "Lightscar Flare: dodge the initial beam, then stand in the light cone for 300% damage amp during the 18s stun." },
+                    { role = "general",   text = "Eclipsing Step targets two players — spread to avoid cleaving allies; use a defensive for the hit + DoT." },
+                    { role = "dps",       text = "Kill adds before stun ends — Dreadflail → interrupt Grand Nullifiers (Nullify) → cleave Haunting Grunts." },
+                    { role = "tank",      text = "Defensive for Umbral Lash channel, especially if adds are alive. Face Dreadflail away from group — Void Lash frontal." },
                     { role = "healer",    text = "30% healing amp is active during the stun — use CDs." },
                 },
             },
@@ -431,10 +446,11 @@ KwikTip.DUNGEONS = {
                 encounterID = 3333,  -- confirmed in-game
                 npcID       = 241546,
                 name        = "Lothraxion",
-                tip         = "At 100 energy, find and interrupt the real Lothraxion among his images — he's the only one without glowing horns; wrong target = Core Exposure (group damage + 20% increased Holy damage taken for 1 min). Spread 8 yards for Brilliant Dispersion.",
+                tip         = "At 100 energy, find and interrupt the real Lothraxion among his images — he's the only one without glowing horns; wrong target = Core Exposure (group damage + 20% increased Holy damage taken for 1 min). Spread 8 yards for Brilliant Dispersion. Tank: defensive for Searing Rend — drop the puddle away from the group.",
                 notes = {
                     { role = "interrupt", text = "At 100 energy, find and interrupt the real Lothraxion — no glowing horns; wrong target = Core Exposure (group damage + 20% Holy taken for 1 min)." },
                     { role = "general",   text = "Spread 8 yards for Brilliant Dispersion." },
+                    { role = "tank",      text = "Defensive for Searing Rend — drop the puddle away from the group." },
                 },
             },
         },
@@ -684,8 +700,8 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 1753,  -- BigWigs Loader.lua
-        uiMapID    = 0,     -- TODO: verify in-game with /run print(C_Map.GetBestMapForUnit("player"))
+        instanceID = 1753,  -- confirmed in-game
+        uiMapID    = 903,   -- confirmed in-game; single map ID, no alt maps
         name       = "Seat of the Triumvirate",
         location   = "Argus",
         season     = "legacy",
@@ -693,10 +709,9 @@ KwikTip.DUNGEONS = {
         mythicPlus = true,
         bosses = {
             {
-                encounterID = 2065,  -- confirmed via LittleWigs Legion/SeatOfTheTriumvirate; Midnight mod:Retail() block present
+                encounterID = 2065,  -- confirmed in-game
                 npcID       = 122313,
                 name        = "Zuraal the Ascended",
-                -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
                 tip         = "Keep boss away from Coalesced Void adds — they despawn on contact with him. Decimate: bait the pool but not too far (puddles persist and stack). At 100 energy, Crashing Void — defensive and avoid being knocked back into pools. CC and kill Oozing Slam adds before Crashing Void hits. Tank: face Null Palm away from group; defensive for Void Slash.",
                 notes = {
                     { role = "general",   text = "Keep boss away from Coalesced Void adds — they despawn on contact with him." },
@@ -706,10 +721,9 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 2066,  -- confirmed via LittleWigs Legion/SeatOfTheTriumvirate
+                encounterID = 2066,  -- confirmed in-game
                 npcID       = 122316,
                 name        = "Saprish",
-                -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
                 tip         = "Boss and pets share health — stay stacked for cleave. Interrupt Dread Screech (Duskwing) every cast. Phase Dash: overlap and clear all Void Bombs. Overload is a damage check — successive casts hit harder. Shadow Pounce applies a strong 5s bleed.",
                 notes = {
                     { role = "general",   text = "Boss and pets share health — stay stacked to cleave all three simultaneously." },
@@ -719,10 +733,9 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 2067,  -- confirmed via LittleWigs Legion/SeatOfTheTriumvirate
+                encounterID = 2067,  -- confirmed in-game
                 npcID       = 124309,
                 name        = "Viceroy Nezhar",
-                -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
                 tip         = "Interrupt Mind Blast — top priority. At 100 energy, Collapsing Void: run under the boss to avoid the storm. Kill Umbral Tentacles fast (Mind Flay fixates a player). Mass Void Infusion cannot be dispelled — use a defensive.",
                 notes = {
                     { role = "general",   text = "At 100 energy (Collapsing Void): run under the boss to avoid the storm; if a player is caught, move to them." },
@@ -732,10 +745,9 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 2068,  -- confirmed via LittleWigs Legion/SeatOfTheTriumvirate
+                encounterID = 2068,  -- confirmed in-game
                 npcID       = 214650,
                 name        = "L'ura",
-                -- Tips sourced from journal API (static-12.0.1); unverified in-game (dungeon locked until M+ S1 launch)
                 tip         = "Spread Notes of Despair — Grim Chorus zones stack. Discordant Blast: align with Notes of Despair to silence them. Once all are silenced, boss casts Siphon Void — interrupt it for a 25% damage taken window; use Bloodlust here. Defensive for Abyssal Lancer (3 stacks).",
                 notes = {
                     { role = "general",   text = "Spread Notes of Despair — Grim Chorus zones stack damage." },
@@ -744,6 +756,11 @@ KwikTip.DUNGEONS = {
                     { role = "tank",      text = "Defensive for Abyssal Lancer at 3 stacks." },
                 },
             },
+        },
+        areas = {
+            { subzone = "Triad's Conservatory",        bossIndex = 1 },  -- Zuraal the Ascended; confirmed in-game
+            { subzone = "Shadowguard Incursion",        bossIndex = 2 },  -- Saprish; confirmed in-game
+            { subzone = "The Seat of the Triumvirate",  bossIndex = 3 },  -- Viceroy Nezhar (L'ura bossIndex=4 in same subzone); confirmed in-game
         },
     },
     -- --------------------------------------------------------
@@ -754,8 +771,8 @@ KwikTip.DUNGEONS = {
     -- Tip content sourced from Icy Veins (primary for non-M+ content).
     -- --------------------------------------------------------
     {
-        instanceID = 2933,
-        uiMapID    = 0,  -- TODO: verify in-game
+        instanceID = 2933,  -- confirmed in-game
+        uiMapID    = 2547,  -- confirmed in-game (Voidscorned Vagrant boss room; primary map ID)
         name       = "Collegiate Calamity",
         location   = "Eversong Woods",
         season     = "midnight",
@@ -928,8 +945,12 @@ KwikTip.DUNGEONS = {
             {
                 encounterID = 3362,
                 name        = "Mycomight",
-                tip         = "",  -- TODO: Icy Veins page truncated — mechanics unconfirmed; source separately
-                notes       = {},
+                tip         = "Rancid Rain: move to arena edges to drop poison clouds away from centre. The Fungi's Fist: dodge the slam and all 5 projectiles — being hit stuns for 3s. Fling Chair: sidestep to avoid knockback and disorientation. No interrupts — pure positioning fight.",
+                notes = {
+                    { role = "general",   text = "Rancid Rain: move to arena edges to drop poison clouds away from the centre." },
+                    { role = "general",   text = "The Fungi's Fist: dodge the slam and all 5 projectiles — being hit stuns for 3s." },
+                    { role = "general",   text = "Fling Chair: sidestep to avoid knockback and disorientation." },
+                },
             },
         },
     },
@@ -955,8 +976,13 @@ KwikTip.DUNGEONS = {
             {
                 encounterID = 3359,
                 name        = "Mul'tha'ul",
-                tip         = "",  -- TODO: Icy Veins page truncated — mechanics unconfirmed; source separately
-                notes       = {},
+                tip         = "Interrupt Hopeless Curse every cast — reduces Haste and Movement Speed; dispel if possible. Tear It Down: tentacles slam after a short delay — reposition to avoid. Unanswered Call fixates a player for 8s — kite the boss away immediately.",
+                notes = {
+                    { role = "general",   text = "Tear It Down: tentacles slam after a short delay — keep moving to avoid the impact." },
+                    { role = "general",   text = "Unanswered Call fixates a player for 8s — use a movement ability to kite the boss away." },
+                    { role = "healer",    text = "Dispel Hopeless Curse if missed — reduces Haste and Movement Speed on all players." },
+                    { role = "interrupt", text = "Hopeless Curse — every cast; reduced movement speed combined with fixate is lethal at higher tiers." },
+                },
             },
         },
     },
@@ -1090,7 +1116,9 @@ KwikTip.DUNGEONS = {
                 notes = {
                     { role = "general",   text = "Stack to soak Umbral Collapse near Abyssal Voidshapers — blocks their tile claim. 3 adjacent tiles triggers March of the Endless." },
                     { role = "general",   text = "Avoid claimed tiles — Imperator's Glory grants near-immunity near claimed territory. Dodge Oblivion's Wrath ground zones." },
+                    { role = "dps",       text = "Kill Abyssal Voidshapers before 100 energy — at max energy they transform into Obsidian Endwalkers (permanent, empowered)." },
                     { role = "tank",      text = "Swap on Blackening Wounds — stacks reduce max HP and the highest-stack tank draws adds." },
+                    { role = "interrupt", text = "Pitch Bulwark from Stalwart/Annihilator adds. Kill Voidmaws before 35% HP — below that threshold they flee to portals for healing." },
                 },
             },
             {
@@ -1102,6 +1130,7 @@ KwikTip.DUNGEONS = {
                     { role = "general",   text = "Dodge Void Breath — sweeping lethal laser; move to the safe side." },
                     { role = "general",   text = "Kill Blistercreep fixates near crystal walls — Blisterburst explosions destroy the walls." },
                     { role = "general",   text = "Primordial Roar pulls in then knocks back — brace with a personal. Primordial Power stacks up — healing pressure escalates." },
+                    { role = "healer",    text = "Dispel Parasite (magic debuff) promptly." },
                     { role = "tank",      text = "Tank 1 intentionally takes 2 Shadowclaw Slam stacks (Smashed = 150% phys damage taken), then swap. Tank 2 holds until Smashed falls off." },
                 },
             },
@@ -1111,9 +1140,10 @@ KwikTip.DUNGEONS = {
                 name        = "Fallen-King Salhadaar",
                 tip         = "Intercept Void Convergence orbs — boss absorbing one (Void Infusion) wipes the raid. At 100 energy: Entropic Unraveling — dodge rotating beams; boss takes 25% increased damage for 20s. Interrupt Shadow Fracture from Fractured Images. Tanks: swap on Destabilizing Strikes; aim Shattering Twilight away from the raid.",
                 notes = {
-                    { role = "general",   text = "Intercept Void Convergence orbs — boss absorbing one (Void Infusion) wipes the raid." },
+                    { role = "general",   text = "Intercept Void Convergence orbs — boss absorbing one (Void Infusion) wipes the raid. Space orb kills to avoid overlapping Dark Radiation." },
                     { role = "general",   text = "Despotic Command: place timed puddle circles at room edges." },
-                    { role = "dps",       text = "At 100 energy: Entropic Unraveling — dodge rotating beams; boss takes 25% increased damage for 20s." },
+                    { role = "dps",       text = "At 100 energy: Entropic Unraveling — dodge rotating beams; boss takes 25% increased damage for 20s. Use cooldowns and Bloodlust here." },
+                    { role = "healer",    text = "Dispel Twisting Obscurity (magic DoT) — it jumps between players." },
                     { role = "tank",      text = "Swap on Destabilizing Strikes stacks. Aim Shattering Twilight arrows away from raid and boss." },
                     { role = "interrupt", text = "Shadow Fracture cast by Fractured Images adds." },
                 },
@@ -1130,6 +1160,7 @@ KwikTip.DUNGEONS = {
                     { role = "general",   text = "Gloom (Ezzorak): up to 5 players soak the moving orb to shrink its Gloomfield." },
                     { role = "healer",    text = "Midnight Flames intermission: stack in Radiant Barrier; kill Manifestation of Midnight before it empowers the dragons." },
                     { role = "tank",      text = "Nullbeam (Vaelgor): intentional soak — stack ~8 stacks then reposition. Swap on Vaelwing (Vaelgor) and Rakfang (Ezzorak — Impale stuns)." },
+                    { role = "interrupt", text = "Voidbolt from Voidorbs (spawned by Void Howl) — Mass Grip, stun, or interrupt; free casts deal heavy sustained damage." },
                 },
             },
             {
@@ -1140,6 +1171,7 @@ KwikTip.DUNGEONS = {
                 tip         = "Three paladins: Bellamy (Devotion), Venel (Wrath), Senn (Peace). At 100 energy: boss applies aura buffing the other two — pull boss to edge; consecration drops when aura ends. Execution Sentence: each marked player forms their own separate stack — do NOT merge circles. Senn: burn Sacred Shield then interrupt Blinding Light. Tanks: swap immediately after Judgment lands (follow-up hits 200% harder).",
                 notes = {
                     { role = "general",   text = "Aura order: Bellamy → Venel → Senn. Each aura buffs the other two — tank the near-100-energy boss to the arena edge." },
+                    { role = "general",   text = "Do NOT attack inside Aura of Devotion (75% damage reduction) or Aura of Peace (pacifies attackers)." },
                     { role = "general",   text = "Execution Sentence: each marked player needs their own separate stack — do NOT merge the circles." },
                     { role = "general",   text = "Senn: burn Sacred Shield fast, then interrupt Blinding Light — missed interrupt = raid-wide disorientation." },
                     { role = "tank",      text = "Swap immediately after Judgment lands — the follow-up hit deals 200% more damage." },
@@ -1150,11 +1182,14 @@ KwikTip.DUNGEONS = {
                 npcID       = 240430,
                 altNpcIDs   = { 243805, 243810, 243811 },  -- Morium, Demiar, Vorelus
                 name        = "Crown of the Cosmos",
-                tip         = "Multi-stage encounter. No published guide as of Season 1 launch — ability names unverified. Stage 1: kill three adds around Alleria; dodge ground effects. Follow BigWigs callouts for intermission transitions.",  -- TODO: verify ability names in-raid; method.gg/Wowhead guide not live at launch
+                tip         = "Stage 1: kill three Undying Sentinels (Morium, Demiar, Vorelus) — keep each within 25 yd of its void portal or they teleport. Devouring Cosmos = 99% healing reduction — move out immediately. Destroy Rift Simulacrum (Stage 2) — while active it reduces Alleria's damage taken. Kill Undying Voidspawn before 100 energy (gains immunity + 500% damage). Tanks: Rift Slash stacks reduce all stats — swap proactively. Healers: dispel Null Corona carefully (absorb jumps to new target on dispel).",
                 notes = {
-                    { role = "general",   text = "Multi-stage encounter — follow BigWigs callouts. No finalized guide available at Season 1 launch." },
-                    { role = "general",   text = "Stage 1: kill three adds around Alleria; dodge ground effects." },
-                    { role = "general",   text = "Ability names unverified — check method.gg after week 1." },
+                    { role = "general",   text = "Stage 1: kill Undying Sentinels (Morium, Demiar, Vorelus) — each must stay within 25 yd of its void portal or it teleports." },
+                    { role = "general",   text = "Devouring Cosmos = 99% healing reduction zone — move out immediately. Void Expulsion: move away from crashing celestial body impact." },
+                    { role = "dps",       text = "Kill Undying Voidspawn before 100 energy — at max energy gains CC immunity and 500% damage. Stage 2: destroy Rift Simulacrum — reduces Alleria's damage taken while active." },
+                    { role = "tank",      text = "Rift Slash stacks reduce all stats by 10% per stack (20s) — swap before stacks cripple mitigation. Keep sentinels within 25 yd of their portal." },
+                    { role = "healer",    text = "Dispel Null Corona carefully — remaining absorb jumps to a new player on dispel. Heavy healing during Devouring Cosmos; Aspect of the End reduces healing received." },
+                    { role = "interrupt", text = "Void Barrage from Voidspawn adds. Interrupting Tremor from Demiar (sentinel add)." },
                 },
             },
         },
@@ -1217,6 +1252,7 @@ KwikTip.DUNGEONS = {
                     { role = "general",   text = "Manifestations must never reach the boss — Insatiable: raid damage + 200% HP heal + 100% damage buff per add eaten." },
                     { role = "healer",    text = "Dispel Consuming Miasma (player debuff) while standing in ground puddles — dispelling removes the puddle. Avoid stacking dispel splash." },
                     { role = "general",   text = "Intermission (To the Skies): dodge Corrupted Devastation breath lines; all Manifestations must die before Ravenous Dive." },  -- TODO: verify dodge vs spread in-raid
+                    { role = "interrupt", text = "Fearsome Cry and Essence Bolt from Colossal Horror adds (Haunting Essence channel)." },
                 },
             },
         },
