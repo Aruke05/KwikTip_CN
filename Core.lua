@@ -230,9 +230,11 @@ local function FormatAreaContent(dungeon, difficultyID)
                     return FormatBossContent(dungeon, boss, difficultyID)
                 end
             end
+            -- Guard: if neither bossIndex nor tip is present, skip rather than showing a blank body.
+            if not a.tip or a.tip == "" then return nil end
             return GOLD .. dungeon.name .. RESET .. "\n"
                 .. WHITE .. (subzone ~= "" and subzone or "") .. RESET .. "\n"
-                .. GRAY .. (a.tip or "") .. RESET
+                .. GRAY .. a.tip .. RESET
         end
     end
     return nil

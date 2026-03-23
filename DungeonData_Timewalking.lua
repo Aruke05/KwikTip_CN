@@ -1389,12 +1389,16 @@ for _, dungeon in ipairs(KwikTip.DUNGEONS) do
     end
 end
 
--- Trash mob lookup: npcID (from UnitGUID) → { dungeon, mob }
+-- Trash mob lookup: npcID → { dungeon, mob }
+-- NOTE: not queried at runtime in Midnight 12.x — hostile NPC GUIDs are tainted and cannot be
+-- resolved via C_CreatureInfo.GetCreatureID. Retained for potential future use.
 KwikTip.TRASH_BY_NPCID = {}
 for _, dungeon in ipairs(KwikTip.DUNGEONS) do
     if dungeon.trash then
         for _, mob in ipairs(dungeon.trash) do
-            KwikTip.TRASH_BY_NPCID[mob.npcID] = { dungeon = dungeon, mob = mob }
+            if mob.npcID and mob.npcID ~= 0 then
+                KwikTip.TRASH_BY_NPCID[mob.npcID] = { dungeon = dungeon, mob = mob }
+            end
         end
     end
 end
@@ -1419,8 +1423,9 @@ for _, dungeon in ipairs(KwikTip.DUNGEONS) do
 end
 
 -- Boss NPC lookup: npcID → { dungeon, boss }
--- Fallback for rooms where ENCOUNTER_START hasn't fired yet and no subzone text exists.
--- Populated from boss entries that have an npcID field (sourced from Wowhead).
+-- NOTE: not queried at runtime in Midnight 12.x — hostile NPC GUIDs are tainted and cannot be
+-- resolved via C_CreatureInfo.GetCreatureID. npcID/altNpcIDs fields on boss entries are
+-- reference data only (useful for Wowhead cross-referencing). Retained for potential future use.
 KwikTip.BOSS_BY_NPCID = {}
 for _, dungeon in ipairs(KwikTip.DUNGEONS) do
     for _, boss in ipairs(dungeon.bosses) do

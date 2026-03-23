@@ -29,8 +29,8 @@ local ADDON_NAME, KwikTip = ...
 --     encounterID    : ENCOUNTER_START event ID (from LittleWigs SetEncounterID). 0 = unknown.
 --     altEncounterIDs: (optional) additional encounterIDs that map to the same boss tip (e.g. per-variant
 --                      delve bosses that share mechanics but fire different encounterIDs per event type).
---     npcID          : (optional) NPC ID from UnitGUID; enables tip on targeting before ENCOUNTER_START fires.
---                   Source from Wowhead. Required for boss rooms with no subzone text.
+--     npcID          : (optional) Wowhead NPC ID — reference data only. In Midnight 12.x hostile NPC GUIDs
+--                   are tainted; live detection via targeting is not possible. Retained for cross-referencing.
 --     name        : boss name as shown in the game
 --     tip         : short contextual tip shown in the HUD during the boss fight (flat string; legacy/fallback)
 --     notes       : (optional) structured role-aware notes; if present, replaces `tip` in the HUD.
@@ -760,7 +760,8 @@ KwikTip.DUNGEONS = {
         areas = {
             { subzone = "Triad's Conservatory",        bossIndex = 1 },  -- Zuraal the Ascended; confirmed in-game
             { subzone = "Shadowguard Incursion",        bossIndex = 2 },  -- Saprish; confirmed in-game
-            { subzone = "The Seat of the Triumvirate",  bossIndex = 3 },  -- Viceroy Nezhar (L'ura bossIndex=4 in same subzone); confirmed in-game
+            { subzone = "The Seat of the Triumvirate",  bossIndex = 3 },  -- Viceroy Nezhar; confirmed in-game
+            -- L'ura (bossIndex=4) shares this subzone — ENCOUNTER_START overrides the area tip when L'ura's fight begins.
         },
     },
     -- --------------------------------------------------------
