@@ -19,11 +19,10 @@ KwikTip.DEFAULTS = {
     minimapAngle   = 0,      -- radians; position around minimap
     debugLog       = false,
     mapIDLog       = {},
-    mobLog         = {},
+    mobLog         = {},     -- reserved; write path removed in Midnight 12.x (hostile GUIDs are tainted)
     encounterLog   = {},     -- always-on; records every ENCOUNTER_START encounterID seen
     keystoneLog    = {},     -- always-on; records M+ keystone info (level, affixes) on CHALLENGE_MODE_START
     spellLog       = {},     -- debug-gated; records hostile NPC spell casts (feeds interrupt/mechanic tips)
-    timelineLog    = {},     -- debug-gated; records ENCOUNTER_TIMELINE_EVENT_ADDED payloads (aids phase spellID discovery)
     debugSnapshots = {},     -- written by /kwik debug; inspection log for post-session review
     -- HUD appearance
     borderEnabled  = true,
