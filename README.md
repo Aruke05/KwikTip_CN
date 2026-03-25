@@ -12,6 +12,8 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 
 **[Download on CurseForge](https://www.curseforge.com/wow/addons/kwiktip)** &nbsp;|&nbsp; **[Download on Wago](https://addons.wago.io/addons/kwiktip)** &nbsp;|&nbsp; **[Download on WoWInterface](https://www.wowinterface.com/downloads/info27074-KwikTip.html)**
 
+![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
+
 ---
 
 ## Screenshots
