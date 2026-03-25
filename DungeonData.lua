@@ -588,11 +588,12 @@ KwikTip.DUNGEONS = {
                 encounterID = 2563,  -- confirmed in-game
                 npcID       = 196482,
                 name        = "Overgrown Ancient",
-                tip         = "Interrupt Healing Touch from Ancient Branch adds — top priority. At 100 energy, Burst Forth activates Hungry Lashers. Stand in Abundance circles on add death to auto-cleanse. Stack during Germinate. Tank: defensive for Barkbreaker.",
+                tip         = "Interrupt Healing Touch from Ancient Branch adds — top priority. Stand in Abundance circles on add death to auto-cleanse Splinterbark bleeds. Stack during Germinate. At 100 energy, Burst Forth activates Hungry Lashers — tank grabs them; dispel Lasher Toxin stacks. Tank: defensive for Barkbreaker.",
                 notes = {
-                    { role = "general",   text = "At 100 energy, Burst Forth activates Hungry Lashers — use stuns/slows. Stand in Abundance circles on add death to auto-cleanse." },
+                    { role = "general",   text = "Stand in Abundance circles on add death to auto-cleanse Splinterbark bleeds." },
                     { role = "general",   text = "Stack during Germinate channel; free allies from roots." },
-                    { role = "tank",      text = "Defensive for Barkbreaker — physical damage amp." },
+                    { role = "general",   text = "At 100 energy, Burst Forth activates Hungry Lashers — use stuns/slows; dispel Lasher Toxin stacks." },
+                    { role = "tank",      text = "Grab Hungry Lashers; defensive for Barkbreaker (physical damage amp)." },
                     { role = "interrupt", text = "Healing Touch (Ancient Branch adds) — highest priority." },
                 },
             },
@@ -600,32 +601,37 @@ KwikTip.DUNGEONS = {
                 encounterID = 2564,  -- confirmed in-game
                 npcID       = 191736,
                 name        = "Crawth",
-                tip         = "Ruinous Winds at 75% and 45%: grab balls and throw into the goals. At 45%, Firestorm begins — 12s damage amp; save offensive CDs and Bloodlust for this window. Spread loosely for Deafening Screech. Tank: defensive for Savage Peck.",
+                tip         = "Ruinous Winds at 75% and 45%: grab balls and throw into goals. First goal triggers patrolling tornadoes — dodge them. Second goal starts Firestorm (12s damage amp) — save offensive CDs and Bloodlust. Spread loosely for Deafening Screech. Tank: defensive for Savage Peck.",
                 notes = {
-                    { role = "general",   text = "Ruinous Winds at 75% and 45%: grab balls and throw into the goals." },
+                    { role = "general",   text = "Ruinous Winds at 75% and 45%: grab balls and throw into goals. First goal triggers patrolling tornadoes; second goal triggers Firestorm (12s damage amp)." },
                     { role = "general",   text = "Spread loosely for Deafening Screech." },
                     { role = "tank",      text = "Defensive for Savage Peck." },
-                    { role = "dps",       text = "Firestorm at 45% — 12s damage amp with pulsing damage; use offensive CDs and Bloodlust here." },
+                    { role = "dps",       text = "Save offensive CDs and Bloodlust for Firestorm — 12s damage amp phase at 45%." },
                 },
             },
             {
                 encounterID = 2562,  -- confirmed in-game
                 npcID       = 194181,
                 name        = "Vexamus",
-                tip         = "Interrupt Spellvoid; dodge Overloaded explosions; spread Arcane Puddle soaks.",
+                tip         = "Spread to soak Arcane Orbs around the arena edges — each applies Oversurge, so soak only one unless you have an immunity. Mana Bombs targets 3 random players — move to room perimeter to drop puddles. At 100 energy, Arcane Fissure — knockback + 3 circles per player; dodge circles. Tank: point Arcane Expulsion away, use a defensive.",
                 notes = {
-                    { role = "general",   text = "Dodge Overloaded explosions; spread Arcane Puddle soaks." },
-                    { role = "interrupt", text = "Spellvoid." },
+                    { role = "general",   text = "Spread to soak Arcane Orbs around arena edges — each applies Oversurge; soak only one unless you have an immunity." },
+                    { role = "general",   text = "Mana Bombs targets 3 random players — move to room perimeter to drop puddles." },
+                    { role = "general",   text = "At 100 energy, Arcane Fissure — knockback + 3 circles per player; dodge the circles." },
+                    { role = "tank",      text = "Point Arcane Expulsion away from group; use a defensive for the impact." },
                 },
             },
             {
                 encounterID = 2565,  -- confirmed in-game
                 npcID       = 190609,
                 name        = "Echo of Doragosa",
-                tip         = "Spread for Astral Breath; interrupt Nullifying Pulse; dodge Arcane Rifts.",
+                tip         = "Pull boss toward the entrance — Unleash Energy on pull spawns 2 Arcane Rifts (rifts periodically shoot orbs). At 3 Overwhelming Power stacks (from any ability hit), a new rift spawns beneath you — spread loosely and use defensives to stay under 3 stacks. Power Vacuum pulls everyone to boss — use movement abilities to escape the AoE. Tank: defensive for Astral Blast.",
                 notes = {
-                    { role = "general",   text = "Spread for Astral Breath; dodge Arcane Rifts." },
-                    { role = "interrupt", text = "Nullifying Pulse." },
+                    { role = "general",   text = "Pull boss toward entrance — Unleash Energy spawns 2 rifts on pull; manage your Overwhelming Power stacks (3 stacks = new rift under you)." },
+                    { role = "general",   text = "Spread loosely for Energy Bomb and Arcane Missiles — taking any hit stacks Overwhelming Power." },
+                    { role = "general",   text = "Use defensives to avoid reaching 3 Overwhelming Power stacks — 3 stacks spawns a new rift under you." },
+                    { role = "general",   text = "Power Vacuum pulls everyone to boss — use movement abilities to escape the AoE." },
+                    { role = "tank",      text = "Defensive for Astral Blast." },
                 },
             },
         },
@@ -1034,39 +1040,47 @@ KwikTip.DUNGEONS = {
                 encounterID = 1698,  -- confirmed in-game
                 npcID       = 75964,
                 name        = "Ranjit",
-                tip         = "Hide behind wind barriers for Fan of Blades; interrupt Four Winds.",
+                tip         = "Fan of Blades: 360° attack applying a bleed to all players — healers use cleanses if available. Dodge Wind Chakram and the Chakram Vortex tornadoes it creates. Gale Surge: bait wind orbs away from your path — knockback near edges is lethal.",
                 notes = {
-                    { role = "general",   text = "Hide behind wind barriers for Fan of Blades." },
-                    { role = "interrupt", text = "Four Winds." },
+                    { role = "general",   text = "Fan of Blades: 360° attack applying a bleed to all players." },
+                    { role = "healer",    text = "Fan of Blades bleeds all players — use cleanses if available." },
+                    { role = "general",   text = "Dodge Wind Chakram and the Chakram Vortex tornadoes it spawns." },
+                    { role = "general",   text = "Gale Surge: bait wind orbs away from your path — knockback near platform edges is lethal." },
                 },
             },
             {
                 encounterID = 1699,  -- confirmed in-game
                 npcID       = 76141,
                 name        = "Araknath",
-                tip         = "Dodge Burn ground fissures; spread to reduce Solarflare chain damage.",
+                tip         = "Tank stays in melee range to prevent Blast Wave. Non-tanks intercept Energize beams from Lesser Constructs using defensives — prevents boss buff; 12s later dodge Heart Exhaustion frontal. Tank: point Fiery Smash away from beam-interceptors. Avoid Defensive Protocol — the 5-yard AoE beneath the boss. Group defensives for Supernova if any Energize beam reached the boss.",
                 notes = {
-                    { role = "general",   text = "Dodge Burn ground fissures; spread to reduce Solarflare chain damage." },
+                    { role = "tank",      text = "Stay in melee range to prevent Blast Wave; point Fiery Smash away from players intercepting beams." },
+                    { role = "general",   text = "Intercept Energize beams from Lesser Constructs using defensives — prevents boss buff. 12s later dodge Heart Exhaustion frontal." },
+                    { role = "general",   text = "Move away from Defensive Protocol — the 5-yard AoE beneath the boss." },
+                    { role = "healer",    text = "Group defensives for Supernova if any Energize beam reached the boss (i.e., a beam went unblocked)." },
                 },
             },
             {
                 encounterID = 1700,  -- confirmed in-game
                 npcID       = 76379,
                 name        = "Rukhran",
-                tip         = "Burn Spire Eagle adds fast; stay out of Solar Breath frontal cone.",
+                tip         = "Swap to Sunwing adds (Sunbreak/Burning Pursuit) and kill them away from eggs — adds killed on eggs respawn. Searing Quills: all players hide behind the central pillar, then return immediately. Tank: stay in melee range except during Searing Quills; defensive for every Burning Claws.",
                 notes = {
-                    { role = "general",   text = "Stay out of Solar Breath frontal cone." },
-                    { role = "dps",       text = "Burn Spire Eagle adds fast." },
+                    { role = "dps",       text = "Swap to Sunwing adds from Sunbreak/Burning Pursuit — kill them away from eggs or they respawn." },
+                    { role = "general",   text = "Searing Quills: hide behind the central pillar — return to boss immediately after." },
+                    { role = "tank",      text = "Stay in melee range except during Searing Quills. Defensive for every Burning Claws cast." },
                 },
             },
             {
                 encounterID = 1701,  -- confirmed in-game
                 npcID       = 76266,
                 name        = "High Sage Viryx",
-                tip         = "Interrupt Lens Flare; kill Initiates before they carry players off the platform.",
+                tip         = "Scorching Ray targets 3 players each turn — healers monitor for repeated targets and use defensives. Cast Down drags a player toward the edge — targeted player runs toward entrance to maximize distance; group swaps to the mob and stuns immediately. Lens Flare: chasing beam — run to platform sides using movement cooldowns. Interrupt Solar Blast to reduce tank damage.",
                 notes = {
-                    { role = "dps",       text = "Kill Initiates before they carry players off the platform." },
-                    { role = "interrupt", text = "Lens Flare." },
+                    { role = "general",   text = "Cast Down drags a player toward the edge — run toward entrance; group stuns the mob immediately." },
+                    { role = "general",   text = "Lens Flare: chasing beam — run to platform sides using movement cooldowns." },
+                    { role = "healer",    text = "Scorching Ray targets 3 players each turn — monitor for repeated targets and use defensives." },
+                    { role = "interrupt", text = "Solar Blast — reduces tank damage." },
                 },
             },
         },
