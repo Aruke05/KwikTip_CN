@@ -1083,24 +1083,31 @@ KwikTip.DUNGEONS = {
 
     -- --------------------------------------------------------
     -- MIDNIGHT SEASON 1 RAID — Three wings, same season
-    -- instanceIDs from BigWigs Midnight/ raid directories (unverified in-game).
-    -- encounterIDs from BigWigs SetEncounterID() calls (unverified in-game).
-    -- uiMapIDs all 0 — verify in-game; primary detection is instanceID.
+    -- instanceIDs: Voidspire + Dreamrift confirmed in-game; March on Quel'Danas from BigWigs (unverified).
+    -- encounterIDs: Voidspire + Dreamrift confirmed in-game; March on Quel'Danas from BigWigs (unverified).
+    -- uiMapIDs: Voidspire + Dreamrift confirmed in-game; March on Quel'Danas still 0 (TODO: verify).
     -- Mechanic data from BigWigs Lua + Wowhead + method.gg (pre-launch sourcing).
     -- --------------------------------------------------------
 
     -- Wing 1: The Voidspire (6 bosses)
     {
-        instanceID = 2912,  -- BigWigs Midnight/TheVoidspire/; unverified in-game
-        uiMapID    = 0,     -- TODO: verify in-game
+        instanceID = 2912,  -- confirmed in-game
+        uiMapID    = 2529,  -- confirmed in-game
+        altMapIDs  = { 2530 },  -- The Bazaar (entrance); confirmed in-game
         name       = "The Voidspire",
         location   = "Quel'Thalas",
         season     = "midnight",
         type       = "raid",
         mythicPlus = false,
+        areas = {
+            { subzone = "The Approach",    bossIndex = 1 },  -- Imperator Averzian; confirmed in-game
+            { subzone = "Behemoth's Rise", bossIndex = 2 },  -- Vorasius; confirmed in-game
+            { subzone = "The Riftlabs",    bossIndex = 3 },  -- Fallen-King Salhadaar; confirmed in-game
+            -- Vaelgor & Ezzorak (4), Lightblinded Vanguard (5), Crown of the Cosmos (6): no subzone text captured
+        },
         bosses = {
             {
-                encounterID = 3176,  -- BigWigs; unverified in-game
+                encounterID = 3176,  -- confirmed in-game
                 npcID       = 240435,
                 name        = "Imperator Averzian",
                 tip         = "Stack to soak Umbral Collapse near Abyssal Voidshapers — soaking near a voidshaper blocks its tile claim. 3 adjacent claimed tiles triggers March of the Endless (wipe). Avoid claimed tiles — boss gains near-immunity (Imperator's Glory) near them. Tanks: Blackening Wounds stacks reduce max HP and draw adds — swap before stacks peak.",
@@ -1113,7 +1120,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 3177,  -- BigWigs; unverified in-game
+                encounterID = 3177,  -- confirmed in-game
                 npcID       = 240434,
                 name        = "Vorasius",
                 tip         = "Dodge Void Breath — the sweeping laser is lethal. Kill Blistercreep adds near crystal walls — Blisterburst detonations destroy the walls. Primordial Roar pulls in then knocks back — brace with a personal. Tanks: Tank 1 intentionally takes 2 Shadowclaw Slam stacks (Smashed = 150% phys damage taken), then swap; wait for Smashed to fall off before swapping back.",
@@ -1126,7 +1133,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 3179,  -- BigWigs; unverified in-game
+                encounterID = 3179,  -- confirmed in-game
                 npcID       = 240432,
                 name        = "Fallen-King Salhadaar",
                 tip         = "Intercept Void Convergence orbs — boss absorbing one (Void Infusion) wipes the raid. At 100 energy: Entropic Unraveling — dodge rotating beams; boss takes 25% increased damage for 20s. Interrupt Shadow Fracture from Fractured Images. Tanks: swap on Destabilizing Strikes; aim Shattering Twilight away from the raid.",
@@ -1140,7 +1147,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 3178,  -- BigWigs; unverified in-game
+                encounterID = 3178,  -- confirmed in-game
                 npcID       = 242056,
                 altNpcIDs   = { 244552 },  -- Ezzorak
                 name        = "Vaelgor & Ezzorak",
@@ -1155,7 +1162,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 3180,  -- BigWigs; unverified in-game
+                encounterID = 3180,  -- confirmed in-game
                 npcID       = 240431,
                 altNpcIDs   = { 240437, 240438 },  -- Lightblood, Senn
                 name        = "Lightblinded Vanguard",
@@ -1225,16 +1232,20 @@ KwikTip.DUNGEONS = {
 
     -- Wing 3: The Dreamrift (1 boss)
     {
-        instanceID = 2939,  -- BigWigs Midnight/TheDreamrift/; unverified in-game
-        uiMapID    = 0,     -- TODO: verify in-game
+        instanceID = 2939,  -- confirmed in-game
+        uiMapID    = 2531,  -- confirmed in-game
+        altMapIDs  = { 2532 },  -- Den of the Undreamt; confirmed in-game
         name       = "The Dreamrift",
         location   = "The Dreamrift",
         season     = "midnight",
         type       = "raid",
         mythicPlus = false,
+        areas = {
+            { subzone = "Den of the Undreamt", bossIndex = 1 },  -- Chimaerus; confirmed in-game
+        },
         bosses = {
             {
-                encounterID = 3306,  -- BigWigs; unverified in-game
+                encounterID = 3306,  -- confirmed in-game
                 npcID       = 245569,
                 name        = "Chimaerus the Undreamt God",
                 tip         = "Alternate groups soaking Alndust Upheaval — soaked players gain Alnsight and must break Alnshroud shields on Manifestations (only Alnsighted players can). Manifestations reaching the boss = massive damage + 100% boss damage buff. Dispel Consuming Miasma (player debuff) while standing in Alndust puddles to remove them. Intermission (To the Skies): dodge Corrupted Devastation breath lines; all Manifestations die before Ravenous Dive.",
