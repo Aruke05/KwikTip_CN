@@ -100,11 +100,12 @@ KwikTip.DUNGEONS = {
                 encounterID = 3058,  -- confirmed in-game
                 npcID       = 231631,
                 name        = "Commander Kroluk",
-                tip         = "Stack near melee. Rallying Bellow gives the boss 70%/40%/10% damage reduction while adds are alive — kill them fast (interrupt Phantasmal Mystic or it enrages). Bladestorm fixates a player — kite the boss. Stay near an ally or Intimidating Shout fears you. Reckless Leap (second) targets furthest player — one player with a defensive runs out.",
+                tip         = "Stack near melee. Rallying Bellow (66%/33%) gives the boss damage reduction while adds are alive — kill them fast (interrupt Phantasmal Mystic or it enrages). Bladestorm fixates a player — kite the boss. Stay near an ally or Intimidating Shout fears you. Reckless Leap hits the furthest player twice — first hit: ranged DPS use a defensive; second hit: tank runs furthest out to bait it.",
                 notes = {
                     { role = "general",   text = "Stack near melee. Stay near an ally or Intimidating Shout fears you." },
                     { role = "general",   text = "Bladestorm fixates a player — kite the boss while killing adds." },
-                    { role = "dps",       text = "Kill adds fast — Rallying Bellow gives boss 70%/40%/10% damage reduction while adds are alive." },
+                    { role = "general",   text = "Reckless Leap hits furthest player twice — ranged DPS use defensive on first hit; tank baits second." },
+                    { role = "dps",       text = "Kill adds fast — Rallying Bellow (66%/33%) gives boss damage reduction while adds are alive." },
                     { role = "interrupt", text = "Phantasmal Mystic adds — interrupt or they enrage." },
                 },
             },
@@ -277,9 +278,10 @@ KwikTip.DUNGEONS = {
                 encounterID = 3213,
                 npcID       = 248595,
                 name        = "Vordaza",
-                tip         = "Interrupt Necrotic Convergence — if missed, burst the Deathshroud shield with damage CDs. Kite Unstable Phantoms into each other to detonate them — killing directly applies Lingering Dread to the group; dodge Unmake line. Tank: defensive for Drain Soul channel.",
+                tip         = "Interrupt Necrotic Convergence — if missed, burst the Deathshroud shield with damage CDs. Kite Unstable Phantoms into each other to detonate — killing directly applies Lingering Dread; wait for the collision DoT to expire before detonating the second pair. Dodge Unmake line. Tank: defensive for Drain Soul channel.",
                 notes = {
-                    { role = "general",   text = "Kite Unstable Phantoms into each other to detonate — killing directly applies Lingering Dread to the group; dodge Unmake line." },
+                    { role = "general",   text = "Kite Unstable Phantoms into each other to detonate — killing directly applies Lingering Dread; wait for the collision DoT to expire before detonating the second pair." },
+                    { role = "general",   text = "Dodge Unmake line." },
                     { role = "dps",       text = "Burst the Deathshroud shield during Necrotic Convergence with damage CDs." },
                     { role = "tank",      text = "Defensive for Drain Soul channel." },
                     { role = "interrupt", text = "Necrotic Convergence — interrupting prevents the Deathshroud shield entirely." },
@@ -336,10 +338,10 @@ KwikTip.DUNGEONS = {
                 encounterID = 3071,  -- confirmed in-game
                 npcID       = 231861,
                 name        = "Arcanotron Custos",
-                tip         = "Intercept orbs before they reach the boss — boss is 20% more vulnerable during intermission; save offensive CDs for this window. Avoid Arcane Residue zones; tank defensive for Repulsing Slam. Magic dispel Ethereal Shackles from two players.",
+                tip         = "Refueling Protocol (0 energy): spread to intercept Energy Orbs before they reach the boss — each orb that arrives grants it a damage buff; manage Unstable Energy stacks while soaking. Avoid Arcane Residue zones; tank defensive for Repulsing Slam. Magic dispel Ethereal Shackles from two players.",
                 notes = {
-                    { role = "general",   text = "Intercept orbs before they reach the boss; avoid Arcane Residue zones." },
-                    { role = "dps",       text = "Boss takes 20% increased damage during intermission — save offensive CDs for this window." },
+                    { role = "general",   text = "Refueling Protocol (0 energy): spread to intercept Energy Orbs — each that reaches the boss grants it a damage buff; manage Unstable Energy stacks while soaking." },
+                    { role = "general",   text = "Avoid Arcane Residue zones." },
                     { role = "tank",      text = "Defensive for Repulsing Slam — knockback; position near terrain edges to stop it." },
                     { role = "healer",    text = "Magic dispel Ethereal Shackles from two random players." },
                 },
@@ -360,21 +362,22 @@ KwikTip.DUNGEONS = {
                 encounterID = 3073,  -- confirmed in-game
                 npcID       = 231864,
                 name        = "Gemellus",
-                tip         = "All copies share health. Neural Link: follow the arrow indicator to your correct clone and touch it — Astral Grasp pulls you toward the clones so you must fight the pull-in.",
+                tip         = "All copies share health. Neural Link: follow the arrow indicator to your correct clone and touch it — Astral Grasp pulls you toward the clones so you must fight the pull-in. Cosmic Sting: move away from the group to drop puddles.",
                 notes = {
                     { role = "general",   text = "All copies share health; follow Neural Link's arrow indicator to find your correct clone and touch it." },
                     { role = "general",   text = "Astral Grasp pulls players toward the clones — fight the pull-in while navigating." },
+                    { role = "general",   text = "Cosmic Sting: move away from the group to drop puddles." },
                 },
             },
             {
                 encounterID = 3074,  -- confirmed in-game
                 npcID       = 231865,
                 name        = "Degentrius",
-                tip         = "One player per quadrant soaks Unstable Void Essence as it bounces — missing applies a 40s DoT to the group. Tank: step back out of melee for Hulking Fragment DoT dispel (drops a puddle). Never stand in Void Torrent beams — they stun.",
+                tip         = "One player per quadrant soaks Unstable Void Essence as it bounces — missing applies a 40s DoT to the group. Tank: step back out of melee for Hulking Fragment Magic dispel (drops a puddle). Never stand in Void Torrent beams — they stun.",
                 notes = {
                     { role = "general",   text = "One player per quadrant soaks Unstable Void Essence as it bounces — missing applies a 40s DoT to the group." },
                     { role = "general",   text = "Never stand in Void Torrent beams — they stun." },
-                    { role = "tank",      text = "Step back out of melee for Hulking Fragment DoT dispel — drops a puddle." },
+                    { role = "tank",      text = "Step back out of melee for Hulking Fragment Magic dispel — drops a puddle." },
                 },
             },
         },
@@ -1137,10 +1140,11 @@ KwikTip.DUNGEONS = {
                 encounterID = 3177,  -- confirmed in-game
                 npcID       = 240434,
                 name        = "Vorasius",
-                tip         = "Dodge Void Breath — the sweeping laser is lethal. Kill Blistercreep adds near crystal walls — Blisterburst detonations destroy the walls. Primordial Roar pulls in then knocks back — brace with a personal. Tanks: Tank 1 intentionally takes 2 Shadowclaw Slam stacks (Smashed = 150% phys damage taken), then swap; wait for Smashed to fall off before swapping back.",
+                tip         = "Dodge Void Breath — identify which hand fires and run the opposite direction; walls must be broken first to open escape lanes. Kill Blistercreep adds near crystal walls — Blisterburst destroys walls but leaves a 30s +50% shadow damage taken debuff; avoid taking Void Breath while debuffed. Aftershock expanding rings: melee step into the slam crater (safe zone). Primordial Roar pulls in then knocks back — brace with a personal. Tanks: Tank 1 intentionally takes 2 Shadowclaw Slam stacks (Smashed = 150% phys damage taken), then swap; wait for Smashed to fall off before swapping back.",
                 notes = {
-                    { role = "general",   text = "Dodge Void Breath — sweeping lethal laser; move to the safe side." },
-                    { role = "general",   text = "Kill Blistercreep fixates near crystal walls — Blisterburst explosions destroy the walls." },
+                    { role = "general",   text = "Void Breath: identify which hand initiates and run the opposite direction — walls must already be broken to have escape space." },
+                    { role = "general",   text = "Kill Blistercreep adds near walls — Blisterburst destroys walls (melee left, ranged right) but applies a 30s +50% shadow damage debuff; avoid Void Breath while debuffed." },
+                    { role = "general",   text = "Aftershock: expanding rings from slam impact — melee step into the crater immediately (origin is safe zone)." },
                     { role = "general",   text = "Primordial Roar pulls in then knocks back — brace with a personal. Primordial Power stacks up — healing pressure escalates." },
                     { role = "healer",    text = "Dispel Parasite (magic debuff) promptly." },
                     { role = "tank",      text = "Tank 1 intentionally takes 2 Shadowclaw Slam stacks (Smashed = 150% phys damage taken), then swap. Tank 2 holds until Smashed falls off." },
@@ -1165,11 +1169,12 @@ KwikTip.DUNGEONS = {
                 npcID       = 242056,
                 altNpcIDs   = { 244552 },  -- Ezzorak
                 name        = "Vaelgor & Ezzorak",
-                tip         = "Keep both within 10% HP and within 15 yards — Twilight Bond gives 100% increased damage if either condition fails. Vaelgor: Dread Breath fears — targeted player steps away from raid, then dispel. Midnight Flames intermission: stack in Radiant Barrier; kill Manifestation of Midnight. Tanks: Nullbeam (Vaelgor) is intentional — stack ~8 stacks then reposition. Swap on Vaelwing and Rakfang (Ezzorak — Impale stuns).",
+                tip         = "Keep both within 10% HP and within 15 yards — Twilight Bond gives 100% increased damage if either condition fails. Don't stand behind either boss — Tail Lash knockback. Vaelgor: Dread Breath fears — targeted player steps to the side, then dispel. Gloom (Ezzorak): 5 players soak; soakers gain a 1-min debuff — rotate groups. Midnight Flames intermission: stack in Radiant Barrier; kill Manifestation of Midnight. Tanks: Nullbeam (Vaelgor) is intentional — stack ~8 stacks then reposition. Swap on Vaelwing and Rakfang (Ezzorak — Impale stuns).",
                 notes = {
                     { role = "general",   text = "Keep both within 10% HP and within 15 yards — Twilight Bond: 100% increased damage if either condition fails." },
+                    { role = "general",   text = "Don't stand behind either boss — Tail Lash knockback." },
                     { role = "general",   text = "Dread Breath (Vaelgor): targeted player steps to the side, face away from raid — dispel the fear." },
-                    { role = "general",   text = "Gloom (Ezzorak): up to 5 players soak the moving orb to shrink its Gloomfield." },
+                    { role = "general",   text = "Gloom (Ezzorak): 5 players soak to shrink the puddle — soakers gain a 1-min debuff; rotate soak groups." },
                     { role = "healer",    text = "Midnight Flames intermission: stack in Radiant Barrier; kill Manifestation of Midnight before it empowers the dragons." },
                     { role = "tank",      text = "Nullbeam (Vaelgor): intentional soak — stack ~8 stacks then reposition. Swap on Vaelwing (Vaelgor) and Rakfang (Ezzorak — Impale stuns)." },
                     { role = "interrupt", text = "Voidbolt from Voidorbs (spawned by Void Howl) — Mass Grip, stun, or interrupt; free casts deal heavy sustained damage." },
@@ -1262,12 +1267,13 @@ KwikTip.DUNGEONS = {
                 encounterID = 3306,  -- confirmed in-game
                 npcID       = 245569,
                 name        = "Chimaerus the Undreamt God",
-                tip         = "Alternate groups soaking Alndust Upheaval — soaked players gain Alnsight and must break Alnshroud shields on Manifestations (only Alnsighted players can). Manifestations reaching the boss = massive damage + 100% boss damage buff. Dispel Consuming Miasma (player debuff) while standing in Alndust puddles to remove them. Intermission (To the Skies): dodge Corrupted Devastation breath lines; all Manifestations die before Ravenous Dive.",
+                tip         = "Alndust Upheaval targets the tank — split into two groups to alternate soaks; soaked group gains Alnsight (40s) and must break Alnshroud shields on Manifestations; then they get Rift Vulnerability (90s) — can't soak again. Manifestations reaching the boss = massive damage + full heal + 100% damage buff. Rending Tear — frontal cone; sidestep immediately. Dispel Consuming Miasma while standing near ground puddles to remove both. Intermission (To the Skies): dodge Corrupted Devastation breath lines; kill all Manifestations before Ravenous Dive.",
                 notes = {
-                    { role = "general",   text = "Two groups alternate Alndust Upheaval soaks. Soaked group gains Alnsight — only they can break Alnshroud shields on Manifestations." },
+                    { role = "general",   text = "Alndust Upheaval targets the tank — two groups alternate soaks. Soaked group gains Alnsight (40s): only they can break Alnshroud shields on Manifestations. After Alnsight expires, they gain Rift Vulnerability (90s) — cannot re-soak." },
                     { role = "general",   text = "Manifestations must never reach the boss — Insatiable: raid damage + 200% HP heal + 100% damage buff per add eaten." },
-                    { role = "healer",    text = "Dispel Consuming Miasma (player debuff) while standing in ground puddles — dispelling removes the puddle. Avoid stacking dispel splash." },
-                    { role = "general",   text = "Intermission (To the Skies): dodge Corrupted Devastation breath lines; all Manifestations must die before Ravenous Dive." },  -- TODO: verify dodge vs spread in-raid
+                    { role = "general",   text = "Rending Tear — frontal cone; sidestep immediately to avoid the bleed." },
+                    { role = "healer",    text = "Dispel Consuming Miasma (player debuff) while standing near ground puddles — dispelling removes the puddle. Avoid stacking dispel splash." },
+                    { role = "general",   text = "Intermission (To the Skies): dodge Corrupted Devastation breath lines; all Manifestations must die before Ravenous Dive." },
                     { role = "interrupt", text = "Fearsome Cry and Essence Bolt from Colossal Horror adds (Haunting Essence channel)." },
                 },
             },
