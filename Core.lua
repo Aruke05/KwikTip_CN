@@ -16,10 +16,19 @@ frame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 -- NPC-based trash tip detection is impossible; detection uses subzone/area events only.
 -- UNIT_SPELLCAST_START is registered dynamically for debug spell logging only.
 frame:SetScript("OnEvent", function(self, event, ...)
-    if event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" or event == "ZONE_CHANGED" then
+    if event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" then
         KwikTip:UpdateContent()
         KwikTip:UpdateVisibility()
         KwikTip:LogMapID()
+    elseif event == "ZONE_CHANGED" then
+        -- Defer by one frame: ZONE_CHANGED fires before GetSubZoneText() returns the new
+        -- subzone, so reading it synchronously here would match the old area and miss boss
+        -- room tips. A zero-second timer lets the game state settle before we query it.
+        C_Timer.After(0, function()
+            KwikTip:UpdateContent()
+            KwikTip:UpdateVisibility()
+            KwikTip:LogMapID()
+        end)
     elseif event == "ENCOUNTER_START" then
         local encounterID, encounterName, difficultyID, groupSize = ...
         KwikTip:OnEncounterStart(encounterID, encounterName, difficultyID, groupSize)

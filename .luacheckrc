@@ -48,6 +48,7 @@ read_globals = {
     "C_CreatureInfo",
     "C_Spell",
     "C_ChallengeMode",
+    "C_Timer",
 
     -- Role / group API
     "UnitGroupRolesAssigned",

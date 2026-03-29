@@ -113,12 +113,13 @@ KwikTip.DUNGEONS = {
                 encounterID = 3059,  -- confirmed in-game
                 npcID       = 231636,
                 name        = "The Restless Heart",
-                tip         = "Step on Turbulent Arrows to clear Squall Leap stacks. At 100 energy (Billowing Wind), step on arrows to vault over the expanding shockwave. Overlap Gust Shot ground pools to clear space. Tempest Slash knocks you back — try to land near arrows. Bolt Gale: frontal channel on a random player — stand still if targeted, use a defensive or combat drop to stop it.",
+                tip         = "Step on Turbulent Arrows to clear Squall Leap stacks — stacks hit hard, clear them quickly. At 100 energy (Billowing Wind), step on arrows to vault over the expanding shockwave. Overlap Gust Shot ground pools to clear space. Tempest Slash knocks you back — try to land near arrows. Bolt Gale: frontal channel on a random player — stand still if targeted, use a defensive or combat drop to stop it.",
                 notes = {
                     { role = "general",   text = "Step on Turbulent Arrows to clear Squall Leap stacks; at 100 energy (Billowing Wind) step on arrows to vault over the expanding shockwave." },
                     { role = "general",   text = "Overlap Gust Shot ground pools to clear space." },
                     { role = "general",   text = "Bolt Gale: frontal channel on a random player — stand still if targeted; use a defensive or combat drop to stop the channel." },
                     { role = "tank",      text = "Defensive for Tempest Slash — knockback; try to land near arrows to clear your debuff." },
+                    { role = "healer",    text = "Squall Leap stacks hit hard — top up anyone building stacks between arrow clears; CDs if multiple players stack up." },
                 },
             },
         },
@@ -303,7 +304,7 @@ KwikTip.DUNGEONS = {
             { npcID = 242964, name = "Keen Headhunter",   tip = "Interrupt Hooked Snare. If it lands, use a freedom effect to clear the root and bleed." },
             { npcID = 248686, name = "Dread Souleater",   tip = "Avoid Rain of Toads pools. Defensives for Necrotic Wave — it leaves a healing absorb on hit players." },
             { npcID = 248685, name = "Ritual Hexxer",     tip = "Interrupt Hex first. Use spare kicks on Shadow Bolt." },
-            { npcID = 248678, name = "Hulking Juggernaut", tip = "Defensive before Deafening Roar lands — it spell-locks anyone mid-cast. Tank watch Rending Gore bleed stacks." },
+            { npcID = 248678, name = "Hulking Juggernaut", tip = "Defensive before Deafening Roar lands — it spell-locks anyone mid-cast. Tank watch Rending Gore bleed stacks — bleed cleanses work." },
             { npcID = 249020, name = "Hexbound Eagle",    tip = "Sidestep Shredding Talons — step to the side of the eagle as it winds up." },
             { npcID = 249022, name = "Bramblemaw Bear",   tip = "Crunch Armor stacks per bear — avoid pulling multiple bears simultaneously; rotate defensive cooldowns." },
             { npcID = 248692, name = "Reanimated Warrior", tip = "CC or stop Reanimation at 0 HP or it revives. Any crowd-control effect works." },
@@ -373,9 +374,9 @@ KwikTip.DUNGEONS = {
                 encounterID = 3074,  -- confirmed in-game
                 npcID       = 231865,
                 name        = "Degentrius",
-                tip         = "One player per quadrant soaks Unstable Void Essence as it bounces — missing applies a 40s DoT to the group. Tank: step back out of melee for Hulking Fragment Magic dispel (drops a puddle). Never stand in Void Torrent beams — they stun.",
+                tip         = "One player per side soaks Unstable Void Essence as it bounces — missing applies a 40s DoT to the group. Tank: step back out of melee for Hulking Fragment Magic dispel (drops a puddle). Never stand in Void Torrent beams — they stun.",
                 notes = {
-                    { role = "general",   text = "One player per quadrant soaks Unstable Void Essence as it bounces — missing applies a 40s DoT to the group." },
+                    { role = "general",   text = "One player per side soaks Unstable Void Essence as it bounces — missing applies a 40s DoT to the group." },
                     { role = "general",   text = "Never stand in Void Torrent beams — they stun." },
                     { role = "tank",      text = "Step back out of melee for Hulking Fragment Magic dispel — drops a puddle." },
                 },
@@ -453,7 +454,7 @@ KwikTip.DUNGEONS = {
             { npcID = 248708, name = "Nexus Adept",            tip = "Interrupt Umbra Bolt — high-damage shadow nuke; use a stun or stop if interrupt is on cooldown." },
             { npcID = 248373, name = "Circuit Seer",           tip = "Immune to CC. Defensives and healing CDs for Arcing Mana channel; avoid Erratic Zap and Power Flux circles; watch for nearby Mana Batteries it activates — swap and destroy them before the 12s cast completes." },
             { npcID = 248706, name = "Cursed Voidcaller",      tip = "On death casts Creeping Void — brace for the hit and use Curse dispels to remove the lingering debuff." },
-            { npcID = 251853, name = "Grand Nullifier",        tip = "Interrupt Nullify every cast; avoid Dusk Frights fear zones; turns into a Smudge on death that awakens a nearby Dreadflail — CC or cleave it fast." },
+            { npcID = 251853, name = "Grand Nullifier",        tip = "Interrupt Nullify every cast; avoid Dusk Frights fear zones; turns into a Smudge on death that awakens a nearby Dreadflail in ~1.5s — CC or cleave the Smudge immediately." },
             { npcID = 241660, name = "Duskfright Herald",      tip = "Immune to CC. Entropic Leech channels on a random player and applies a healing absorb — use a combat drop or dispel the absorb to end it. Avoid pulsing projectiles from Dark Beckoning." },
             { npcID = 251024, name = "Dreadflail",             tip = "Tank point away from group — Void Lash frontal tank buster; dodge Flailstorm AoE if fixated on you. Also spawned as a Corewarden Nysarra add — kill before the 18s stun ends." },
         },
@@ -569,8 +570,8 @@ KwikTip.DUNGEONS = {
         },
         areas = {
             { subzone = "The Den", bossIndex = 1 },  -- Taz'Rah's arena; confirmed in-game
-            { mapID = 2573,        bossIndex = 2 },  -- Atroxus; inferred from encounter order (unconfirmed)
-            { mapID = 2574,        bossIndex = 3 },  -- Charonus; inferred from encounter order (unconfirmed)
+            { mapID = 2573,        bossIndex = 2 },  -- Atroxus; confirmed in-game
+            { mapID = 2574,        bossIndex = 3 },  -- Charonus; confirmed in-game
         },
     },
 
@@ -628,10 +629,10 @@ KwikTip.DUNGEONS = {
                 encounterID = 2565,  -- confirmed in-game
                 npcID       = 190609,
                 name        = "Echo of Doragosa",
-                tip         = "Pull boss toward the entrance — Unleash Energy on pull spawns 2 Arcane Rifts (rifts periodically shoot orbs). At 3 Overwhelming Power stacks (from any ability hit), a new rift spawns beneath you — spread loosely and use defensives to stay under 3 stacks. Power Vacuum pulls everyone to boss — use movement abilities to escape the AoE. Tank: defensive for Astral Blast.",
+                tip         = "Pull boss toward the entrance — Unleash Energy on pull spawns 2 Arcane Rifts (rifts periodically shoot orbs). At 3 Overwhelming Power stacks (from any ability hit), a new rift spawns beneath you — spread loosely and use defensives to stay under 3 stacks. Energy Bomb targets 2 players — both must drop puddles away from the group. Power Vacuum pulls everyone to boss — use movement abilities to escape the AoE. Tank: defensive for Astral Blast.",
                 notes = {
                     { role = "general",   text = "Pull boss toward entrance — Unleash Energy spawns 2 rifts on pull; manage your Overwhelming Power stacks (3 stacks = new rift under you)." },
-                    { role = "general",   text = "Spread loosely for Energy Bomb and Arcane Missiles — taking any hit stacks Overwhelming Power." },
+                    { role = "general",   text = "Spread loosely for Energy Bomb (targets 2 players) and Arcane Missiles — taking any hit stacks Overwhelming Power." },
                     { role = "general",   text = "Use defensives to avoid reaching 3 Overwhelming Power stacks — 3 stacks spawns a new rift under you." },
                     { role = "general",   text = "Power Vacuum pulls everyone to boss — use movement abilities to escape the AoE." },
                     { role = "tank",      text = "Defensive for Astral Blast." },
