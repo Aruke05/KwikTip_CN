@@ -97,3 +97,17 @@ Boss tips for all Midnight delves. Enable in settings — off by default.
 
 The HUD is hidden outside of instances. Use `/kwik move` to show and reposition it at any time.
 
+---
+
+## Translations
+
+The settings UI is fully localizable. Tip content intentionally stays in English — mechanical accuracy is critical and mistranslations could cost your group a key.
+
+To contribute a translation for your language:
+
+1. Log in to CurseForge
+2. Go to the [KwikTip localization page](https://legacy.curseforge.com/wow/addons/kwiktip/localization)
+3. Select your language and fill in the strings
+
+Translations are pulled automatically into each release via the CurseForge packager.
+

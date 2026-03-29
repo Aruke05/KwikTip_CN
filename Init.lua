@@ -1,5 +1,6 @@
 -- KwikTip: Initialization & Defaults
 local ADDON_NAME, KwikTip = ...
+local L = KwikTip.L
 
 KwikTip.DEFAULTS = {
     width          = 220,
@@ -73,5 +74,5 @@ function KwikTip:OnLogin()
     if self.UpdateVisibility then self:UpdateVisibility() end
     if self.UpdateContent then self:UpdateContent() end
     if self._PlaceMinimapBtn then self:_PlaceMinimapBtn() end
-    print("|cff00ff00KwikTip|r loaded. Type /kwik for settings.")
+    print("|cff00ff00KwikTip|r " .. L["loaded. Type /kwik for settings."])
 end

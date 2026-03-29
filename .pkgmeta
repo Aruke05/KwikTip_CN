@@ -5,3 +5,8 @@ wowi-id: 27074
 
 ignore:
   - CLAUDE.md
+
+localizations:
+  - localization-id: 1478824
+    output-file: Locale/Locales.lua
+    handle-unlocalized: english

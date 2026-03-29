@@ -1,5 +1,6 @@
 -- KwikTip: Core.lua (Event tracking, logging, commands, detection)
 local ADDON_NAME, KwikTip = ...
+local L = KwikTip.L
 
 local frame = CreateFrame("Frame", "KwikTipCoreFrame", UIParent)
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -420,7 +421,7 @@ function KwikTip:UpdateContent()
         if affixDetails then
             self:SetContent(GOLD .. dungeon.name .. RESET .. "\n" .. affixDetails)
         else
-            self:SetContent(GRAY .. "Waiting for relevant encounter..." .. RESET)
+            self:SetContent(GRAY .. L["Waiting for relevant encounter..."] .. RESET)
         end
     else
         self.areaActive    = false
@@ -509,7 +510,7 @@ local DEMO_NOTES = {
 function KwikTip:ShowPreview()
     self.previewActive = true
     self:InitHUD()
-    self:SetContent(FormatHeader("Demo Dungeon", "Example Boss") .. "\n" .. FormatNotes(DEMO_NOTES))
+    self:SetContent(FormatHeader(L["Demo Dungeon"], L["Example Boss"]) .. "\n" .. FormatNotes(DEMO_NOTES))
     self:UpdateVisibility()
 end
 
@@ -616,16 +617,16 @@ SlashCmdList["KWIKTIP"] = function(msg)
     elseif cmd == "config" or cmd == "" then
         KwikTip:ToggleConfig()
     elseif cmd == "help" then
-        print("|cff00ff00KwikTip|r commands:")
-        print("  /kwik           — open settings")
-        print("  /kwik move      — toggle move/lock mode")
-        print("  /kwik preview   — toggle role notes preview in the HUD")
-        print("  /kwik debug     — print current detection state to chat")
-        print("  /kwik debuglog  — toggle map/mob ID logging to SavedVariables")
-        print("  /kwik clearlog  — clear all debug logs from SavedVariables")
-        print("  /kwik feedback  — print the feedback/issue link")
-        print("  /kwik help      — show this command list")
+        print("|cff00ff00KwikTip|r " .. L["commands:"])
+        print(L["  /kwik           — open settings"])
+        print(L["  /kwik move      — toggle move/lock mode"])
+        print(L["  /kwik preview   — toggle role notes preview in the HUD"])
+        print(L["  /kwik debug     — print current detection state to chat"])
+        print(L["  /kwik debuglog  — toggle map/mob ID logging to SavedVariables"])
+        print(L["  /kwik clearlog  — clear all debug logs from SavedVariables"])
+        print(L["  /kwik feedback  — print the feedback/issue link"])
+        print(L["  /kwik help      — show this command list"])
     else
-        print("|cff00ff00KwikTip|r unknown command. Type /kwik help for a list of commands.")
+        print("|cff00ff00KwikTip|r " .. L["unknown command. Type /kwik help for a list of commands."])
     end
 end

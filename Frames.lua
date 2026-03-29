@@ -1,5 +1,6 @@
 -- KwikTip: HUD frame and layout API
 local ADDON_NAME, KwikTip = ...
+local L = KwikTip.L
 
 -- ============================================================
 -- HUD Frame
@@ -133,7 +134,7 @@ function KwikTip:InitHUD()
 
     printBtn:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-        GameTooltip:SetText("Print tip to instance chat", 1, 1, 1)
+        GameTooltip:SetText(L["Print tip to instance chat"], 1, 1, 1)
         GameTooltip:Show()
     end)
 
