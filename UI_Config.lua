@@ -297,7 +297,9 @@ function KwikTip:CreateConfigWindow()
     delveCaution:SetText(L["CAUTION: Preliminary Release"])
     delveCaution:SetTextColor(1, 0.8, 0, 1)
 
-    local raidCB       = MakeCheckbox("KwikTipRaidCB",         cfg, delveCaution,    L["Enable in Raids"])
+    local raidCB         = MakeCheckbox("KwikTipRaidCB",         cfg, delveCaution,    L["Enable in Raids"])
+    local autoExpandCB   = MakeCheckbox("KwikTipAutoExpandCB",   cfg, raidCB,          L["Auto-expand Height"])
+    local showNoteBtnCB  = MakeCheckbox("KwikTipShowNoteBtnCB",  cfg, autoExpandCB,    L["Show Note Button"])
 
     minimapBtnCB:SetScript("OnClick", function(self)
         KwikTipDB.showMinimapBtn = self:GetChecked()
@@ -323,11 +325,19 @@ function KwikTip:CreateConfigWindow()
         KwikTip:UpdateContent()
         KwikTip:UpdateVisibility()
     end)
+    autoExpandCB:SetScript("OnClick", function(self)
+        KwikTipDB.autoExpand = self:GetChecked()
+        KwikTip:UpdateContent()
+    end)
+    showNoteBtnCB:SetScript("OnClick", function(self)
+        KwikTipDB.showNoteBtn = self:GetChecked()
+        if KwikTip._UpdateNoteBtn then KwikTip:_UpdateNoteBtn() end
+    end)
 
     -- ============================================================
     -- SEND TO CHAT
     -- ============================================================
-    local chatHeader = MakeSectionHeader(L["SEND TO CHAT"], raidCB)
+    local chatHeader = MakeSectionHeader(L["SEND TO CHAT"], showNoteBtnCB)
 
     local CHAT_OPTIONS = {
         { label = L["None"],     value = "NONE"          },
@@ -681,6 +691,8 @@ function KwikTip:CreateConfigWindow()
         showInDungeonCB:SetChecked(db.showInDungeon)
         delveCB:SetChecked(db.delves)
         raidCB:SetChecked(db.raids ~= false)
+        autoExpandCB:SetChecked(db.autoExpand ~= false)
+        showNoteBtnCB:SetChecked(db.showNoteBtn ~= false)
         SetChatChannel(db.printChannel or "NONE")
         opacitySlider:SetValue(math.floor(db.alpha * 100 + 0.5))
         SetFont(db.fontName or "Friz Quadrata")

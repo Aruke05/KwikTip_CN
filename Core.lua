@@ -222,6 +222,34 @@ local function FormatAreaContent(dungeon, difficultyID)
 end
 
 -- ============================================================
+-- User notes
+-- ============================================================
+
+-- Returns the SavedVariables key for the player's current area, or nil if not
+-- in a recognized instance. Format: "instanceID:subzone" (or "instanceID" alone
+-- when GetSubZoneText() is empty, e.g. transition corridors).
+function KwikTip:GetNoteKey()
+    local _, _, _, _, _, _, _, instanceID = GetInstanceInfo()
+    if not instanceID or instanceID == 0 then return nil end
+    local subzone = GetSubZoneText()
+    if subzone and subzone ~= "" then
+        return tostring(instanceID) .. ":" .. subzone
+    end
+    return tostring(instanceID)
+end
+
+-- Appends the user's saved note for the current area to a content string.
+-- Returns the string unchanged when no note exists.
+local function AppendUserNote(content)
+    if not KwikTipDB or not KwikTipDB.notes then return content end
+    local key = KwikTip:GetNoteKey()
+    if not key then return content end
+    local note = KwikTipDB.notes[key]
+    if not note or note == "" then return content end
+    return content .. "\n|cffffdd88" .. note .. "|r"
+end
+
+-- ============================================================
 -- Boss encounter state
 -- ============================================================
 
@@ -263,7 +291,7 @@ function KwikTip:OnEncounterStart(encounterID, encounterName, difficultyID, grou
     self.bossActive = true
     local content = FormatBossContent(entry.dungeon, entry.boss, difficultyID)
     local bar = entry.dungeon.mythicPlus and FormatAffixBar()
-    self:SetContent(bar and (content .. "\n" .. bar) or content)
+    self:SetContent(AppendUserNote(bar and (content .. "\n" .. bar) or content))
     self:UpdateVisibility()
 end
 
@@ -412,7 +440,7 @@ function KwikTip:UpdateContent()
         self.areaActive    = true
         self.dungeonActive = false
         local bar = dungeon.mythicPlus and FormatAffixBar()
-        self:SetContent(bar and (areaContent .. "\n" .. bar) or areaContent)
+        self:SetContent(AppendUserNote(bar and (areaContent .. "\n" .. bar) or areaContent))
     elseif dungeon and KwikTipDB.showInDungeon then
         -- No area match — show M+ affix details if active, otherwise a holding message.
         self.areaActive    = false

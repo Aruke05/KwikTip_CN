@@ -49,6 +49,9 @@ read_globals = {
     "C_Spell",
     "C_ChallengeMode",
     "C_Timer",
+    "UIFrameFadeIn",
+    "UIFrameFadeOut",
+    "IsShiftKeyDown",
 
     -- Role / group API
     "UnitGroupRolesAssigned",

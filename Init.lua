@@ -18,6 +18,9 @@ KwikTip.DEFAULTS = {
     fontName       = "Friz Quadrata",
     fontSize       = 11,
     minimapAngle   = 0,      -- radians; position around minimap
+    autoExpand     = true,   -- expand HUD height to fit content (false = fixed height + scroll)
+    showNoteBtn    = true,   -- show the pencil note button on the HUD
+    notes          = {},     -- user notes keyed by "instanceID:subzone"
     debugLog       = false,
     mapIDLog       = {},
     mobLog         = {},     -- reserved; write path removed in Midnight 12.x (hostile GUIDs are tainted)
