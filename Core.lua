@@ -50,16 +50,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
 end)
 
 -- Returns true if the current instance type should be handled by KwikTip.
--- Raids are opt-in via KwikTipDB.raids (default true).
--- Delves return instanceType "scenario" and are opt-in via KwikTipDB.delves.
 local function IsSupportedInstance(inInstance, instanceType)
     if not inInstance then return false end
-    if instanceType == "party" then return true end
-    if instanceType == "raid" then
-        return not KwikTipDB or KwikTipDB.raids ~= false
-    end
-    if instanceType == "scenario" and KwikTipDB and KwikTipDB.delves then return true end
-    return false
+    return instanceType == "party" or instanceType == "raid" or instanceType == "scenario"
 end
 
 local GOLD  = "|cffffcc00"

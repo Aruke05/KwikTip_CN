@@ -293,7 +293,7 @@ function KwikTip:InitHUD()
     KwikTip.NoteBtn = noteBtn
 
     local noteBtnTex = noteBtn:CreateTexture(nil, "OVERLAY")
-    noteBtnTex:SetTexture("Interface\\Icons\\INV_Inscription_Tradeskill01")
+    noteBtnTex:SetTexture("Interface\\Icons\\inv_misc_1h_scribesquill_b_01_silver")
     noteBtnTex:SetAllPoints(noteBtn)
     noteBtnTex:SetAlpha(0.7)
 
