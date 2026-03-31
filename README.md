@@ -19,6 +19,10 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 ## Screenshots
 
 <p align="center">
+  <img src="assets/example.png" alt="KwikTip in action" />
+</p>
+
+<p align="center">
   <img src="assets/tipwindow.png" alt="Tip HUD" />
   &nbsp;&nbsp;
   <img src="assets/settings.png" alt="Settings window" />
@@ -32,8 +36,9 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 - **Sub-zone aware HUD** — the HUD updates automatically as your group moves through each area; boss room tips surface on entry before the encounter starts, and trash sections in supported dungeons get their own contextual tips
 - **Role-specific notes** — tips are categorized by role (tank, healer, DPS, general) and interrupt priority, each with a distinct color and icon so you can find what's relevant at a glance
 - **M+ affix display** — active keystone affix names and tips are shown in the HUD while waiting between encounters
-- **Delve support** — opt-in boss tips for Midnight delves (enable in settings)
-- **Keep Open Through Instance** — optionally keep the HUD visible throughout a run
+- **Delve support** — boss tips for all Midnight delves
+- **Custom notes** — save your own per-subzone notes that appear alongside tips in the HUD
+- **Persistent Tip Window** — optionally keep the HUD visible throughout a run
 - **Resizable, draggable HUD** — drag to reposition, drag corners to resize; locks in place when done
 - **LibSharedMedia-3.0 support** — font picker lists all fonts registered by your other addons if LSM is present; falls back to three built-in WoW fonts otherwise
 
@@ -41,7 +46,7 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 
 ## Dungeon Coverage
 
-All bosses across all listed dungeons have tips. Full area tip coverage — boss rooms and trash sections — is live for all eight Midnight dungeons and three of the four legacy M+ dungeons (Algeth'ar Academy, Pit of Saron, Skyreach). Seat of the Triumvirate coverage is in progress pending in-game verification.
+All bosses across all listed dungeons have tips. Full area tip coverage — boss rooms and trash sections — is live for all eight Midnight dungeons and all four legacy M+ dungeons.
 
 ### Season 1 Mythic+ Rotation
 
@@ -65,9 +70,9 @@ All bosses across all listed dungeons have tips. Full area tip coverage — boss
 | The Blinding Vale | Max level |
 | Voidscar Arena | Max level |
 
-### Delves (opt-in)
+### Delves
 
-Boss tips for all Midnight delves. Enable in settings — off by default.
+Boss tips for all Midnight delves.
 
 ---
 
