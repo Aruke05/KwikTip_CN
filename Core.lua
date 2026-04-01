@@ -288,16 +288,40 @@ function KwikTip:OnEncounterStart(encounterID, encounterName, difficultyID, grou
     self:UpdateVisibility()
 end
 
--- Called by ENCOUNTER_END. On a kill, leaves the boss tip visible until the
--- next natural tip trigger (area change, trash target, or new encounter).
+-- Called by ENCOUNTER_END. On a kill, advances to the next boss tip in the
+-- dungeon sequence so areas without subzone/mapID coverage (e.g. Pit of Saron)
+-- still surface the upcoming boss immediately after a kill. In dungeons with
+-- normal area coverage the next ZONE_CHANGED_NEW_AREA will override it anyway.
 -- On a wipe/reset, restores normal area/trash detection immediately.
 function KwikTip:OnEncounterEnd(success)
+    local lastEntry          = self._activeBossEntry  -- capture before clear
+    local lastDifficultyID   = self._activeDifficultyID
     self._activeBossEntry    = nil
     self._activeEncounterID  = nil
     self._activeDifficultyID = nil
     self.bossActive = false
     if success == 1 then
-        -- Boss killed — leave current tip up until next natural trigger.
+        -- Try to advance to the next boss tip in the dungeon sequence.
+        local advanced = false
+        if lastEntry then
+            local dungeon = lastEntry.dungeon
+            for i, boss in ipairs(dungeon.bosses) do
+                if boss == lastEntry.boss then
+                    local nextBoss = dungeon.bosses[i + 1]
+                    if nextBoss then
+                        local bar     = dungeon.mythicPlus and FormatAffixBar()
+                        local content = FormatBossContent(dungeon, nextBoss, lastDifficultyID)
+                        self:SetContent(AppendUserNote(bar and (content .. "\n" .. bar) or content))
+                        advanced = true
+                    end
+                    break
+                end
+            end
+        end
+        -- No next boss (last boss of dungeon) — leave current tip up.
+        if not advanced then
+            -- intentionally empty; existing content remains visible
+        end
         self:UpdateVisibility()
     else
         -- Wipe or reset — clear and return to normal detection.

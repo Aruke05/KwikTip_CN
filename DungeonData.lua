@@ -134,7 +134,8 @@ KwikTip.DUNGEONS = {
         },
         areas = {
             { subzone = "The Promenade",       tip = "Interrupt Spirit Bolt from Restless Stewards — dispel Soul Torment on debuffed players immediately. Use a personal defensive for Creeping Spindleweb's Poison Spray." },
-            { subzone = "Vereesa's Repose",    bossIndex = 1 },  -- wing bosses (Emberdawn + Derelict Duo share this subzone); confirmed in-game; bossIndex=1 shows Emberdawn tip on entry — ENCOUNTER_START overrides for Derelict Duo
+            { mapID = 2493, bossIndex = 1 },  -- Emberdawn's wing; confirmed in-game
+            { mapID = 2494, bossIndex = 2 },  -- Derelict Duo's wing; confirmed in-game
             { subzone = "Sylvanas's Quarters", tip = "Spellguard Magus drops a 99% damage-reduction zone at 50% — move the pack out immediately. Use defensives for Arcane Salvo." },
             { subzone = "Windrunner Vault",    bossIndex = 3 },  -- Commander Kroluk's arena; confirmed in-game
             { subzone = "The Pinnacle",        bossIndex = 4 },  -- The Restless Heart; confirmed in-game
