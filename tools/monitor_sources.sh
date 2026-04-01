@@ -50,10 +50,10 @@ check_youtube() {
         # Compare video IDs line by line; new ones are in tmp but not in state
         while IFS= read -r vid_id; do
             [[ -z "$vid_id" ]] && continue
-            if ! grep -qF "$vid_id" "$state"; then
+            if ! grep -qF -- "$vid_id" "$state"; then
                 local title published
-                title=$(grep -A 20 "$vid_id" "$tmp" | grep -oP '(?<=<title>)[^<]+' | head -1)
-                published=$(grep -A 20 "$vid_id" "$tmp" | grep -oP '(?<=<published>)[^<]+' | head -1)
+                title=$(grep -A 20 -- "$vid_id" "$tmp" | grep -oP '(?<=<title>)[^<]+' | head -1)
+                published=$(grep -A 20 -- "$vid_id" "$tmp" | grep -oP '(?<=<published>)[^<]+' | head -1)
                 append "- **[YouTube/$name]** [${title}](https://youtu.be/${vid_id}) — ${published:0:10}"
                 NEW_ITEMS=$((NEW_ITEMS + 1))
             fi
