@@ -20,6 +20,9 @@ Two concerns are handled separately: **game data** (IDs, names) and **tip conten
 1. **Wowhead** — primary. Database is pulled directly from the game client; NPC IDs, encounter IDs, and ability names can be trusted without secondary verification.
 2. **warcraft.wiki.gg** — secondary. Most mechanically precise; exact ability numbers, durations, and damage values sourced from game data. Use to cross-check specific ability details when writing tips.
 
+### Source Monitoring
+`tools/.monitor/updates.md` is written daily by `tools/monitor_sources.sh` (cron, 09:00). It tracks new Tactyks YouTube uploads and content changes on all method.gg and Icy Veins dungeon guide pages. **Read this file at the start of any session involving tip content** to check for upstream changes before writing or revising tips.
+
 ### Tip Content — what to write in `tip` fields
 **M+ dungeons** (Magisters' Terrace, Windrunner Spire, Maisara Caverns, Nexus-Point Xenas + legacy four):
 1. **Tactyks YouTube (@Tactyks)** — tier 1. Tactyks is the author of the method.gg dungeon guides; his YouTube videos are the upstream source and may reflect post-season updates before the written guides are revised. Check here first for season-start content or when guides may be stale.
