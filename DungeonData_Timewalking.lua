@@ -42,17 +42,17 @@ local twDungeons = {
         twPool      = "bc",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1922,
                 name        = "The Maker",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1924,
                 name        = "Broggok",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1923,
                 name        = "Keli'dan the Breaker",
                 tip         = "",
             },
@@ -71,27 +71,27 @@ local twDungeons = {
         twPool      = "bc",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1925,
                 name        = "Commander Sarannis",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1926,
                 name        = "High Botanist Freywinn",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1928,
                 name        = "Thorngrin the Tender",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1927,
                 name        = "Laj",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1929,
                 name        = "Warp Splinter",
                 tip         = "",
             },
@@ -112,22 +112,22 @@ local twDungeons = {
         twPool      = "bc",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1897,
                 name        = "Selin Fireheart",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1898,
                 name        = "Vexallus",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1895,
                 name        = "Priestess Delrissa",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1894,
                 name        = "Kael'thas Sunstrider",
                 tip         = "",
             },
@@ -146,17 +146,17 @@ local twDungeons = {
         twPool      = "bc",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1900,
                 name        = "Pandemonius",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1901,
                 name        = "Tavarok",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1899,
                 name        = "Nexus-Prince Shaffar",
                 tip         = "",
             },
@@ -175,17 +175,17 @@ local twDungeons = {
         twPool      = "bc",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1936,
                 name        = "Grand Warlock Nethekurse",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1937,
                 name        = "Warbringer O'mrogg",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1938,
                 name        = "Warchief Kargath Bladefist",
                 tip         = "",
             },
@@ -204,22 +204,22 @@ local twDungeons = {
         twPool      = "bc",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1946,
                 name        = "Hungarfen",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1945,
                 name        = "Ghaz'an",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1947,
                 name        = "Swamplord Musel'ek",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1948,
                 name        = "The Black Stalker",
                 tip         = "",
             },
@@ -246,17 +246,17 @@ local twDungeons = {
         twPool      = "wrath",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1971,
                 name        = "Krik'thir the Gatewatcher",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1972,
                 name        = "Hadronox",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1973,
                 name        = "Anub'arak",
                 tip         = "",
             },
@@ -275,12 +275,12 @@ local twDungeons = {
         twPool      = "wrath",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 2006,
                 name        = "Bronjahm",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 2007,
                 name        = "The Devourer of Souls",
                 tip         = "",
             },
@@ -299,22 +299,22 @@ local twDungeons = {
         twPool      = "wrath",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1978,
                 name        = "Slad'ran",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1980,
                 name        = "Moorabi",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1983,
                 name        = "Drakkari Colossus",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1981,
                 name        = "Gal'darah",
                 tip         = "",
             },
@@ -333,22 +333,22 @@ local twDungeons = {
         twPool      = "wrath",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1987,
                 name        = "General Bjarngrim",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1985,
                 name        = "Volkhan",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1984,
                 name        = "Ionar",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1986,
                 name        = "Loken",
                 tip         = "",
             },
@@ -367,22 +367,22 @@ local twDungeons = {
         twPool      = "wrath",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 521,
                 name        = "Grand Magus Telestra",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 522,
                 name        = "Anomalus",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 524,
                 name        = "Ormorok the Tree-Shaper",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 527,
                 name        = "Keristrasza",
                 tip         = "",
             },
@@ -401,17 +401,17 @@ local twDungeons = {
         twPool      = "wrath",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 2026,
                 name        = "Prince Keleseth",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 2024,
                 name        = "Skarvald & Dalronn",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 2025,
                 name        = "Ingvar the Plunderer",
                 tip         = "",
             },
@@ -435,7 +435,7 @@ local twDungeons = {
         twPool      = "cata",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1040,
                 name        = "Rom'ogg Bonecrusher",
                 tip         = "Break Chains of Woe immediately — Skullcracker kills everyone within 12 yards; run 15+ yards as soon as chains shatter.",
                 notes = {
@@ -445,7 +445,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1038,
                 name        = "Corla, Herald of Twilight",
                 tip         = "Rotate in/out of Evolution beams at ~70 stacks to stop Zealot transformation; interrupt Dark Command — fears the tank.",
                 notes = {
@@ -455,7 +455,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1039,
                 name        = "Karsh Steelbender",
                 tip         = "Tank kites boss briefly through central lava to build 1–3 armor stacks, group burns during the window; 6+ stacks = severe group fire damage.",
                 notes = {
@@ -465,7 +465,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1037,
                 name        = "Beauty",
                 tip         = "Kill 3 pups first — never kill Runty (the small one) or she permanently berserk-enrages. Face boss away; top everyone before AoE Fear.",
                 notes = {
@@ -475,7 +475,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1036,
                 name        = "Ascendant Lord Obsidius",
                 tip         = "Designate a kiter for the unkillable Shadow adds (stacking healing reduction); taunt the new body immediately when Obsidius transforms at ~66%/33%.",
                 notes = {
@@ -502,7 +502,7 @@ local twDungeons = {
         twPool      = "cata",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1881,
                 name        = "Echo of Baine",
                 tip         = "Click and throw Baine's totem back at him — stuns + deals 5% HP. Spread across platforms; Pulverize sinks the target's platform. Healer dispels Molten Blast.",
                 notes = {
@@ -512,7 +512,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1883,
                 name        = "Echo of Jaina",
                 tip         = "Run into Flarecore orbs to detonate them safely — undetonated ones wipe the group. Assign 3-person interrupt chain for Frostbolt Volley. Dodge Frost Blades.",
                 notes = {
@@ -522,7 +522,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1882,
                 name        = "Echo of Sylvanas",
                 tip         = "Calling of the Highborne: instantly burst one ghoul to open a gap in the chain ring, escape through it, kill the rest before they reach Sylvanas (Sacrifice = wipe).",
                 notes = {
@@ -532,7 +532,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1884,
                 name        = "Echo of Tyrande",
                 tip         = "Keep moving — dodge Moonlance splits and Eye of the Goddess orbs (50k + 5s silence). Stay 15+ yards away. Interrupt Stardust. Healer CD at 30% for Tears of Elune.",
                 notes = {
@@ -543,7 +543,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1271,
                 name        = "Murozond",
                 tip         = "Hourglass of Time (5 charges) fully restores HP/mana, resets all CDs, and clears bomb zones — use before wiping, or deliberately to re-use major DPS cooldowns.",
                 notes = {
@@ -568,7 +568,7 @@ local twDungeons = {
         twPool      = "cata",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1052,
                 name        = "General Husam",
                 tip         = "Move away from Mystic Trap placements before they detonate (7-yard radius). Move perpendicular to Shockwave lines. Tank kites on Heroic to spread traps.",
                 notes = {
@@ -578,7 +578,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1054,
                 name        = "Lockmaw & Augh",
                 tip         = "Spread to avoid stacking poison puddles. Burst crocolisk adds immediately on Scent of Blood — they fixate hard. Dispel/Soothe Venomous Rage at 30%.",
                 notes = {
@@ -588,7 +588,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1053,
                 name        = "High Prophet Barim",
                 tip         = "At 50%, immediately kill every Soul Fragment before it reaches the Harbinger — each one heals it massively. Tank kites Harbinger in large circles. Dispel Plague of Ages.",
                 notes = {
@@ -598,7 +598,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1055,
                 name        = "Siamat",
                 tip         = "Kill 3 Servants to land Siamat; kite Minions away separately (dangerous at 5%). Phase 2: burn Siamat hard — ignore new adds. Healer CD for Wailing Winds on landing.",
                 notes = {
@@ -611,8 +611,8 @@ local twDungeons = {
     },
 
     {
-        instanceID  = 725,  -- The Stonecore; LittleWigs source, unverified
-        uiMapID     = 0,
+        instanceID  = 725,  -- confirmed in-game
+        uiMapID     = 324,  -- confirmed in-game
         name        = "The Stonecore",
         location    = "Deepholm",
         season      = "timewalking",
@@ -622,7 +622,7 @@ local twDungeons = {
         twPool      = "cata",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1056,  -- confirmed in-game
                 name        = "Corborus",
                 tip         = "During burrow, watch dust clouds and dodge thrashing charges — lethal on Heroic. Kill Rock Borers. Heroic: destroy crystal shards immediately (25% damage-taken debuff on contact).",
                 notes = {
@@ -632,7 +632,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1059,  -- confirmed in-game
                 name        = "Slabhide",
                 tip         = "Move away from Lava Fissure marks (erupts after 5s). During air phase dodge stalactites; Heroic: hide behind them for Crystal Storm LoS on landing. Face boss away.",
                 notes = {
@@ -642,7 +642,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1058,  -- confirmed in-game
                 name        = "Ozruk",
                 tip         = "Attack normally during Spike Shield — reflected damage onto yourself breaks Paralyze before Shatter. Step back when shield ends. Heroic tank: run through the boss on Ground Slam.",
                 notes = {
@@ -652,7 +652,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1057,  -- confirmed in-game
                 name        = "High Priestess Azil",
                 tip         = "Position Gravity Wells between the boss and incoming adds to funnel and kill them. Altar phase: move immediately on Seismic Shard dust clouds — lethal on Heroic. Decurse Curse of Blood.",
                 notes = {
@@ -677,7 +677,7 @@ local twDungeons = {
         twPool      = "cata",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1043,
                 name        = "Grand Vizier Ertan",
                 tip         = "Stay inside the cyclone ring at all times — outside deals continuous Nature damage. Stack under the boss when cyclones retract; spread as they expand. Heroic: face Lurking Tempests.",
                 notes = {
@@ -687,7 +687,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1041,
                 name        = "Altairus",
                 tip         = "Reposition when wind changes — upwind grants +100% attack/cast speed, downwind halves it. Chilling Breath target: move away from group. Tank stand downwind; let DPS take upwind buff.",
                 notes = {
@@ -697,7 +697,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1042,
                 name        = "Asaad",
                 tip         = "Move inside the triangular Grounding Field before Supremacy of the Storm fires — anyone outside takes lethal damage. Spread during normal phases. Heroic: jump before Static Cling completes.",
                 notes = {
@@ -721,7 +721,7 @@ local twDungeons = {
         twPool      = "cata",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1045,
                 name        = "Lady Naz'jar",
                 tip         = "Interrupt Shock Blast every cast — uninterrupted it one-shots the tank. Move out of Geyser ground markers immediately (5s fuse). Add phases at 60%/30%: CC two, kill one, interrupt Chain Lightning.",
                 notes = {
@@ -731,7 +731,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1044,
                 name        = "Commander Ulthok",
                 tip         = "Move out of Dark Fissure zones — direct hit can one-shot, pools spawn chasing oozes. Tank kites in circles to spread fissures; CD immediately on Crushing Claw (+100% physical damage taken).",
                 notes = {
@@ -741,7 +741,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1046,
                 name        = "Mindbender Ghur'sha",
                 tip         = "P1: destroy Stormflurry Totem immediately. P2: DPS the mind-controlled player to 50% HP to break it — full duration kills them on Heroic. Use pillars to LoS Terrifying Vision.",
                 notes = {
@@ -752,7 +752,7 @@ local twDungeons = {
                 },
             },
             {
-                encounterID = 0,
+                encounterID = 1047,
                 name        = "Ozumat",
                 tip         = "P1: kill small adds near Neptulon first; tank holds Behemoth. P2: Sappers are top priority — if they reach Neptulon the encounter resets. P3: all CDs on Ozumat immediately — hard DPS timer.",
                 notes = {
@@ -783,22 +783,22 @@ local twDungeons = {
         twPool      = "mop",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1397,
                 name        = "Saboteur Kip'tilak",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1405,
                 name        = "Striker Ga'dok",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1406,
                 name        = "Commander Ri'mok",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1419,
                 name        = "Raigonn",
                 tip         = "",
             },
@@ -817,17 +817,17 @@ local twDungeons = {
         twPool      = "mop",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1442,
                 name        = "Trial of the King",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 2129,
                 name        = "Gekkan",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1441,
                 name        = "Xin the Weaponmaster",
                 tip         = "",
             },
@@ -846,27 +846,27 @@ local twDungeons = {
         twPool      = "mop",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1426,
                 name        = "Instructor Chillheart",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1427,
                 name        = "Jandice Barov",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1428,
                 name        = "Rattlegore",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1429,
                 name        = "Lilian Voss",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1430,
                 name        = "Darkmaster Gandling",
                 tip         = "",
             },
@@ -885,22 +885,22 @@ local twDungeons = {
         twPool      = "mop",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1303,
                 name        = "Gu Cloudstrike",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1304,
                 name        = "Master Snowdrift",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1305,
                 name        = "Sha of Violence",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1306,
                 name        = "Taran Zhu",
                 tip         = "",
             },
@@ -919,17 +919,17 @@ local twDungeons = {
         twPool      = "mop",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1412,
                 name        = "Ook-Ook",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1413,
                 name        = "Hoptallus",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1414,
                 name        = "Yan-Zhu the Uncasked",
                 tip         = "",
             },
@@ -948,22 +948,22 @@ local twDungeons = {
         twPool      = "mop",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1418,
                 name        = "Wise Mari",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1417,
                 name        = "Lorewalker Stonestep",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1416,
                 name        = "Liu Flameheart",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1439,
                 name        = "Sha of Doubt",
                 tip         = "",
             },
@@ -989,22 +989,22 @@ local twDungeons = {
         twPool      = "wod",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1686,
                 name        = "Vigilant Kaathar",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1685,
                 name        = "Soulbinder Nyami",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1678,
                 name        = "Azzakel",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1714,
                 name        = "Teron'gor",
                 tip         = "",
             },
@@ -1023,22 +1023,22 @@ local twDungeons = {
         twPool      = "wod",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1653,
                 name        = "Slave Watcher Crushto",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1655,  -- Magmolatus; Gog'duh is a preceding encounter in the same area
                 name        = "Forgemaster Gog'duh & Magmolatus",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1652,
                 name        = "Roltall",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1654,
                 name        = "Gug'rokk",
                 tip         = "",
             },
@@ -1057,22 +1057,22 @@ local twDungeons = {
         twPool      = "wod",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1746,
                 name        = "Witherbark",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1757,
                 name        = "Ancient Protectors",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1751,
                 name        = "Archmage Sol",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1756,
                 name        = "Yalnu",
                 tip         = "",
             },
@@ -1091,17 +1091,17 @@ local twDungeons = {
         twPool      = "wod",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1715,
                 name        = "Rocketspark & Borka",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1732,
                 name        = "Nitrogg Thundertower",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1736,
                 name        = "Skylord Tovra",
                 tip         = "",
             },
@@ -1120,22 +1120,22 @@ local twDungeons = {
         twPool      = "wod",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1677,
                 name        = "Sadana Bloodfury",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1688,
                 name        = "Nhallish",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1679,
                 name        = "Bonemaw",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1682,
                 name        = "Ner'zhul",
                 tip         = "",
             },
@@ -1159,22 +1159,22 @@ local twDungeons = {
         twPool      = "legion",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1832,
                 name        = "Amalgam of Souls",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1833,
                 name        = "Illysanna Ravencrest",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1834,
                 name        = "Smashspite the Hateful",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1835,
                 name        = "Kur'talos Ravencrest",
                 tip         = "",
             },
@@ -1193,17 +1193,17 @@ local twDungeons = {
         twPool      = "legion",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1868,
                 name        = "Patrol Captain Gerdo",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1869,
                 name        = "Talixae Flamewreath",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1870,
                 name        = "Advisor Melandrus",
                 tip         = "",
             },
@@ -1222,22 +1222,22 @@ local twDungeons = {
         twPool      = "legion",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1836,
                 name        = "Archdruid Glaidalis",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1837,
                 name        = "Oakheart",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1838,
                 name        = "Dresaron",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1839,
                 name        = "Shade of Xavius",
                 tip         = "",
             },
@@ -1256,27 +1256,27 @@ local twDungeons = {
         twPool      = "legion",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1810,
                 name        = "Warlord Parjesh",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1811,
                 name        = "Lady Hatecoil",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1812,
                 name        = "King Deepbeard",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1813,
                 name        = "Serpentrix",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1814,
                 name        = "Wrath of Azshara",
                 tip         = "",
             },
@@ -1295,22 +1295,22 @@ local twDungeons = {
         twPool      = "legion",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1790,
                 name        = "Rokmora",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1791,
                 name        = "Ularogg Cragshaper",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1792,
                 name        = "Naraxas",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1793,
                 name        = "Dargrul the Underking",
                 tip         = "",
             },
@@ -1329,27 +1329,27 @@ local twDungeons = {
         twPool      = "legion",
         bosses = {
             {
-                encounterID = 0,
+                encounterID = 1815,
                 name        = "Tirathon Saltheril",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1850,
                 name        = "Inquisitor Tormentorum",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1816,
                 name        = "Ash'Golm",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1817,
                 name        = "Glazer",
                 tip         = "",
             },
             {
-                encounterID = 0,
+                encounterID = 1818,
                 name        = "Cordana Felsong",
                 tip         = "",
             },
