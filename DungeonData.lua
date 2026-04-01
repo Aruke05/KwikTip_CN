@@ -267,11 +267,12 @@ KwikTip.DUNGEONS = {
                 npcID       = 247570,  -- Muro'jin
                 altNpcIDs   = { 247572 },  -- Nekraxx
                 name        = "Muro'jin and Nekraxx",
-                tip         = "Keep equal health — if Nekraxx dies first Muro'jin revives him at 35%; if Muro'jin dies first Nekraxx gains 20% dmg every 4s (stacking). Carrion Swoop target: step into a Freezing Trap to block the charge and stun Nekraxx 5s. Barrage: targeted player stand still. Dispel Infected Pinions disease. Tank: defensive or bleed cleanse for Flanking Spear.",
+                tip         = "Keep equal health — if Nekraxx dies first Muro'jin revives him at 35%; if Muro'jin dies first Nekraxx gains 20% dmg every 4s (stacking). Carrion Swoop target: step into a Freezing Trap to block the charge and stun Nekraxx 5s. Barrage: targeted player stand still. Sidestep Fetid Quillstorm circles. Dispel Infected Pinions disease. Tank: defensive or bleed cleanse for Flanking Spear.",
                 notes = {
                     { role = "general",   text = "Keep equal health — if Nekraxx dies first Muro'jin revives him at 35%; if Muro'jin dies first Nekraxx gains +20% damage every 4s (continuously stacking)." },
                     { role = "general",   text = "Carrion Swoop target: step into a Freezing Trap to block the charge and stun Nekraxx 5s." },
                     { role = "general",   text = "Barrage targets a player — that player stands still." },
+                    { role = "general",   text = "Sidestep Fetid Quillstorm circles." },
                     { role = "tank",      text = "Defensive or bleed cleanse for Flanking Spear." },
                     { role = "healer",    text = "Dispel Infected Pinions disease." },
                 },
@@ -375,9 +376,10 @@ KwikTip.DUNGEONS = {
                 encounterID = 3074,  -- confirmed in-game
                 npcID       = 231865,
                 name        = "Degentrius",
-                tip         = "One player per side soaks Unstable Void Essence as it bounces — missing applies a 40s DoT to the group. Tank: step back out of melee for Hulking Fragment Magic dispel (drops a puddle). Never stand in Void Torrent beams — they stun.",
+                tip         = "Void Torrent beam splits the arena — keep one player on each side to soak Unstable Void Essence. Devouring Entropy: random players get debuffs of different durations — use a defensive if your duration is long; aim your orb so allies can intercept it. Tank: step back for Hulking Fragment Magic dispel (drops a puddle). Never stand in Void Torrent beams — they stun.",
                 notes = {
-                    { role = "general",   text = "One player per side soaks Unstable Void Essence as it bounces — missing applies a 40s DoT to the group." },
+                    { role = "general",   text = "Void Torrent beam splits the arena — keep one player on each side to soak Unstable Void Essence bounces; missing applies a 40s DoT." },
+                    { role = "general",   text = "Devouring Entropy: players get debuffs with different durations — use a defensive if yours is long; aim your orb toward allies." },
                     { role = "general",   text = "Never stand in Void Torrent beams — they stun." },
                     { role = "tank",      text = "Step back out of melee for Hulking Fragment Magic dispel — drops a puddle." },
                 },
@@ -441,10 +443,10 @@ KwikTip.DUNGEONS = {
                 encounterID = 3333,  -- confirmed in-game
                 npcID       = 241546,
                 name        = "Lothraxion",
-                tip         = "At 100 energy, find and interrupt the real Lothraxion among his images — he's the only one without glowing horns; wrong target = Core Exposure (group damage + 20% increased Holy damage taken for 1 min). Spread 8 yards for Brilliant Dispersion. Tank: defensive for Searing Rend — drop the puddle away from the group.",
+                tip         = "At 100 energy, find and interrupt the real Lothraxion among his images — he's the only one without glowing horns; wrong target = Core Exposure (group damage + 20% increased Holy damage taken for 1 min). Brilliant Dispersion: spread 8 yards — spawns Fractured Images (5-yard damage aura, reposition via Flicker); cleave them. Tank: defensive for Searing Rend — drop the puddle away from the group.",
                 notes = {
                     { role = "interrupt", text = "At 100 energy, find and interrupt the real Lothraxion — no glowing horns; wrong target = Core Exposure (group damage + 20% Holy taken for 1 min)." },
-                    { role = "general",   text = "Spread 8 yards for Brilliant Dispersion." },
+                    { role = "general",   text = "Brilliant Dispersion: spread 8 yards — spawns Fractured Images (5-yard damage aura, reposition via Flicker); cleave them." },
                     { role = "tank",      text = "Defensive for Searing Rend — drop the puddle away from the group." },
                 },
             },
@@ -660,11 +662,12 @@ KwikTip.DUNGEONS = {
                 encounterID = 1999,  -- confirmed in-game
                 npcID       = 36494,
                 name        = "Forgemaster Garfrost",
-                tip         = "Throw Saronite places ore chunks — position yourself near them to LoS Glacial Overload (full-energy channel: massive damage + 75% frost vulnerability). Dispel Cryostomp (magic: slow + 50% more frost damage taken). Tank: defensive for Orebreaker.",
+                tip         = "Throw Saronite targets 2 players — spread to prevent circle overlap; bait chunks to room edges. Glacial Overload channels toward the closest forge — hide behind a remaining chunk to LoS it. Cryostomp destroys nearby chunks — dispel Siphoning Chill stacks immediately (magic: slow + 50% frost damage taken). Tank: defensive for Orebreaker — destroy nearby chunks to avoid the stun. Freedom effects reduce Siphoning Chill damage.",
                 notes = {
-                    { role = "general",   text = "Throw Saronite places ore chunks on players — stay near an ore to LoS Glacial Overload at full energy." },
-                    { role = "healer",    text = "Dispel Cryostomp (magic) — slow + 50% increased frost damage taken." },
-                    { role = "tank",      text = "Defensive for Orebreaker." },
+                    { role = "general",   text = "Throw Saronite targets 2 players — spread; bait chunks to room edges." },
+                    { role = "general",   text = "Glacial Overload channels toward the closest forge — hide behind a remaining chunk to LoS it." },
+                    { role = "healer",    text = "Cryostomp destroys nearby chunks — dispel Siphoning Chill stacks immediately (magic: slow + 50% frost damage taken)." },
+                    { role = "tank",      text = "Defensive for Orebreaker — destroy nearby chunks to avoid the stun. Freedom effects reduce Siphoning Chill damage." },
                 },
             },
             {
@@ -672,25 +675,28 @@ KwikTip.DUNGEONS = {
                 npcID       = 36476,  -- Ick
                 altNpcIDs   = { 36477 },  -- Krick
                 name        = "Ick & Krick",
-                tip         = "Interrupt Death Bolt (Krick) — always. Keep Ick near Shade Shift adds to cleave them down. Drop Plague Explosion near walls or existing puddles to consolidate. Blight Smash: defensive, drop near existing puddles. Phase 2 (50%): kite Ick during 'Get 'em, Ick!' fixation.",
+                tip         = "Bosses share health (Necrolink) — cleave both. Shade Shift spawns 2 Shades of Krick — interrupt Shadowbind casts and cleave. Interrupt Death Bolt (Krick). Plague Explosion spawns puddles under 4 players — pre-spread near walls. Tank: defensive for Blight Smash, position puddle away from group. Phase 2 (50%): kite Ick during 'Get 'em, Ick!' fixation.",
                 notes = {
-                    { role = "general",   text = "Keep Ick near Shade Shift adds to cleave them; drop Plague Explosion near walls or existing puddles to consolidate." },
-                    { role = "general",   text = "Phase 2 (50%): kite Ick during 'Get 'em, Ick!' fixation." },
-                    { role = "tank",      text = "Defensive for Blight Smash — drop it near existing puddles." },
-                    { role = "interrupt", text = "Death Bolt (Krick) — always." },
+                    { role = "general",   text = "Bosses share health (Necrolink) — cleave both whenever possible." },
+                    { role = "general",   text = "Shade Shift spawns 2 Shades of Krick — interrupt their Shadowbind casts and cleave down." },
+                    { role = "general",   text = "Plague Explosion spawns puddles under 4 players — pre-spread near walls to consolidate." },
+                    { role = "general",   text = "Phase 2 (50%): kite Ick during 'Get 'em, Ick!' fixation (7s)." },
+                    { role = "tank",      text = "Defensive for Blight Smash — position the puddle away from the group." },
+                    { role = "interrupt", text = "Shadowbind (Shades of Krick) — interrupt every cast. Death Bolt (Krick)." },
                 },
             },
             {
                 encounterID = 2000,  -- confirmed in-game
                 npcID       = 36658,
                 name        = "Scourgelord Tyrannus",
-                tip         = "Rime Blast targets a player — stand over a buffed bone pile so the beam freezes it (prevents Army of the Dead). Scourgelord's Brand: defensive, save a movement ability for the knockback, then move to remaining unfrozen piles to aggro Plaguespreaders. Kill Plaguespreader adds fast (interrupt Plague Bolt). Festering Pulse pulses AoE damage every 2s while adds are up.",
+                tip         = "Rime Blast targets a player — stand over a green-lit bone pile so the beam freezes it (prevents Army of the Dead). Frozen piles spawn Rotlings or Plaguespreaders when Army of the Dead fires. Rotlings apply Rotting Strikes disease to the tank — dispel. Kill Plaguespreaders fast (interrupt Plague Bolt) — Festering Pulse deals AoE damage every 2s while alive. Avoid Death's Grasp circles. Scourgelord's Brand: knockback + leap — defensive + movement ability.",
                 notes = {
-                    { role = "general",   text = "Rime Blast targets a player — stand over a buffed (green-lit) bone pile so the beam freezes it and prevents Army of the Dead spawns." },
-                    { role = "general",   text = "After Scourgelord's Brand knockback, move to any remaining unfrozen bone piles to aggro Plaguespreaders." },
-                    { role = "dps",       text = "Kill Plaguespreader adds fast — Festering Pulse deals AoE damage every 2s while they're alive." },
-                    { role = "tank",      text = "Defensive for Scourgelord's Brand — save a movement ability for after the knockback." },
-                    { role = "interrupt", text = "Plague Bolt (Plaguespreader adds)." },
+                    { role = "general",   text = "Rime Blast targets a player — stand over a green-lit bone pile so the beam freezes it and prevents Army of the Dead spawns." },
+                    { role = "general",   text = "Frozen piles spawn Rotlings or Plaguespreaders when Army of the Dead activates." },
+                    { role = "general",   text = "Avoid Death's Grasp circles. Scourgelord's Brand: knockback + follow-up leap — defensive + save a movement ability." },
+                    { role = "healer",    text = "Dispel Rotting Strikes disease from the tank — applied by Rotlings." },
+                    { role = "tank",      text = "Defensive for Scourgelord's Brand." },
+                    { role = "interrupt", text = "Plague Bolt (Plaguespreader adds) — Festering Pulse pulses AoE every 2s while they live." },
                 },
             },
         },
@@ -713,12 +719,13 @@ KwikTip.DUNGEONS = {
                 encounterID = 2065,  -- confirmed in-game
                 npcID       = 122313,
                 name        = "Zuraal the Ascended",
-                tip         = "Keep boss away from Coalesced Void adds — they despawn on contact with him. Decimate: bait the pool but not too far (puddles persist and stack). At 100 energy, Crashing Void — defensive and avoid being knocked back into pools. CC and kill Oozing Slam adds before Crashing Void hits. Tank: face Null Palm away from group; defensive for Void Slash.",
+                tip         = "Keep boss away from Coalesced Void adds — they explode on contact. Decimate: bait the pool but not too far (puddles persist and stack). Null Palm is a random-target frontal — everyone dodge. At 100 energy, Crashing Void pulls in all players and speeds up adds — CC/kill adds before it hits; use a defensive. Tank: defensive for Void Slash.",
                 notes = {
-                    { role = "general",   text = "Keep boss away from Coalesced Void adds — they despawn on contact with him." },
-                    { role = "general",   text = "Decimate: bait the pool but not too far — puddles persist and proximity makes the next one worse." },
-                    { role = "dps",       text = "CC and kill Oozing Slam adds before Crashing Void hits at 100 energy." },
-                    { role = "tank",      text = "Defensive for Void Slash and Crashing Void (100 energy) — avoid being knocked back into pools." },
+                    { role = "general",   text = "Keep boss away from Coalesced Void adds — they explode on contact; use slows, stuns, or knockbacks." },
+                    { role = "general",   text = "Decimate: bait the pool near edges — puddles persist and proximity makes the next one worse." },
+                    { role = "general",   text = "Null Palm — random-target frontal; everyone dodge." },
+                    { role = "dps",       text = "CC and kill Coalesced Void adds before Crashing Void (100 energy) — Crashing Void speeds them up and pulls in all players." },
+                    { role = "tank",      text = "Defensive for Void Slash." },
                 },
             },
             {
@@ -749,12 +756,13 @@ KwikTip.DUNGEONS = {
                 encounterID = 2068,  -- confirmed in-game
                 npcID       = 214650,
                 name        = "L'ura",
-                tip         = "Spread Notes of Despair — Grim Chorus zones stack. Discordant Blast: align with Notes of Despair to silence them. Once all are silenced, boss casts Siphon Void — interrupt it for a 25% damage taken window; use Bloodlust here. Defensive for Abyssal Lancer (3 stacks).",
+                tip         = "Spread Notes of Despair — Grim Chorus zones stack. Discordant Beam: align with Notes of Despair to silence them. Once all are silenced, boss casts Siphon Void — interrupt it for a 25% damage taken window; use Bloodlust here. Disintegrate: rotating beams around the boss — move with them. Tank: defensive for Abyssal Lance at 3 stacks.",
                 notes = {
                     { role = "general",   text = "Spread Notes of Despair — Grim Chorus zones stack damage." },
-                    { role = "general",   text = "Discordant Blast: align with Notes of Despair to silence them — don't burn the adds directly." },
+                    { role = "general",   text = "Discordant Beam: align with Notes of Despair to silence them — don't burn the adds directly." },
+                    { role = "general",   text = "Disintegrate: rotating beams around the boss — move with them to avoid." },
                     { role = "dps",       text = "Once all Notes are silenced, interrupt Siphon Void — boss takes 25% increased damage; use Bloodlust here." },
-                    { role = "tank",      text = "Defensive for Abyssal Lancer at 3 stacks." },
+                    { role = "tank",      text = "Defensive for Abyssal Lance at 3 stacks." },
                 },
             },
         },
