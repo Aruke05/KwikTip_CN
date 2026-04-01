@@ -1127,10 +1127,11 @@ KwikTip.DUNGEONS = {
         type       = "raid",
         mythicPlus = false,
         areas = {
-            { subzone = "The Approach",    bossIndex = 1 },  -- Imperator Averzian; confirmed in-game
-            { subzone = "Behemoth's Rise", bossIndex = 2 },  -- Vorasius; confirmed in-game
-            { subzone = "The Riftlabs",    bossIndex = 3 },  -- Fallen-King Salhadaar; confirmed in-game
-            -- Vaelgor & Ezzorak (4), Lightblinded Vanguard (5), Crown of the Cosmos (6): no subzone text captured
+            { subzone = "The Approach",       bossIndex = 1 },  -- Imperator Averzian; confirmed in-game
+            { subzone = "Behemoth's Rise",    bossIndex = 2 },  -- Vorasius; confirmed in-game
+            { subzone = "The Riftlabs",       bossIndex = 3 },  -- Fallen-King Salhadaar; confirmed in-game
+            -- Vaelgor & Ezzorak (4), Lightblinded Vanguard (5): subzone names unconfirmed in-game
+            { subzone = "Crown of the Cosmos", bossIndex = 6 },  -- Alleria; sourced from warcraft.wiki.gg; verify in-game
         },
         bosses = {
             {
@@ -1164,9 +1165,10 @@ KwikTip.DUNGEONS = {
                 encounterID = 3179,  -- confirmed in-game
                 npcID       = 240432,
                 name        = "Fallen-King Salhadaar",
-                tip         = "Intercept Void Convergence orbs — boss absorbing one (Void Infusion) wipes the raid. At 100 energy: Entropic Unraveling — dodge rotating beams; boss takes 25% increased damage for 20s. Interrupt Shadow Fracture from Fractured Images. Tanks: swap on Destabilizing Strikes; aim Shattering Twilight away from the raid.",
+                tip         = "Intercept Void Convergence orbs — boss absorbing one (Void Infusion) wipes the raid. Kill first orb, then wait for Dark Radiation DoT to fall off the raid before killing the second. At 100 energy: Entropic Unraveling — dodge rotating beams; boss takes 25% increased damage for 20s. Interrupt Shadow Fracture from Fractured Images. Tanks: swap on Destabilizing Strikes; aim Shattering Twilight away from the raid.",
                 notes = {
-                    { role = "general",   text = "Intercept Void Convergence orbs — boss absorbing one (Void Infusion) wipes the raid. Space orb kills to avoid overlapping Dark Radiation." },
+                    { role = "general",   text = "Intercept Void Convergence orbs — boss absorbing one (Void Infusion) wipes the raid." },
+                    { role = "general",   text = "Kill first orb, then wait for Dark Radiation DoT to fall off the raid before killing the second." },
                     { role = "general",   text = "Despotic Command: place timed puddle circles at room edges." },
                     { role = "dps",       text = "At 100 energy: Entropic Unraveling — dodge rotating beams; boss takes 25% increased damage for 20s. Use cooldowns and Bloodlust here." },
                     { role = "healer",    text = "Dispel Twisting Obscurity (magic DoT) — it jumps between players." },
@@ -1209,14 +1211,15 @@ KwikTip.DUNGEONS = {
                 npcID       = 240430,
                 altNpcIDs   = { 243805, 243810, 243811 },  -- Morium, Demiar, Vorelus
                 name        = "Crown of the Cosmos",
-                tip         = "Stage 1: kill three Undying Sentinels (Morium, Demiar, Vorelus) — keep each within 25 yd of its void portal or they teleport. Devouring Cosmos = 99% healing reduction — move out immediately. Destroy Rift Simulacrum (Stage 2) — while active it reduces Alleria's damage taken. Kill Undying Voidspawn before 100 energy (gains immunity + 500% damage). Tanks: Rift Slash stacks reduce all stats — swap proactively. Healers: dispel Null Corona carefully (absorb jumps to new target on dispel).",
+                tip         = "Stage 1: kill Undying Sentinels in order — Demiar first, Vorelus second, Morium last. Silverstrike Arrow makes Sentinels vulnerable — take the arrow to damage them. Keep each within 25 yd of its void portal or it teleports. Devouring Cosmos = 99% healing reduction — move out immediately. Destroy Rift Simulacrum (Stage 2) — reduces Alleria's damage taken. Kill Undying Voidspawn before 100 energy. Tanks: Rift Slash stacks reduce all stats — swap proactively. Healers: heal through Null Corona absorbs — dispelling jumps the absorb to a new player.",
                 notes = {
-                    { role = "general",   text = "Stage 1: kill Undying Sentinels (Morium, Demiar, Vorelus) — each must stay within 25 yd of its void portal or it teleports." },
-                    { role = "general",   text = "Devouring Cosmos = 99% healing reduction zone — move out immediately. Void Expulsion: move away from crashing celestial body impact." },
+                    { role = "general",   text = "Stage 1: kill Sentinels in order — Demiar, Vorelus, Morium. Silverstrike Arrow makes them vulnerable — take the arrow." },
+                    { role = "general",   text = "Keep each Sentinel within 25 yd of its void portal or it teleports." },
+                    { role = "general",   text = "Devouring Cosmos = 99% healing reduction zone — move out immediately." },
                     { role = "dps",       text = "Kill Undying Voidspawn before 100 energy — at max energy gains CC immunity and 500% damage. Stage 2: destroy Rift Simulacrum — reduces Alleria's damage taken while active." },
-                    { role = "tank",      text = "Rift Slash stacks reduce all stats by 10% per stack (20s) — swap before stacks cripple mitigation. Keep sentinels within 25 yd of their portal." },
-                    { role = "healer",    text = "Dispel Null Corona carefully — remaining absorb jumps to a new player on dispel. Heavy healing during Devouring Cosmos; Aspect of the End reduces healing received." },
-                    { role = "interrupt", text = "Void Barrage from Voidspawn adds. Interrupting Tremor from Demiar (sentinel add)." },
+                    { role = "tank",      text = "Rift Slash stacks reduce all stats by 10% per stack (20s) — swap before stacks cripple mitigation." },
+                    { role = "healer",    text = "Heal through Null Corona absorbs — dispelling jumps the absorb to a new player. Heavy healing during Devouring Cosmos." },
+                    { role = "interrupt", text = "Void Barrage from Voidspawn adds. Tremor from Demiar (sentinel add)." },
                 },
             },
         },
@@ -1231,16 +1234,21 @@ KwikTip.DUNGEONS = {
         season     = "midnight",
         type       = "raid",
         mythicPlus = false,
+        areas = {
+            { subzone = "Court of the Phoenix", bossIndex = 1 },  -- Belo'ren; sourced from warcraft.wiki.gg; verify in-game
+            { subzone = "The Darkwell",          bossIndex = 2 },  -- Midnight Falls; sourced from warcraft.wiki.gg; verify in-game
+        },
         bosses = {
             {
                 encounterID = 3182,  -- BigWigs; unverified in-game
                 npcID       = 240387,
                 name        = "Belo'ren, Child of Al'ar",
-                tip         = "Stage 1: you receive Light or Void feather — soak only matching-color dives, intercept matching-color quills; wrong color = severe debuff. Interrupt Light/Void Eruption from Embers — only matching-color players can interrupt. Stage 2 (Ashen Shell): burn the egg before the 30s rebirth timer; each rebirth stacks Ashen Benediction (10% healing reduction).",
+                tip         = "You receive Light or Void feather — soak only matching-color dives, intercept matching-color quills; wrong color = severe debuff. Embers: kill the Ember add, then immediately hard-swap to its egg. Interrupt Light/Void Eruption — matching-color players only. Stage 2 (Ashen Shell): use Heroism here; burn the egg before the 30s rebirth timer. Each rebirth stacks Ashen Benediction (10% healing reduction).",
                 notes = {
                     { role = "general",   text = "You receive Light or Void feather — only soak matching-color dives and intercept matching-color quills. Cross-color exposure = severe debuff." },
+                    { role = "general",   text = "Embers: kill the Ember add first, then immediately hard-swap to its egg and destroy it." },
                     { role = "interrupt", text = "Light/Void Eruption from Embers — only matching-color players can interrupt." },
-                    { role = "dps",       text = "Stage 2: burn the egg (= boss HP) before the 30s rebirth timer. Each Ashen Benediction stack = 10% healing reduction." },
+                    { role = "dps",       text = "Stage 2: use Heroism; burn the egg before the 30s rebirth timer. Each Ashen Benediction stack = 10% healing reduction." },
                     { role = "healer",    text = "Burning Heart pulses every 3s; doubles during egg phase. Each Ashen Benediction stack reduces healing 10%." },
                 },
             },
@@ -1248,11 +1256,11 @@ KwikTip.DUNGEONS = {
                 encounterID = 3183,  -- BigWigs; unverified in-game
                 npcID       = 240391,
                 name        = "Midnight Falls",
-                tip         = "Destroy Midnight Crystals before they explode (Cosmic Fracture — massive AoE + DoT). Heal Dusk Crystals to create Dawn Crystals — Torchbearers carry them for a 12-yd protective aura and Dawnlight Barrier (99% DR dome, 6s). Death's Dirge: position rune marks carefully before the laser sweep. Intermission: dodge Extinction Rays reflecting off mirrors.",
+                tip         = "Grim Symphony: boss flashes 4 symbols in sequence, then marks 4 players with those symbols — marked players must line up left-to-right in the exact order the symbols were shown or it triggers Dissonance (heavy damage). Destroy Midnight Crystals before they explode (Cosmic Fracture). Heal Dusk Crystals to create Dawn Crystals — Torchbearers carry them for a 12-yd aura and Dawnlight Barrier (99% DR, 6s). Intermission: dodge Extinction Rays reflecting off Oblivion's Mirrors.",
                 notes = {
+                    { role = "general",   text = "Grim Symphony: boss flashes 4 symbols, then marks 4 players — line up left-to-right in the exact order the symbols were shown; wrong order = Dissonance (heavy damage)." },
                     { role = "general",   text = "Destroy Midnight Crystals before they detonate (Cosmic Fracture — massive AoE + DoT)." },
                     { role = "general",   text = "Heal Dusk Crystals to Dawn Crystals; Torchbearers provide 12-yd protective aura and Dawnlight Barrier (99% DR dome, 6s)." },
-                    { role = "general",   text = "Death's Dirge: position rune marks carefully — laser sweep triggers Dark Toll or Dissonant Dirge." },
                     { role = "general",   text = "Intermission: dodge Extinction Rays reflecting off Oblivion's Mirrors." },
                 },
             },
