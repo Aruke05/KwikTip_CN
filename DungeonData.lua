@@ -100,12 +100,13 @@ KwikTip.DUNGEONS = {
                 encounterID = 3058,  -- confirmed in-game
                 npcID       = 231631,
                 name        = "Commander Kroluk",
-                tip         = "Stack near melee. Rallying Bellow (66%/33%) gives the boss damage reduction while adds are alive — kill them fast (interrupt Phantasmal Mystic or it enrages). Bladestorm fixates a player — kite the boss. Stay near an ally or Intimidating Shout fears you. Reckless Leap hits the furthest player twice — first hit: ranged DPS use a defensive; second hit: tank runs furthest out to bait it.",
+                tip         = "Stack near melee. Rallying Bellow (66%/33%) gives the boss damage reduction while adds are alive — kill them fast (interrupt Phantasmal Mystic or it enrages). Bladestorm fixates a player — kite the boss. Stay near an ally or Intimidating Shout fears you. Reckless Leap hits the furthest player twice — first hit: ranged DPS use a defensive; second hit: tank runs furthest out to bait it. Tank: defensive for Rampage channel.",
                 notes = {
                     { role = "general",   text = "Stack near melee. Stay near an ally or Intimidating Shout fears you." },
                     { role = "general",   text = "Bladestorm fixates a player — kite the boss while killing adds." },
                     { role = "general",   text = "Reckless Leap hits furthest player twice — ranged DPS use defensive on first hit; tank baits second." },
                     { role = "dps",       text = "Kill adds fast — Rallying Bellow (66%/33%) gives boss damage reduction while adds are alive." },
+                    { role = "tank",      text = "Defensive for Rampage — sustained channel on the tank." },
                     { role = "interrupt", text = "Phantasmal Mystic adds — interrupt or they enrage." },
                 },
             },
@@ -131,6 +132,12 @@ KwikTip.DUNGEONS = {
             { npcID = 232094, name = "Bloated Lasher",         tip = "Interrupt Fungal Bolt — top priority. Spore Dispersal on death buffs nearby mobs' melee damage — position kills away from other packs." },
             { npcID = 231616, name = "Ardent Cutthroat",       tip = "Interrupt every Poison Blades cast — each uninterrupted stack bleeds the tank." },
             { npcID = 231615, name = "Devoted Woebringer",     tip = "CC-immune. Interrupt Shadow Bolt; break the Pulsing Shriek shield to interrupt the channel." },
+            { npcID = 232071, name = "Dutiful Groundskeeper",  tip = "Shear Armor stacks on every tank hit — use defensives or kite when stacks get high." },
+            { npcID = 232121, name = "Phalanx Breaker",        tip = "Break Ranks charges a random player — bait toward a nearby wall to maximize cleave. Interrupting Screech silences all players mid-cast — watch for it and stop casting." },
+            { npcID = 0,      name = "Apex Lynx",              tip = "CC immune. Puncturing Bite applies a bleed on the tank — defensive or bleed cleanse. Ferocious Pounce spreads to 3 players — position loosely to avoid overlap." },
+            { npcID = 0,      name = "Loyal Worg",             tip = "Shred Flesh applies a healing absorb — use a defensive or cleanse to remove it." },
+            { npcID = 0,      name = "Flesh Behemoth",         tip = "CC immune. Fetid Spew targets multiple players — spread loosely and position puddles away from the pack." },
+            { npcID = 232447, name = "Spectral Axethrower",    tip = "Throw Axe bleeds a random player — use a defensive or bleed cleanse; chain CC to delay subsequent casts." },
         },
         areas = {
             { subzone = "The Promenade",       tip = "Interrupt Spirit Bolt from Restless Stewards — dispel Soul Torment on debuffed players immediately. Use a personal defensive for Creeping Spindleweb's Poison Spray." },
@@ -271,7 +278,7 @@ KwikTip.DUNGEONS = {
                 notes = {
                     { role = "general",   text = "Keep equal health — if Nekraxx dies first Muro'jin revives him at 35%; if Muro'jin dies first Nekraxx gains +20% damage every 4s (continuously stacking)." },
                     { role = "general",   text = "Carrion Swoop target: step into a Freezing Trap to block the charge and stun Nekraxx 5s." },
-                    { role = "general",   text = "Barrage targets a player — that player stands still." },
+                    { role = "general",   text = "Barrage targets a player — that player stands still; everyone else moves out of the cone." },
                     { role = "general",   text = "Sidestep Fetid Quillstorm circles." },
                     { role = "tank",      text = "Defensive or bleed cleanse for Flanking Spear." },
                     { role = "healer",    text = "Dispel Infected Pinions disease." },
@@ -316,6 +323,7 @@ KwikTip.DUNGEONS = {
             { npcID = 253683, name = "Rokh'zal",          tip = "Ritual Sacrifice chains an ally to an altar — break the shackles to free them; freedom effects also work." },
             { npcID = 249025, name = "Bound Defender",    tip = "Attack from behind to bypass Vigilant Defense frontal immunity. Dodge Soulstorm tornadoes." },
             { npcID = 249024, name = "Hollow Soulrender",  tip = "Interrupt Shadowfrost Blast. Step away from allies before Frost Nova hits — it chains to nearby players." },
+            { npcID = 0,      name = "Hex Guardian",       tip = "Constantly pulses AoE damage — limit pull size and stack defensive and healing CDs. Dodge Magma Surge line attack; dispel fire debuffs." },
         },
         areas = {
             { subzone = "Wailing Depths",    bossIndex = 1 },  -- Muro'jin and Nekraxx; confirmed in-game
@@ -356,7 +364,7 @@ KwikTip.DUNGEONS = {
                 tip         = "Purge Hastening Ward magic buff from the boss when it appears. At 100 energy, step inside a Suppression Zone before Wave of Silence finishes or you're pacified for 8s. Step into a zone to resolve Runic Mark (Feedback) — but zones purge your buffs. Null Reaction: two players targeted take a combo hit — use a defensive.",
                 notes = {
                     { role = "general",   text = "At 100 energy, be inside a Suppression Zone before Wave of Silence finishes or you're pacified for 8s." },
-                    { role = "general",   text = "Step into a zone to resolve Runic Mark (Feedback) — zones purge your buffs." },
+                    { role = "general",   text = "Step into a zone to resolve Runic Mark (Feedback) — zones purge your buffs; keep a gap between the two marked players so their zone clears don't clip the raid." },
                     { role = "general",   text = "Purge Hastening Ward from the boss." },
                     { role = "general",   text = "Null Reaction: two players targeted take a combo hit — use a defensive." },
                 },
@@ -386,16 +394,24 @@ KwikTip.DUNGEONS = {
             },
         },
         trash = {
+            -- Three Arcane Magister variants across different wings (library, outdoor, void section) — same abilities, different npcIDs
             { npcID = 241326, name = "Arcane Magister",     tip = "Top interrupt priority — Polymorph targets a random player; dispel if it lands." },
             { npcID = 232369, name = "Arcane Magister",     tip = "Top interrupt priority — Polymorph targets a random player; dispel if it lands." },
             { npcID = 257644, name = "Arcane Magister",     tip = "Top interrupt priority — Polymorph targets a random player; dispel if it lands." },
-            { npcID = 234486, name = "Lightward Healer",    tip = "Dispel Holy Fire; purge Power Word: Shield from allies." },
+            { npcID = 234486, name = "Lightward Healer",    tip = "Dispel Holy Fire; purge Power Word: Shield the healer casts on nearby enemy mobs." },
             { npcID = 251917, name = "Animated Codex",      tip = "Arcane Volley pulses constant AoE — limit pull size and prepare healing cooldowns." },
             { npcID = 257161, name = "Blazing Pyromancer",  tip = "Interrupt every Pyroblast; use defensives during Ignition; avoid Flamestrike." },
             { npcID = 24761,  name = "Brightscale Wyrm",    tip = "Stagger kills — Energy Release fires on death; killing simultaneously overwhelms the group." },
             { npcID = 234068, name = "Shadowrift Voidcaller", tip = "CC-immune. Line of sight Consuming Shadows — break line before the channel completes; kill spawned adds from Call of the Void." },
             { npcID = 249086, name = "Void Infuser",        tip = "Interrupt Terror Wave every cast; dispel or use a defensive for Consuming Void debuff." },
             { npcID = 234066, name = "Devouring Tyrant",    tip = "CC-immune. Tank defensive for Devouring Strike (large healing absorb). Void Bomb targets a random player — that player and nearby allies use defensives for the absorb." },
+            { npcID = 0,      name = "Arcane Sentry",       tip = "Ethereal Shackles targets the tank — use a root break or magic dispel immediately. Dodge Arcane Beam puddles." },
+            { npcID = 241325, name = "Sunblade Enforcer",   tip = "Arcane Blade is a magic buff on the tank — purge it. Charge gap-closes aggressively." },
+            { npcID = 259387, name = "Spellwoven Familiar",  tip = "Blink triggers an AoE group hit — brace when it casts." },
+            { npcID = 241444, name = "Runed Spellbreaker",  tip = "CC immune. Runic Glaive targets 2 random players — use defensives. Shield Slam is a line attack toward the tank — point away from the group." },
+            { npcID = 0,      name = "Voidling",             tip = "Void Gash passively damages nearby melee players." },
+            { npcID = 0,      name = "Dreaded Voidwalker",   tip = "Shadow Bolt — use spare interrupts when available." },
+            { npcID = 0,      name = "Unstable Voidling",    tip = "Void Eruption on death — stagger kills to avoid overwhelming group damage." },
         },
         areas = {
             { subzone = "Arcane Atheneum",        tip = "Interrupt Arcane Magisters' Polymorph first — targets a random player. Limit Animated Codex pulls — Arcane Volley is sustained group AoE. Dispel Holy Fire from Lightward Healers." },
@@ -460,6 +476,7 @@ KwikTip.DUNGEONS = {
             { npcID = 251853, name = "Grand Nullifier",        tip = "Interrupt Nullify every cast; avoid Dusk Frights fear zones; turns into a Smudge on death that awakens a nearby Dreadflail in ~1.5s — CC or cleave the Smudge immediately." },
             { npcID = 241660, name = "Duskfright Herald",      tip = "Immune to CC. Entropic Leech channels on a random player and applies a healing absorb — use a combat drop or dispel the absorb to end it. Avoid pulsing projectiles from Dark Beckoning." },
             { npcID = 251024, name = "Dreadflail",             tip = "Tank point away from group — Void Lash frontal tank buster; dodge Flailstorm AoE if fixated on you. Also spawned as a Corewarden Nysarra add — kill before the 18s stun ends." },
+            { npcID = 241644, name = "Corewright Arcanist",   tip = "Interrupt Arcane Explosion every cast. Dispel Transference from affected players." },
         },
         areas = {
             { subzone = "The Bazaar",             tip = "Shadowguard Defenders stack Null Sunder — control pull size. Interrupt Umbra Bolt from Nexus Adepts. Cursed Voidcaller casts Creeping Void on death — brace for the hit." },  -- entrance section; subzone confirmed in-game; mob assignments unverified
@@ -608,9 +625,9 @@ KwikTip.DUNGEONS = {
                 encounterID = 2564,  -- confirmed in-game
                 npcID       = 191736,
                 name        = "Crawth",
-                tip         = "Ruinous Winds at 75% and 45%: grab balls and throw into goals. First goal triggers patrolling tornadoes — dodge them. Second goal starts Firestorm (12s damage amp) — save offensive CDs and Bloodlust. Spread loosely for Deafening Screech. Tank: defensive for Savage Peck.",
+                tip         = "Ruinous Winds at 75% and 45%: grab balls and throw all three into the same goal. Wind goal (75%) triggers patrolling tornadoes — dodge them. Fire goal (45%) starts Firestorm (12s damage amp) — save offensive CDs and Bloodlust. Spread loosely for Deafening Screech. Tank: defensive for Savage Peck.",
                 notes = {
-                    { role = "general",   text = "Ruinous Winds at 75% and 45%: grab balls and throw into goals. First goal triggers patrolling tornadoes; second goal triggers Firestorm (12s damage amp)." },
+                    { role = "general",   text = "Ruinous Winds at 75% and 45%: throw all three balls into the same goal — Wind goal at 75% (tornadoes), Fire goal at 45% (Firestorm, 12s damage amp)." },
                     { role = "general",   text = "Spread loosely for Deafening Screech." },
                     { role = "tank",      text = "Defensive for Savage Peck." },
                     { role = "dps",       text = "Save offensive CDs and Bloodlust for Firestorm — 12s damage amp phase at 45%." },
@@ -641,6 +658,11 @@ KwikTip.DUNGEONS = {
                     { role = "tank",      text = "Defensive for Astral Blast." },
                 },
             },
+        },
+        trash = {
+            { npcID = 196044, name = "Unruly Textbook",     tip = "Interrupt Monotonous Lecture every cast — also a magic dispel if it lands." },
+            { npcID = 197219, name = "Vile Lasher",         tip = "Vile Bite applies a stacking nature debuff — dispel it." },
+            { npcID = 196045, name = "Corrupted Manafiend", tip = "Interrupt Surge on cooldown." },
         },
         areas = {
             { subzone = "Terrace of Lectures",      bossIndex = 3 },  -- Vexamus; confirmed in-game
@@ -700,6 +722,13 @@ KwikTip.DUNGEONS = {
                 },
             },
         },
+        trash = {
+            { npcID = 252561, name = "Quarry Tormentor",      tip = "Curse of Torment targets a random player — use curse dispels to remove it." },
+            { npcID = 252563, name = "Dreadpulse Lich",       tip = "Interrupt Icy Blast every cast. At 50%, Dread Pulse pulses AoE damage every 2s — group defensives. Torrent of Misery hits a random player hard — personal defensive." },
+            { npcID = 252566, name = "Rimebone Coldwraith",   tip = "Interrupt Icebolt. Permeating Cold debuffs 2 random players — magic dispel or use freedom effects." },
+            { npcID = 252606, name = "Plungetalon Gargoyle",  tip = "Plungegrip roots a player — break with root-breaking abilities or destroy the shield. Interrupt Plungegrip as a priority." },
+            { npcID = 0,      name = "Glacieth",               tip = "CC immune. Cryoburst targets the group — loosely spread and move away from puddles together. Focused Guard shields itself — avoid the shield and attack from behind for guaranteed crits." },
+        },
         areas = {
             -- Garfrost and Ick & Krick have no named subzone (empty string throughout).
             -- Only Tyrannus has a distinct boss room subzone.
@@ -721,10 +750,11 @@ KwikTip.DUNGEONS = {
                 name        = "Zuraal the Ascended",
                 tip         = "Keep boss away from Coalesced Void adds — they explode on contact. Decimate: bait the pool but not too far (puddles persist and stack). Null Palm is a random-target frontal — everyone dodge. At 100 energy, Crashing Void pulls in all players and speeds up adds — CC/kill adds before it hits; use a defensive. Tank: defensive for Void Slash.",
                 notes = {
-                    { role = "general",   text = "Keep boss away from Coalesced Void adds — they explode on contact; use slows, stuns, or knockbacks." },
+                    { role = "general",   text = "Keep boss away from Coalesced Void adds — they explode on contact unless CC'd (CC'd slimes touching the boss do NOT explode)." },
                     { role = "general",   text = "Decimate: bait the pool near edges — puddles persist and proximity makes the next one worse." },
                     { role = "general",   text = "Null Palm — random-target frontal; everyone dodge." },
-                    { role = "dps",       text = "CC and kill Coalesced Void adds before Crashing Void (100 energy) — Crashing Void speeds them up and pulls in all players." },
+                    { role = "general",   text = "Crashing Void (100 energy): move to the center near the boss to avoid the outer storm; use a defensive." },
+                    { role = "dps",       text = "CC and kill Coalesced Void adds before Crashing Void — Crashing Void speeds them up and pulls in all players." },
                     { role = "tank",      text = "Defensive for Void Slash." },
                 },
             },
@@ -735,8 +765,9 @@ KwikTip.DUNGEONS = {
                 tip         = "Boss and pets share health — stay stacked for cleave. Interrupt Dread Screech (Duskwing) every cast. Phase Dash: overlap and clear all Void Bombs. Overload is a damage check — successive casts hit harder. Shadow Pounce applies a strong 5s bleed.",
                 notes = {
                     { role = "general",   text = "Boss and pets share health — stay stacked to cleave all three simultaneously." },
-                    { role = "general",   text = "Phase Dash: overlap and clear all Void Bombs. Overload hits harder each successive cast — it's a damage check." },
-                    { role = "healer",    text = "Shadow Pounce applies a strong 5s bleed; Overload damage increases each cast." },
+                    { role = "general",   text = "Phase Dash: overlap and clear all Void Bombs — tank soaks any remaining bombs after the group sweep." },
+                    { role = "general",   text = "Overload hits harder each successive cast — it's a damage check." },
+                    { role = "healer",    text = "Shadow Pounce applies a strong 5s bleed — dispel if possible; Overload damage increases each cast." },
                     { role = "interrupt", text = "Dread Screech (Duskwing) — interrupt every cast." },
                 },
             },
@@ -761,10 +792,18 @@ KwikTip.DUNGEONS = {
                     { role = "general",   text = "Spread Notes of Despair — Grim Chorus zones stack damage." },
                     { role = "general",   text = "Discordant Beam: align with Notes of Despair to silence them — don't burn the adds directly." },
                     { role = "general",   text = "Disintegrate: rotating beams around the boss — move with them to avoid." },
-                    { role = "dps",       text = "Once all Notes are silenced, interrupt Siphon Void — boss takes 25% increased damage; use Bloodlust here." },
+                    { role = "dps",       text = "Once all Notes are silenced, interrupt Siphon Void — boss takes 200% bonus damage for 20s; use Bloodlust here." },
                     { role = "tank",      text = "Defensive for Abyssal Lance at 3 stacks." },
                 },
             },
+        },
+        trash = {
+            { npcID = 122413, name = "Ruthless Riftstalker", tip = "Interrupt Shadowbind — roots all players and deals sustained shadow damage." },
+            { npcID = 124171, name = "Merciless Subjugator",  tip = "Chains of Subjugation targets all players — use root-breaking abilities to clear it and greatly reduce damage taken. Dispel Leeching Void healing absorb." },
+            { npcID = 122412, name = "Bound Voidcaller",      tip = "Constantly pulses moderate group damage — DPS swap to it immediately." },
+            { npcID = 0,      name = "Dark Conjuror",         tip = "Interrupt Summon Voidcaller every cast; use spare interrupts on Umbral Bolt." },
+            { npcID = 0,      name = "Rift Warden",           tip = "Must fight within 30 yards or Stabilize causes lethal group AoE. Interrupt Rift Tear; dispel Rift Essence." },
+            { npcID = 0,      name = "Dire Voidbender",       tip = "Interrupt or purge Abyssal Enhancement every cast." },
         },
         areas = {
             { subzone = "Triad's Conservatory",        bossIndex = 1 },  -- Zuraal the Ascended; confirmed in-game
@@ -1059,6 +1098,7 @@ KwikTip.DUNGEONS = {
                     { role = "healer",    text = "Fan of Blades bleeds all players — use cleanses if available." },
                     { role = "general",   text = "Dodge Wind Chakram and the Chakram Vortex tornadoes it spawns." },
                     { role = "general",   text = "Gale Surge: bait wind orbs away from your path — knockback near platform edges is lethal." },
+                    { role = "dps",       text = "Soothe Raging Squalls adds to remove Wrathful Wind and reduce party-wide damage." },
                 },
             },
             {
@@ -1096,6 +1136,12 @@ KwikTip.DUNGEONS = {
                     { role = "interrupt", text = "Solar Blast — reduces tank damage." },
                 },
             },
+        },
+        trash = {
+            { npcID = 79303, name = "Adorned Bladetalon",    tip = "CC immune. Blade Rush bleeds 2 random players and the tank — dispel or use bleed cleanses. Watch for Shear overlapping with Blade Rush on the tank." },
+            { npcID = 0,     name = "Solar Elemental",       tip = "CC immune. Swap to the Solar Orb immediately and destroy it. Avoid Solar Fire circles." },
+            { npcID = 78932, name = "Driving Gale-Caller",   tip = "Interrupt Repel every cast." },
+            { npcID = 79462, name = "Blinding Sun Priestess", tip = "Interrupt Blinding Light — disorients all players." },
         },
         areas = {
             -- "Grand Spire" appears on both mapID 601 (Araknath) and 602 (High Sage Viryx).
