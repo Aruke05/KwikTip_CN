@@ -1192,11 +1192,11 @@ KwikTip.DUNGEONS = {
         type       = "raid",
         mythicPlus = false,
         areas = {
-            { subzone = "The Approach",       bossIndex = 1 },  -- Imperator Averzian; confirmed in-game
-            { subzone = "Behemoth's Rise",    bossIndex = 2 },  -- Vorasius; confirmed in-game
-            { subzone = "The Riftlabs",       bossIndex = 3 },  -- Fallen-King Salhadaar; confirmed in-game
-            -- Vaelgor & Ezzorak (4), Lightblinded Vanguard (5): subzone names unconfirmed in-game
-            { subzone = "Crown of the Cosmos", bossIndex = 6 },  -- Alleria; sourced from warcraft.wiki.gg; verify in-game
+            { subzone = "The Approach",        bossIndex = 1 },  -- Imperator Averzian; confirmed in-game
+            { subzone = "Behemoth's Rise",     bossIndex = 2 },  -- Vorasius; confirmed in-game
+            { subzone = "The Riftlabs",        bossIndex = 3 },  -- Fallen-King Salhadaar; confirmed in-game
+            { subzone = "Devouring Stronghold", bossIndex = 4 }, -- Vaelgor & Ezzorak approach corridor; confirmed in-game (fight room has no subzone)
+            { subzone = "Celestial Orrery",    bossIndex = 6 },  -- Crown of the Cosmos approach corridor; confirmed in-game (fight room has no subzone)
         },
         bosses = {
             {
@@ -1272,7 +1272,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 3181,  -- BigWigs; unverified in-game
+                encounterID = 3181,  -- confirmed in-game
                 npcID       = 240430,
                 altNpcIDs   = { 243805, 243810, 243811 },  -- Morium, Demiar, Vorelus
                 name        = "Crown of the Cosmos",
