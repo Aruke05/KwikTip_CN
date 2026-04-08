@@ -185,6 +185,20 @@ local function FormatBossContent(dungeon, boss, difficultyID)
 end
 
 
+-- Match a player's current subzone string against an area entry.
+-- Checks the canonical English subzone and any localized aliases stored
+-- in area.subzoneLocales (populated by locale overlay files at load time).
+local function SubzoneMatches(area, playerSubzone)
+    if not playerSubzone or playerSubzone == "" then return false end
+    if area.subzone and area.subzone == playerSubzone then return true end
+    if area.subzoneLocales then
+        for _, loc in ipairs(area.subzoneLocales) do
+            if loc == playerSubzone then return true end
+        end
+    end
+    return false
+end
+
 -- Build the HUD string for the current sub-zone area.
 -- Matches GetSubZoneText() against dungeon.areas[].subzone.
 -- If the area entry has a bossIndex field, the boss tip is shown instead
@@ -195,7 +209,7 @@ local function FormatAreaContent(dungeon, difficultyID)
     local subzone = GetSubZoneText()
     local mapID   = C_Map.GetBestMapForUnit("player")
     for _, a in ipairs(dungeon.areas) do
-        local match = (a.subzone and subzone ~= "" and a.subzone == subzone)
+        local match = (subzone ~= "" and SubzoneMatches(a, subzone))
                    or (a.mapID  and a.mapID  == mapID)
         if match then
             if a.bossIndex then
