@@ -632,9 +632,9 @@ KwikTip.DUNGEONS = {
                 encounterID = 2564,  -- confirmed in-game
                 npcID       = 191736,
                 name        = "Crawth",
-                tip         = "Ruinous Winds: ALWAYS do the wind goal first (~70%) — fire goal now pulses AoE damage the entire time, making fire-first essentially impossible. Wind goal triggers patrolling tornadoes — dodge them. Fire goal (~45%) starts Firestorm (12s damage amp) — save offensive CDs and Bloodlust for this phase. Spread loosely for Deafening Screech. Tank: defensive for Savage Peck — it's a heavy physical hit, not a bleed.",
+                tip         = "Ruinous Winds: ALWAYS do the wind goal first (75%) — fire goal now pulses AoE damage the entire time, making fire-first essentially impossible. Wind goal triggers patrolling tornadoes — dodge them. Fire goal (45%) starts Firestorm (12s damage amp) — save offensive CDs and Bloodlust for this phase. Spread loosely for Deafening Screech. Tank: defensive for Savage Peck — it's a heavy physical hit, not a bleed.",
                 notes = {
-                    { role = "general",   text = "Ruinous Winds: wind goal first (~70%), THEN fire goal (~45%) — fire goal now pulses AoE the entire time; do not score the fire goal first." },
+                    { role = "general",   text = "Ruinous Winds: wind goal first (75%), THEN fire goal (45%) — fire goal now pulses AoE the entire time; do not score the fire goal first." },
                     { role = "general",   text = "Spread loosely for Deafening Screech." },
                     { role = "tank",      text = "Defensive for Savage Peck — heavy physical hit, not a bleed." },
                     { role = "dps",       text = "Save offensive CDs and Bloodlust for Firestorm — 12s damage amp phase at 45%." },
@@ -849,10 +849,10 @@ KwikTip.DUNGEONS = {
             {
                 encounterID = 3367,
                 name        = "Hydrangea",
-                tip         = "Break Wildroot Weave roots immediately — being rooted when Lightbloom Salvo fires makes the zones unavoidable. Dodge Lightbloom Salvo light zones.",
+                tip         = "Interrupt the Wildwood Weed channel to break the root — being rooted when Lightbloom Salvo fires makes the zones unavoidable. Dodge Lightbloom Salvo projectiles.",
                 notes = {
-                    { role = "general",   text = "Break Wildroot Weave roots immediately — being rooted when Lightbloom Salvo fires makes the zones unavoidable." },
-                    { role = "general",   text = "Dodge Lightbloom Salvo light zones." },
+                    { role = "interrupt", text = "Wildwood Weed channel — interrupting it removes the root. Being rooted when Lightbloom Salvo fires makes the zones unavoidable." },
+                    { role = "general",   text = "Dodge Lightbloom Salvo projectiles." },
                 },
             },
             {
@@ -907,9 +907,10 @@ KwikTip.DUNGEONS = {
             {
                 encounterID = 3307,
                 name        = "Gladius Slaurna",
-                tip         = "Kill Sacrificial Voidcallers before Devouring Nova fires — surviving adds empower Slaurna with more damage out and less damage taken. Interrupt Void Bolt on the adds. Dodge Voidscar Raze line attack.",
+                tip         = "Kill Sacrificial Voidcallers before Devouring Nova fires — each add consumed grants Slaurna a permanent 10% damage buff. Keep boss away from platform edges — Devouring Nova knockback near edges is lethal. Interrupt Void Bolt on the adds. Dodge Voidscar Raze line attack.",
                 notes = {
-                    { role = "dps",       text = "Kill Sacrificial Voidcallers before Devouring Nova fires — surviving adds empower Slaurna (more damage out, less in)." },
+                    { role = "dps",       text = "Kill Sacrificial Voidcallers before Devouring Nova fires — each add consumed grants Slaurna a permanent 10% damage buff." },
+                    { role = "general",   text = "Keep boss away from platform edges — Devouring Nova has a knockback; near edges it kills." },
                     { role = "interrupt", text = "Void Bolt on Sacrificial Voidcallers." },
                     { role = "general",   text = "Dodge Voidscar Raze directional line attack." },
                 },
@@ -992,21 +993,21 @@ KwikTip.DUNGEONS = {
             {
                 encounterID = 3364,
                 name        = "Brightthorn",
-                tip         = "Interrupt Bloom Thorn. Turn away before Blinding Burst resolves to avoid disorientation. Sidestep Solar Charge and avoid the lingering void zones.",
+                tip         = "Interrupt Thorn Burst — heavy single-target hit. Turn away before Binding Burst resolves to avoid disorientation. Tank near arena edges — Solar Charge leaves puddles; hitting a wall minimizes space loss.",
                 notes = {
-                    { role = "interrupt", text = "Bloom Thorn." },
-                    { role = "general",   text = "Turn away before Blinding Burst resolves to avoid disorientation." },
-                    { role = "general",   text = "Sidestep Solar Charge; avoid the lingering void zones it leaves behind." },
+                    { role = "interrupt", text = "Thorn Burst — heavy single-target hit." },
+                    { role = "general",   text = "Turn away before Binding Burst resolves to avoid disorientation." },
+                    { role = "general",   text = "Tank near arena edges — Solar Charge leaves persistent puddles; hitting a wall minimizes space loss." },
                 },
             },
             {
                 encounterID = 3363,
                 name        = "Gyrospore",
-                tip         = "Avoid void zones during Fungalstorm spin — burn the boss hard during the 10s vulnerability window after. Step back from melee before Fungsplosion. Sidestep Fungal Charge.",
+                tip         = "Fungistorm: kite the boss near arena edges while it chases you — after it ends boss is dizzy (25% increased damage taken); save DPS CDs for this window. Sidestep Fungal Charge.",
                 notes = {
-                    { role = "general",   text = "Avoid void zones during Fungalstorm spin." },
-                    { role = "dps",       text = "Burn the boss during the 10s vulnerability window after Fungalstorm ends." },
-                    { role = "general",   text = "Step back from melee before Fungsplosion. Sidestep Fungal Charge." },
+                    { role = "general",   text = "Fungistorm: boss chases a player while whirlwinding — kite near arena edges to save space." },
+                    { role = "dps",       text = "After Fungistorm ends, boss is dizzy (25% increased damage taken) — save DPS CDs for this window." },
+                    { role = "general",   text = "Sidestep Fungal Charge." },
                 },
             },
             {
@@ -1033,22 +1034,22 @@ KwikTip.DUNGEONS = {
             {
                 encounterID = 3416,
                 name        = "Lumenia",
-                tip         = "Kill Radiant Command adds before they reach you — kite them into Searing Light patches to disorient them. Dodge Searing Light patches. Defensive for Malignant Gleam.",
+                tip         = "Kill Command Light adds before they reach you — kite them through floor zones to stun them. Turn away from Lumenia's circles before they activate to avoid disorientation. Defensive for Malignant Gleam.",
                 notes = {
-                    { role = "dps",       text = "Kill Radiant Command adds before they reach you — kite them into Searing Light patches to disorient them." },
-                    { role = "general",   text = "Dodge Searing Light patches." },
+                    { role = "dps",       text = "Kill Command Light adds before they reach you — kite them through floor zones to stun them." },
+                    { role = "general",   text = "Turn away from Lumenia's ground circles before they activate to avoid disorientation." },
                     { role = "general",   text = "Defensive for Malignant Gleam — holy damage hit." },
                 },
             },
             {
                 encounterID = 3359,
                 name        = "Mul'tha'ul",
-                tip         = "Interrupt Hopeless Curse every cast — reduces Haste and Movement Speed; dispel if possible. Tear It Down: tentacles slam after a short delay — reposition to avoid. Unanswered Call fixates a player for 8s — kite the boss away immediately.",
+                tip         = "Interrupt Hopelessness every cast — curse that reduces Haste and Movement Speed; dispel if possible. Tear It Down: tentacles slam after a short delay — reposition to avoid. Unanswered Call fixates a player for 8s — kite the boss away immediately.",
                 notes = {
                     { role = "general",   text = "Tear It Down: tentacles slam after a short delay — keep moving to avoid the impact." },
                     { role = "general",   text = "Unanswered Call fixates a player for 8s — use a movement ability to kite the boss away." },
-                    { role = "healer",    text = "Dispel Hopeless Curse if missed — reduces Haste and Movement Speed on all players." },
-                    { role = "interrupt", text = "Hopeless Curse — every cast; reduced movement speed combined with fixate is lethal at higher tiers." },
+                    { role = "healer",    text = "Dispel Hopelessness if missed — curse reducing Haste and Movement Speed on all players." },
+                    { role = "interrupt", text = "Hopelessness — every cast; reduced movement speed combined with fixate is lethal at higher tiers." },
                 },
             },
         },
@@ -1086,11 +1087,11 @@ KwikTip.DUNGEONS = {
             {
                 encounterID = 3365,
                 name        = "Chief-Arcanist Patram",
-                tip         = "Interrupt Void Bolt. Kill the Void Emissary before Dark Communion finishes — success gives you the Versatility + CDR buff; failure gives it to Patram. Dodge Discordant Hymn void zones (damage + slow).",
+                tip         = "Interrupt Submit to the Void — stacking magic DoT. Kill the Dark Harbinger before Dark Prayer finishes — success grants you 20% Versatility + 30% CDR; failure gives Patram a damage buff. Dodge Discordant Hymn void zones.",
                 notes = {
-                    { role = "interrupt", text = "Void Bolt." },
-                    { role = "dps",       text = "Kill the Void Emissary before Dark Communion finishes — success grants the Versatility + CDR buff to you; failure grants it to Patram." },
-                    { role = "general",   text = "Dodge Discordant Hymn void zones — deal damage and apply a slow." },
+                    { role = "interrupt", text = "Submit to the Void — stacking magic DoT." },
+                    { role = "dps",       text = "Kill the Dark Harbinger before Dark Prayer finishes (15s) — success grants 20% Versatility + 30% CDR; failure gives Patram a damage buff." },
+                    { role = "general",   text = "Dodge Discordant Hymn void zones — heavy damage if caught." },
                 },
             },
         },

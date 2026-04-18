@@ -403,7 +403,15 @@ function KwikTip:CreateConfigWindow()
     end)
     AddTooltip(showNoteBtnCB, L["Allows you to save a custom note for each subzone."])
 
-    local chatHeader = MakeSectionHeader(L["SEND TO CHAT"], tf1, showNoteBtnCB, -14)
+    local enableDelvesCB = MakeCheckbox("KwikTipEnableDelvesCB", tf1, showNoteBtnCB, L["Enable in Delves"])
+    enableDelvesCB:SetScript("OnClick", function(self)
+        KwikTipDB.delves = self:GetChecked()
+        KwikTip:UpdateContent()
+        KwikTip:UpdateVisibility()
+    end)
+    AddTooltip(enableDelvesCB, L["Shows tips inside Delve instances."])
+
+    local chatHeader = MakeSectionHeader(L["SEND TO CHAT"], tf1, enableDelvesCB, -14)
 
     local CHAT_OPTIONS = {
         { label = L["None"],     value = "NONE"          },
@@ -801,6 +809,7 @@ function KwikTip:CreateConfigWindow()
         showInDungeonCB:SetChecked(db.showInDungeon)
         autoExpandCB:SetChecked(db.autoExpand ~= false)
         showNoteBtnCB:SetChecked(db.showNoteBtn ~= false)
+        enableDelvesCB:SetChecked(db.delves == true)
         SetChatChannel(db.printChannel or "NONE")
         opacitySlider:SetValue(math.floor(db.alpha * 100 + 0.5))
         SetFont(db.fontName or "Friz Quadrata")

@@ -17,7 +17,12 @@ frame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 -- NPC-based trash tip detection is impossible; detection uses subzone/area events only.
 -- UNIT_SPELLCAST_START is registered dynamically for debug spell logging only.
 frame:SetScript("OnEvent", function(self, event, ...)
-    if event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" then
+    if event == "PLAYER_ENTERING_WORLD" then
+        _loggedSpells = {}  -- reset per-run dedup on every full zone load (loading screen)
+        KwikTip:UpdateContent()
+        KwikTip:UpdateVisibility()
+        KwikTip:LogMapID()
+    elseif event == "ZONE_CHANGED_NEW_AREA" then
         KwikTip:UpdateContent()
         KwikTip:UpdateVisibility()
         KwikTip:LogMapID()
@@ -52,7 +57,8 @@ end)
 -- Returns true if the current instance type should be handled by KwikTip.
 local function IsSupportedInstance(inInstance, instanceType)
     if not inInstance then return false end
-    return instanceType == "party" or instanceType == "raid" or instanceType == "scenario"
+    if instanceType == "scenario" then return KwikTipDB and KwikTipDB.delves end
+    return instanceType == "party" or instanceType == "raid"
 end
 
 local GOLD  = "|cffffcc00"
@@ -479,8 +485,10 @@ function KwikTip:UpdateContent()
         local affixDetails = dungeon.mythicPlus and FormatAffixDetails()
         if affixDetails then
             self:SetContent(GOLD .. dungeon.name .. RESET .. "\n" .. affixDetails)
-        else
+        elseif dungeon.mythicPlus then
             self:SetContent(GRAY .. L["Waiting for relevant encounter..."] .. RESET)
+        else
+            self:SetContent("")
         end
     else
         self.areaActive    = false

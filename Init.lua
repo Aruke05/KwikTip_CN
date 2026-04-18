@@ -19,9 +19,9 @@ KwikTip.DEFAULTS = {
     autoExpand     = true,   -- expand HUD height to fit content (false = fixed height + scroll)
     showNoteBtn    = true,   -- show the pencil note button on the HUD
     notes          = {},     -- user notes keyed by "instanceID:subzone"
+    delves         = false,  -- opt-in: show tips inside Delve instances
     debugLog       = false,
     mapIDLog       = {},
-    mobLog         = {},     -- reserved; write path removed in Midnight 12.x (hostile GUIDs are tainted)
     encounterLog   = {},     -- always-on; records every ENCOUNTER_START encounterID seen
     keystoneLog    = {},     -- always-on; records M+ keystone info (level, affixes) on CHALLENGE_MODE_START
     spellLog       = {},     -- debug-gated; records hostile NPC spell casts (feeds interrupt/mechanic tips)
