@@ -16,6 +16,7 @@ frame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 -- COMBAT_LOG_EVENT_UNFILTERED is also a protected event and cannot be registered.
 -- NPC-based trash tip detection is impossible; detection uses subzone/area events only.
 -- UNIT_SPELLCAST_START is registered dynamically for debug spell logging only.
+local _loggedSpells = {}  -- [npcID..":"..spellID] = true; reset on PLAYER_ENTERING_WORLD and /kwik clearlog
 frame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
         _loggedSpells = {}  -- reset per-run dedup on every full zone load (loading screen)
@@ -339,9 +340,6 @@ function KwikTip:OnEncounterEnd(success)
             end
         end
         -- No next boss (last boss of dungeon) — leave current tip up.
-        if not advanced then
-            -- intentionally empty; existing content remains visible
-        end
         self:UpdateVisibility()
     else
         -- Wipe or reset — clear and return to normal detection.
@@ -388,8 +386,6 @@ end
 -- Gated on debugLog. Deduplicates per (npcID, spellID) pair so each unique
 -- cast is only recorded once per session.
 -- Purpose: surface interrupt priorities and dangerous mechanics for tip writing.
-
-local _loggedSpells = {}  -- [npcID..":"..spellID] = true; reset on /kwik clearlog
 
 function KwikTip:OnSpellCastStart(unit, spellID)
     if not KwikTipDB or not KwikTipDB.debugLog then return end
@@ -618,7 +614,6 @@ SlashCmdList["KWIKTIP"] = function(msg)
         local subzone = GetSubZoneText()
         local dungeonName = dungeon and dungeon.name or "none"
         local mapIDCount     = KwikTipDB.mapIDLog     and #KwikTipDB.mapIDLog     or 0
-        local mobCount       = KwikTipDB.mobLog       and #KwikTipDB.mobLog       or 0
         local encounterCount = KwikTipDB.encounterLog and #KwikTipDB.encounterLog or 0
         local keystoneCount  = KwikTipDB.keystoneLog  and #KwikTipDB.keystoneLog  or 0
         local spellCount     = KwikTipDB.spellLog     and #KwikTipDB.spellLog     or 0
@@ -636,8 +631,8 @@ SlashCmdList["KWIKTIP"] = function(msg)
         if keyLevel then
             print(string.format("  keystone=+%d  affixes=%d", keyLevel, keyAffixes and #keyAffixes or 0))
         end
-        print(string.format("  mapIDLog=%d  mobLog=%d  encounterLog=%d  keystoneLog=%d  spellLog=%d  snapshots=%d",
-            mapIDCount, mobCount, encounterCount, keystoneCount, spellCount, snapshotCount))
+        print(string.format("  mapIDLog=%d  encounterLog=%d  keystoneLog=%d  spellLog=%d  snapshots=%d",
+            mapIDCount, encounterCount, keystoneCount, spellCount, snapshotCount))
         -- Save snapshot to SavedVariables for post-session inspection.
         if KwikTipDB then
             table.insert(KwikTipDB.debugSnapshots, {
@@ -655,7 +650,6 @@ SlashCmdList["KWIKTIP"] = function(msg)
                 areaActive        = KwikTip.areaActive,
                 dungeonActive     = KwikTip.dungeonActive,
                 mapIDLogCount     = mapIDCount,
-                mobLogCount       = mobCount,
                 encounterLogCount = encounterCount,
                 keystoneLogCount  = keystoneCount,
                 spellLogCount     = spellCount,
@@ -672,13 +666,12 @@ SlashCmdList["KWIKTIP"] = function(msg)
         KwikTip:TogglePreview()
     elseif cmd == "clearlog" then
         KwikTipDB.mapIDLog       = {}
-        KwikTipDB.mobLog         = {}
         KwikTipDB.encounterLog   = {}
         KwikTipDB.keystoneLog    = {}
         KwikTipDB.spellLog       = {}
         KwikTipDB.debugSnapshots = {}
         _loggedSpells = {}
-        print("|cff00ff00KwikTip|r mapIDLog, mobLog, encounterLog, keystoneLog, spellLog, and debugSnapshots cleared.")
+        print("|cff00ff00KwikTip|r mapIDLog, encounterLog, keystoneLog, spellLog, and debugSnapshots cleared.")
     elseif cmd == "feedback" then
         print("|cff00ff00KwikTip|r Tips feel off? Open an issue at: https://github.com/postblink/KwikTip/issues")
     elseif cmd == "config" or cmd == "" then

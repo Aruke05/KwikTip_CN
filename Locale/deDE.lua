@@ -48,11 +48,11 @@ L["  inInstance=%s  type=%s  boss=%s  area=%s  dungeon=%s"] = "  inInstance=%s  
 L["  instanceID=%s  mapID=%s  dungeon=%s"] = "  Instanz-ID=%s  Karten-ID=%s  Dungeon=%s"
 L["  subzone=%q  role=%s"] = "  Unterzone=%q  Rolle=%s"
 L["  keystone=+%d  affixes=%d"] = "  Schlüsselstein=+%d  Affixe=%d"
-L["  mapIDLog=%d  mobLog=%d  encounterLog=%d  keystoneLog=%d  spellLog=%d  snapshots=%d"] = "  mapIDLog=%d  mobLog=%d  encounterLog=%d  keystoneLog=%d  spellLog=%d  Snapshots=%d"
+L["  mapIDLog=%d  encounterLog=%d  keystoneLog=%d  spellLog=%d  snapshots=%d"] = "  mapIDLog=%d  encounterLog=%d  keystoneLog=%d  spellLog=%d  Snapshots=%d"
 L["debug logging %s."] = "Debug-Protokollierung %s."
 L["enabled"] = "aktiviert"
 L["disabled"] = "deaktiviert"
-L["mapIDLog, mobLog, encounterLog, keystoneLog, spellLog, and debugSnapshots cleared."] = "mapIDLog, mobLog, encounterLog, keystoneLog, spellLog und debugSnapshots geleert."
+L["mapIDLog, encounterLog, keystoneLog, spellLog, and debugSnapshots cleared."] = "mapIDLog, encounterLog, keystoneLog, spellLog und debugSnapshots geleert."
 L["Tips feel off? Open an issue at: https://github.com/postblink/KwikTip/issues"] = "Tipps passen nicht? Issue auf https://github.com/postblink/KwikTip/issues eröffnen"
 
 -- UI_Config
