@@ -303,9 +303,10 @@ KwikTip.DUNGEONS = {
                 encounterID = 3214,
                 npcID       = 248605,
                 name        = "Rak'tul, Vessel of Souls",
-                tip         = "Interrupt all 6 Malignant Souls in the spirit realm — each interrupt grants a stacking Spectral Residue buff (+25% dmg/heal/speed) back in the boss phase. Avoid Restless Masses roots; cleave Crush Souls totems before returning. Boss phase: Spiritbreaker — position against braziers to negate knockback.",
+                tip         = "Soulrending Roar sends the group down to the spirit realm bridge gauntlet — clear it rapidly. Interrupt all 6 Malignant Souls in the spirit realm — each interrupt grants a stacking Spectral Residue buff (+25% dmg/heal/speed) back in the boss phase. Avoid Restless Masses roots; cleave Crush Souls totems before returning. Boss phase: Spiritbreaker — position against braziers to negate knockback.",
                 notes = {
                     { role = "interrupt", text = "All 6 Malignant Souls in the spirit realm — interrupt the first 5, then have the tank interrupt the 6th last to extend the buff into the boss phase. Each grants stacking Spectral Residue (+25% dmg/heal/speed)." },
+                    { role = "general",   text = "Soulrending Roar triggers the bridge gauntlet (spirit realm) — push through it rapidly to return for the buff window." },
                     { role = "general",   text = "Avoid Restless Masses roots; cleave Crush Souls totems before returning to boss phase." },
                     { role = "tank",      text = "Spiritbreaker combo: channel + puddle + knockback — position against braziers to negate the knockback." },
                 },
@@ -354,9 +355,10 @@ KwikTip.DUNGEONS = {
                 encounterID = 3071,  -- confirmed in-game
                 npcID       = 231861,
                 name        = "Arcanotron Custos",
-                tip         = "Refueling Protocol (0 energy): pull boss to a room corner before it fires — orbs funnel into one position, making soaks easier, and fewer orbs spawn on the far side. Spread to intercept orbs; each that reaches boss grants a damage buff; save damage CDs for the Refueling Protocol damage amp. Arcane Residue snare/DoT: magic dispel or freedom effect removes it. Tank: stand on stair edges to prevent Repulsing Slam knockback. Magic dispel Ethereal Shackles from two players.",
+                tip         = "Refueling Protocol (0 energy): pull boss to a room corner before it fires — orbs funnel into one position, making soaks easier, and fewer orbs spawn on the far side. Spread to intercept orbs; each that reaches boss grants a damage buff; save damage CDs for the Refueling Protocol damage amp. Arcane Expulsion: AoE hit + knockback that drops a puddle — position to drop puddles at arena edges. Arcane Residue snare/DoT: magic dispel or freedom effect removes it. Tank: stand on stair edges to prevent Repulsing Slam knockback. Magic dispel Ethereal Shackles from two players.",
                 notes = {
                     { role = "general",   text = "Refueling Protocol (0 energy): pull boss to a room corner before it fires — orbs funnel into one position for easier soaks; save damage CDs for the damage amp." },
+                    { role = "general",   text = "Arcane Expulsion: AoE hit + knockback + puddle — face the boss toward the arena edge so the puddle drops out of the fight area." },
                     { role = "general",   text = "Arcane Residue snare/DoT: magic dispel or freedom effect removes it — reduces overall damage intake significantly." },
                     { role = "tank",      text = "Stand on stair edges for Repulsing Slam — stops the knockback entirely. Defensive for the slam hit." },
                     { role = "healer",    text = "Magic dispel Ethereal Shackles from two random players." },
@@ -378,9 +380,9 @@ KwikTip.DUNGEONS = {
                 encounterID = 3073,  -- confirmed in-game
                 npcID       = 231864,
                 name        = "Gemellus",
-                tip         = "All copies share health. Neural Link: follow the arrow indicator to your correct clone and touch it — Astral Grasp pulls you toward the clones so you must fight the pull-in. Cosmic Sting: move away from the group to drop puddles.",
+                tip         = "Clones spawn at pull AND at 50% health — all copies share health, cleave them. Neural Link: follow the arrow indicator to your correct clone and touch it — Astral Grasp pulls you toward the clones so you must fight the pull-in. Cosmic Sting: move away from the group to drop puddles.",
                 notes = {
-                    { role = "general",   text = "All copies share health; follow Neural Link's arrow indicator to find your correct clone and touch it." },
+                    { role = "general",   text = "Clones spawn at pull and again at 50% — all copies share health; cleave them and follow Neural Link's arrow indicator to find your correct clone and touch it." },
                     { role = "general",   text = "Astral Grasp pulls players toward the clones — fight the pull-in while navigating." },
                     { role = "general",   text = "Cosmic Sting: move away from the group to drop puddles." },
                 },
@@ -389,12 +391,13 @@ KwikTip.DUNGEONS = {
                 encounterID = 3074,  -- confirmed in-game
                 npcID       = 231865,
                 name        = "Degentrius",
-                tip         = "Void Torrent beam splits the arena — keep one player on each side to soak Unstable Void Essence. Devouring Entropy: random players get debuffs of different durations — use a defensive if your duration is long; aim your orb so allies can intercept it. Tank: step back for Hulking Fragment Magic dispel (drops a puddle). Never stand in Void Torrent beams — they stun.",
+                tip         = "Void Torrent beam splits the arena — keep one player on each side to soak Unstable Void Essence. Devouring Entropy: random players get debuffs of different durations — use a defensive if your duration is long; aim your orb so allies can intercept it. Entropy Blast: unavoidable group damage regardless of positioning — healer plan CDs. Tank: step back for Hulking Fragment Magic dispel (drops a puddle). Never stand in Void Torrent beams — they stun.",
                 notes = {
                     { role = "general",   text = "Void Torrent beam splits the arena — keep one player on each side to soak Unstable Void Essence bounces; missing applies a 40s DoT." },
                     { role = "general",   text = "Devouring Entropy: players get debuffs with different durations — use a defensive if yours is long; aim your orb toward allies." },
                     { role = "general",   text = "Never stand in Void Torrent beams — they stun." },
                     { role = "tank",      text = "Step back out of melee for Hulking Fragment Magic dispel — drops a puddle." },
+                    { role = "healer",    text = "Entropy Blast deals unavoidable group damage — plan CDs around it; positioning won't reduce the hit." },
                 },
             },
         },
@@ -411,7 +414,7 @@ KwikTip.DUNGEONS = {
             { npcID = 249086, name = "Void Infuser",        tip = "Interrupt Terror Wave every cast — fears the group; can also be LoS'd in a pinch. Dispel or use a defensive for Consuming Void debuff." },
             { npcID = 234066, name = "Devouring Tyrant",    tip = "CC-immune. Tank defensive for Devouring Strike (large healing absorb). Void Bomb targets a random player — that player and nearby allies use defensives for the absorb." },
             { npcID = 0,      name = "Arcane Sentry",       tip = "Ethereal Shackles is a root on the tank — a freedom effect removes it and all its damage entirely; magic dispel also works. Dodge Arcane Beam puddles." },
-            { npcID = 241325, name = "Sunblade Enforcer",   tip = "Arcane Blade is a stacking magic buff — purge it immediately; at high stacks (some Enforcers start with 10+) they hit the tank extremely hard. Purging is very high value in this dungeon." },
+            { npcID = 241325, name = "Sunblade Enforcer",   tip = "Arcane Blade is a stacking magic buff — purge it immediately; at high stacks (some Enforcers start with 10+) they hit the tank extremely hard. Purging is very high value in this dungeon. Kiting is difficult due to Charge — tank through it rather than trying to disengage." },
             { npcID = 259387, name = "Spellwoven Familiar",  tip = "Blink triggers an AoE group hit — brace when it casts." },
             { npcID = 241444, name = "Runed Spellbreaker",  tip = "CC immune. Runic Glaive targets random players and applies a debuff — use a defensive or meld immediately; cannot be removed with Dwarf racial. Two of these guard the pack before the last boss — do not double-pull that pack. Shield Slam is a line attack toward the tank — point away from the group." },
             { npcID = 0,      name = "Voidling",             tip = "Void Gash passively damages nearby melee players." },
@@ -440,10 +443,11 @@ KwikTip.DUNGEONS = {
                 encounterID = 3328,  -- confirmed in-game
                 npcID       = 241539,
                 name        = "Chief Corewright Kasreth",
-                tip         = "Don't cross Leyline Arrays (damage + slow). When targeted by Reflux Charge, touch an array intersection to destroy it and open space. At full energy: Corespark Detonation — massive knockback + healing absorb DoT on target; party-wide Sparkburn follows — healer CDs.",
+                tip         = "Don't cross Leyline Arrays (damage + slow). When targeted by Reflux Charge, touch an array intersection to destroy it and open space. At full energy: Corespark Detonation — massive knockback + healing absorb DoT on target; party-wide Sparkburn follows — healer CDs. Tank: boss uses instant arcane damage instead of melee swings — defensive timing should match cast windows, not auto-attack swing timers.",
                 notes = {
                     { role = "general",   text = "Don't cross Leyline Arrays (damage + slow); if targeted by Reflux Charge, touch an intersection to destroy it and open space." },
                     { role = "general",   text = "At full energy: Corespark Detonation — massive knockback + healing absorb DoT; don't get knocked into puddles." },
+                    { role = "tank",      text = "Boss uses instant arcane damage instead of melee swings — defensive timing aligns with casts, not melee swing timers." },
                     { role = "healer",    text = "CDs after Corespark Detonation — party-wide Sparkburn DoT follows immediately." },
                 },
             },
@@ -764,12 +768,12 @@ KwikTip.DUNGEONS = {
                 encounterID = 2065,  -- confirmed in-game
                 npcID       = 122313,
                 name        = "Zuraal the Ascended",
-                tip         = "Oozing Slam spawns two Coalesced Void adds — hard CC one immediately (hunter trap, paralyze, roots) and ignore it while killing the other; CC'd adds touching the boss do NOT explode and don't get the Crashing Void speed boost. Decimate: bait the pool near edges. Null Palm is a random-target frontal — everyone dodge. At 100 energy, Crashing Void: move to center near boss to avoid outer storm; CC any remaining un-CC'd adds. Tank: defensive for Void Slash.",
+                tip         = "Oozing Slam spawns two Coalesced Void adds — hard CC one immediately (hunter trap, paralyze, roots) and ignore it while killing the other; CC'd adds touching the boss do NOT explode and don't get the Crashing Void speed boost. Decimate: bait the pool near edges. Null Palm is a random-target frontal — everyone dodge. At 100 energy, Crashing Void: pulls players in then explodes — top everyone off before the cast finishes, move to center near boss to avoid outer storm, and CC any remaining un-CC'd adds. Tank: defensive for Void Slash.",
                 notes = {
                     { role = "general",   text = "Oozing Slam spawns two adds — hard CC one (hunter trap, paralyze, roots) and only kill one at a time; CC'd slimes touching the boss do NOT explode." },
                     { role = "general",   text = "Decimate: bait the pool near edges — puddles persist and proximity makes the next one worse." },
                     { role = "general",   text = "Null Palm — random-target frontal; everyone dodge." },
-                    { role = "general",   text = "Crashing Void (100 energy): move to the center near the boss to avoid the outer storm; use a defensive." },
+                    { role = "general",   text = "Crashing Void (100 energy): pulls players in then explodes — everyone must be topped before it lands. Move to center near the boss to avoid the outer storm; use a defensive." },
                     { role = "dps",       text = "CC one add per pair — CC'd adds won't speed boost or explode on contact; only deal with one at a time." },
                     { role = "tank",      text = "Defensive for Void Slash." },
                 },
@@ -803,9 +807,10 @@ KwikTip.DUNGEONS = {
                 encounterID = 2068,  -- confirmed in-game
                 npcID       = 214650,
                 name        = "L'ura",
-                tip         = "Spread Notes of Despair — Grim Chorus zones stack. Discordant Beam: align with Notes of Despair to silence them. Once all are silenced, boss casts Siphon Void — interrupt it for a 25% damage taken window; use Bloodlust here. Disintegrate: rotating beams around the boss — move with them. Tank: defensive for Abyssal Lance at 3 stacks.",
+                tip         = "Spread Notes of Despair — Grim Chorus zones stack. Discordant Beam: align with Notes of Despair to silence them. Grim Chorus repositions Notes and drops circles — use the intermission to rush to the new positions while dodging. Once all are silenced, boss casts Siphon Void — interrupt it for a 25% damage taken window; use Bloodlust here. Disintegrate: rotating beams around the boss — move with them. Tank: defensive for Abyssal Lance at 3 stacks.",
                 notes = {
                     { role = "general",   text = "Spread Notes of Despair — Grim Chorus zones stack damage." },
+                    { role = "general",   text = "Grim Chorus intermission: Notes get repositioned and circles drop — rush to the new positions while dodging the circles." },
                     { role = "general",   text = "Discordant Beam: align with Notes of Despair to silence them — don't burn the adds directly." },
                     { role = "general",   text = "Disintegrate: rotating beams around the boss — move with them to avoid." },
                     { role = "dps",       text = "Once all Notes are silenced, interrupt Siphon Void — boss takes 200% bonus damage for 20s; use Bloodlust here." },
