@@ -203,6 +203,16 @@ KwikTip.DUNGEONS = {
                 },
             },
         },
+        trash = {
+            { npcID = 0, name = "Corrupted Ghoul",      tip = "Interrupt Vile Bite — applies a stacking disease that reduces max HP. Dispel between pulls." },
+            { npcID = 0, name = "Hateful Shaper",        tip = "Interrupt Shadow Mend — heals nearby trash for a substantial amount. Spare interrupts on Mind Flay." },
+            { npcID = 0, name = "Ghostly Retainer",     tip = "Mind Rend is a long channel on a random player — interrupt it. Use a defensive while it channels." },
+            { npcID = 0, name = "Vilethorn Sapling",    tip = "Mass Entanglement roots the whole group — use AoE stops or knockbacks to interrupt the cast. Tenderize marks a player — use a defensive." },
+            { npcID = 0, name = "Fel Bat",             tip = "Sonic Screech is a heavy group-wide hit — interrupt it. Interrupt or CC to prevent subsequent casts." },
+            { npcID = 0, name = "Shadowmire Attendant", tip = "Shadow Bolt volley is the main threat — use spare interrupts. Avoid Darkspear ground patches." },
+            { npcID = 0, name = "Wrathguard Invader",  tip = "Chaos Strike passive cleaves — tank keeps the Wrathguard facing away from the group. Interrupt Fel Bolt." },
+            { npcID = 0, name = "Doomguard Sentry",    tip = "Cleave and War Stomp — tank faces away; dodge the War Stomp ground indicator. Interrupt Shadowbolt Volley." },
+        },
         areas = {
             { subzone = "Silvermoon Pet Shop", bossIndex = 1 },  -- Kystia Manaheart; confirmed in-game
             { subzone = "The Illicit Rain",    bossIndex = 2 },  -- Zaen Bladesorrow; confirmed in-game
@@ -252,6 +262,16 @@ KwikTip.DUNGEONS = {
                     { role = "general",   text = "Spread when Echoing Maul marks you." },
                 },
             },
+        },
+        trash = {
+            { npcID = 0, name = "Temporal Titan",         tip = "Infinite Arc is a long frontal beam — sidestep it. Interrupt Temporal Shock to stop the AoE stun." },
+            { npcID = 0, name = "Timestream Anomaly",     tip = "Temporal Spit hits the tank hard — use a defensive. Dispel Infusion — it's a heal absorb on a random player." },
+            { npcID = 0, name = "Sand Lasher",            tip = "Sandstorm pulses heavy group damage — healer CDs. Burrow drops threat — the Lasher re-emerges on a random player; tank taunt back." },
+            { npcID = 0, name = "Var'auk",                tip = "Singed Wounds stacks on the tank — kite or use defensives when stacks get high. Interrupt Cauterize every cast — it heals nearby trash for 40% health over 6s. Top priority interrupt." },
+            { npcID = 0, name = "Echo of Winter",         tip = "Chilling Aura slows nearby players. Dodge Rime Bolt ground circles." },
+            { npcID = 0, name = "Frozen Berserker",       tip = "Shattering Slash is a frontal cone — tank faces away from group. Kite if Unstable Frost stacks get high." },
+            { npcID = 0, name = "Frostweaver",            tip = "Interrupt Icy Binding every cast — roots a player. Dodge Arctic Gale zone." },
+            { npcID = 0, name = "Spirit-Touched Jaguar",  tip = "Prowl — stealth detection or AoE to reveal. Spirit Bite applies a bleed that stacks — dispel." },
         },
         areas = {
             { subzone = "Enduring Winter",    bossIndex = 1 },  -- first two bosses share this subzone (Hoardmonger + Sentinel of Winter); confirmed in-game (mapID 2514); bossIndex=1 shows Hoardmonger tip on entry — ENCOUNTER_START overrides for Sentinel of Winter
@@ -551,6 +571,15 @@ KwikTip.DUNGEONS = {
                 },
             },
         },
+        trash = {
+            { npcID = 0, name = "Ineffable Tormentor",    tip = "Crushing Doubt drops avoidable circles — dodge them. Overwhelming Power channels on a player — interrupt it or LoS behind terrain." },
+            { npcID = 0, name = "Time-Lost Stalker",      tip = "Ireful Strike hits the tank hard and slows attack speed — use a defensive. Dispel the lingering debuff." },
+            { npcID = 0, name = "Muddled Screamer",       tip = "Wracking Scream fears all players — interrupt this cast above all else. Use CC to chain stops." },
+            { npcID = 0, name = "Dormant Lasher",         tip = "These start dormant — don't wake them unless needed. If active, sidestep their lash frontal." },
+            { npcID = 0, name = "Lightbloom Harvester",   tip = "Interrupt Lightbloom Channel — it heals nearby mobs. Dodge Flowering Burst petals on death." },
+            { npcID = 0, name = "Vale Stalker",           tip = "Prowls between patrols — use stealth detection. Pouncing Strike roots the target — freedom effect removes it." },
+            { npcID = 0, name = "Sunblaze Warden",        tip = "Radiant Slash is a frontal cone — tank faces away. Interrupt Gleaming Barrier when possible." },
+        },
         areas = {
             { subzone = "The Luminous Garden",  bossIndex = 1 },  -- Lightblossom Trinity; confirmed in-game
             { subzone = "The Gilded Tangle",    bossIndex = 2 },  -- Ikuzz the Light Hunter; confirmed in-game
@@ -599,6 +628,14 @@ KwikTip.DUNGEONS = {
                     { role = "healer",    text = "CDs for Cosmic Blast — group-wide shadow damage + knockback." },
                 },
             },
+        },
+        trash = {
+            { npcID = 0, name = "Bloodswarmer",          tip = "Blood Bolt hits hard — use spare interrupts. Tainted Blood leaves a puddle on death; kite the swarm away from existing puddles." },
+            { npcID = 0, name = "Festering Rot",         tip = "Bait Vile Eruption by standing in front of it — the frontal cone is well-telegraphed. Don't get hit; it applies a healing absorb." },
+            { npcID = 0, name = "Sporecaller Zan'cha",   tip = "Ticking Spider casts a long channel — interrupt or stun it. The spider bomb explodes on death — AoE it down from range to avoid the explosion." },
+            { npcID = 0, name = "Void-Touched Berserker", tip = "Enrages at low health — soothe or kite. On death, leaves a void zone that deals shadow damage — move out." },
+            { npcID = 0, name = "Ethereal Channeler",    tip = "Interrupt Void Bolt. Void Shift heals the Channeler and damages the group — top interrupt priority." },
+            { npcID = 0, name = "Phase Spider",          tip = "Shadowstep blinks to random players — loosely spread. Apply a slow or root if it fixates." },
         },
         areas = {
             { subzone = "The Den", bossIndex = 1 },  -- Taz'Rah's arena; confirmed in-game
