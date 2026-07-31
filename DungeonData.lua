@@ -114,9 +114,9 @@ KwikTip.DUNGEONS = {
                 encounterID = 3059,  -- confirmed in-game
                 npcID       = 231636,
                 name        = "The Restless Heart",
-                tip         = "Step on Turbulent Arrows to clear Squall Leap stacks — stacks hit hard, clear them quickly. At 100 energy (Billowing Wind), step on arrows to vault over the expanding shockwave. Overlap Gust Shot ground pools to clear space. Tempest Slash knocks you back — try to land near arrows. Bolt Gale: frontal channel on a random player — stand still if targeted, use a defensive or combat drop to stop it.",
+                tip         = "Step on Turbulent Arrows to clear Squall Leap stacks — stacks hit hard, clear them quickly. At 100 energy (Bullseye Windblast), step on arrows to vault over the expanding shockwave. Overlap Gust Shot ground pools to clear space. Tempest Slash knocks you back — try to land near arrows. Bolt Gale: frontal channel on a random player — stand still if targeted, use a defensive or combat drop to stop it.",
                 notes = {
-                    { role = "general",   text = "Step on Turbulent Arrows to clear Squall Leap stacks; at 100 energy (Billowing Wind) step on arrows to vault over the expanding shockwave." },
+                    { role = "general",   text = "Step on Turbulent Arrows to clear Squall Leap stacks; at 100 energy (Bullseye Windblast) step on arrows to vault over the expanding shockwave." },
                     { role = "general",   text = "Overlap Gust Shot ground pools to clear space." },
                     { role = "general",   text = "Bolt Gale: frontal channel on a random player — stand still if targeted; use a defensive or combat drop to stop the channel." },
                     { role = "tank",      text = "Defensive for Tempest Slash — knockback; try to land near arrows to clear your debuff." },
@@ -355,11 +355,12 @@ KwikTip.DUNGEONS = {
                 encounterID = 3071,  -- confirmed in-game
                 npcID       = 231861,
                 name        = "Arcanotron Custos",
-                tip         = "Refueling Protocol (0 energy): pull boss to a room corner before it fires — orbs funnel into one position, making soaks easier, and fewer orbs spawn on the far side. Spread to intercept orbs; each that reaches boss grants a damage buff; save damage CDs for the Refueling Protocol damage amp. Arcane Expulsion: AoE hit + knockback that drops a puddle — position to drop puddles at arena edges. Arcane Residue snare/DoT: magic dispel or freedom effect removes it. Tank: stand on stair edges to prevent Repulsing Slam knockback. Magic dispel Ethereal Shackles from two players.",
+                tip         = "Refueling Protocol (0 energy): pull boss to a room corner before it fires — orbs funnel into one position, making soaks easier, and fewer orbs spawn on the far side. Spread to intercept orbs; each that reaches boss grants a damage buff; save damage CDs for the Refueling Protocol damage amp. Each orb soaked stacks Unstable Energy (DoT) — use defensives if soaking multiple. Arcane Expulsion: AoE hit + knockback that drops a puddle — position to drop puddles at arena edges. Arcane Residue snare/DoT: magic dispel or freedom effect removes it. Tank: stand on stair edges to prevent Repulsing Slam knockback. Magic dispel Ethereal Shackles from two players.",
                 notes = {
                     { role = "general",   text = "Refueling Protocol (0 energy): pull boss to a room corner before it fires — orbs funnel into one position for easier soaks; save damage CDs for the damage amp." },
                     { role = "general",   text = "Arcane Expulsion: AoE hit + knockback + puddle — face the boss toward the arena edge so the puddle drops out of the fight area." },
                     { role = "general",   text = "Arcane Residue snare/DoT: magic dispel or freedom effect removes it — reduces overall damage intake significantly." },
+                    { role = "general",   text = "Refueling Protocol orbs stack Unstable Energy (DoT) — use defensives if soaking multiple." },
                     { role = "tank",      text = "Stand on stair edges for Repulsing Slam — stops the knockback entirely. Defensive for the slam hit." },
                     { role = "healer",    text = "Magic dispel Ethereal Shackles from two random players." },
                 },
@@ -807,7 +808,7 @@ KwikTip.DUNGEONS = {
                 encounterID = 2068,  -- confirmed in-game
                 npcID       = 214650,
                 name        = "L'ura",
-                tip         = "Spread Notes of Despair — Grim Chorus zones stack. Discordant Beam: align with Notes of Despair to silence them. Grim Chorus repositions Notes and drops circles — use the intermission to rush to the new positions while dodging. Once all are silenced, boss casts Siphon Void — interrupt it for a 25% damage taken window; use Bloodlust here. Disintegrate: rotating beams around the boss — move with them. Tank: defensive for Abyssal Lance at 3 stacks.",
+                tip         = "Spread Notes of Despair — Grim Chorus zones stack. Discordant Beam: align with Notes of Despair to silence them. Grim Chorus repositions Notes and drops circles — use the intermission to rush to the new positions while dodging. Once all are silenced, boss casts Siphon Void — interrupt it: boss takes 200% bonus damage for 20s; use Bloodlust here. Disintegrate: rotating beams around the boss — move with them. Tank: defensive for Abyssal Lance at 3 stacks.",
                 notes = {
                     { role = "general",   text = "Spread Notes of Despair — Grim Chorus zones stack damage." },
                     { role = "general",   text = "Grim Chorus intermission: Notes get repositioned and circles drop — rush to the new positions while dodging the circles." },
