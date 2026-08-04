@@ -128,6 +128,7 @@ check_youtube "Tactyks" "UC_0qsnA6yJ_DzEvKsm-XdvQ"
 # check_youtube "Quazii" "UCXEvcv2LXzaaWJCKDPGQs8g"
 
 # method.gg — M+ dungeon guides (written by Tactyks)
+# Season 1 (still monitored for non-M+ runners)
 check_page "method/windrunner-spire"           "https://www.method.gg/guides/dungeons/windrunner-spire"
 check_page "method/magisters-terrace"          "https://www.method.gg/guides/dungeons/magisters-terrace"
 check_page "method/maisara-caverns"            "https://www.method.gg/guides/dungeons/maisara-caverns"
@@ -136,6 +137,15 @@ check_page "method/algethar-academy"           "https://www.method.gg/guides/dun
 check_page "method/pit-of-saron"               "https://www.method.gg/guides/dungeons/pit-of-saron"
 check_page "method/seat-of-the-triumvirate"    "https://www.method.gg/guides/dungeons/seat-of-the-triumvirate"
 check_page "method/skyreach"                   "https://www.method.gg/guides/dungeons/skyreach"
+# Season 2 (active M+ rotation)
+check_page "method/murder-row"                 "https://www.method.gg/guides/dungeons/murder-row"
+check_page "method/den-of-nalorakk"            "https://www.method.gg/guides/dungeons/den-of-nalorakk"
+check_page "method/blinding-vale"              "https://www.method.gg/guides/dungeons/the-blinding-vale"
+check_page "method/voidscar-arena"             "https://www.method.gg/guides/dungeons/voidscar-arena"
+check_page "method/kings-rest"                 "https://www.method.gg/guides/dungeons/kings-rest"
+check_page "method/temple-of-sethraliss"       "https://www.method.gg/guides/dungeons/temple-of-sethraliss"
+check_page "method/ruby-life-pools"            "https://www.method.gg/guides/dungeons/ruby-life-pools"
+check_page "method/altar-of-fangs"             "https://www.method.gg/guides/dungeons/altar-of-fangs"
 
 # Icy Veins — non-M+ dungeons (primary source for Murder Row, DoN, TBV, VA)
 # Individual pages not yet published as of March 2026; 404s are skipped silently
@@ -144,6 +154,10 @@ check_page "icyveins/murder-row"               "https://www.icy-veins.com/wow/mu
 check_page "icyveins/den-of-nalorakk"          "https://www.icy-veins.com/wow/den-of-nalorakk-dungeon-guide"
 check_page "icyveins/blinding-vale"            "https://www.icy-veins.com/wow/the-blinding-vale-dungeon-guide"
 check_page "icyveins/voidscar-arena"           "https://www.icy-veins.com/wow/voidscar-arena-dungeon-guide"
+check_page "icyveins/kings-rest"               "https://www.icy-veins.com/wow/kings-rest-dungeon-guide"
+check_page "icyveins/temple-of-sethraliss"     "https://www.icy-veins.com/wow/temple-of-sethraliss-dungeon-guide"
+check_page "icyveins/ruby-life-pools"          "https://www.icy-veins.com/wow/ruby-life-pools-dungeon-guide"
+check_page "icyveins/altar-of-fangs"           "https://www.icy-veins.com/wow/altar-of-fangs-dungeon-guide"
 
 if [[ $NEW_ITEMS -eq 0 ]]; then
     append "  _(no changes detected)_"
