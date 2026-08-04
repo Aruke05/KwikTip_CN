@@ -53,6 +53,11 @@ local ADDON_NAME, KwikTip = ...
 -- Season 1 M+ rotation (8 dungeons total):
 --   New Midnight: Magisters' Terrace, Maisara Caverns, Nexus-Point Xenas, Windrunner Spire
 --   Legacy:       Algeth'ar Academy, Pit of Saron, Seat of the Triumvirate, Skyreach
+--
+-- Season 2 M+ rotation (8 dungeons total: 4 promoted + 3 returning legacy + 1 new):
+--   Promoted:   Murder Row, Den of Nalorakk, The Blinding Vale, Voidscar Arena
+--   Returning:  Kings' Rest, Temple of Sethraliss, Ruby Life Pools
+--   New:        Altar of Fangs
 
 KwikTip.DUNGEONS = {
 
@@ -67,7 +72,7 @@ KwikTip.DUNGEONS = {
         location   = "Eversong Woods",
         season     = "midnight",
         type       = "level",
-        mythicPlus = true,
+        mythicPlus = false,
         bosses = {
             {
                 encounterID = 3056,  -- confirmed in-game
@@ -156,7 +161,7 @@ KwikTip.DUNGEONS = {
         location   = "Silvermoon City",
         season     = "midnight",
         type       = "level",
-        mythicPlus = false,
+        mythicPlus = true,
         bosses = {
             {
                 encounterID = 3101,  -- confirmed in-game
@@ -228,7 +233,7 @@ KwikTip.DUNGEONS = {
         location   = "Zul'Aman",
         season     = "midnight",
         type       = "level",
-        mythicPlus = false,
+        mythicPlus = true,
         bosses = {
             {
                 encounterID = 3207,  -- confirmed in-game
@@ -287,7 +292,7 @@ KwikTip.DUNGEONS = {
         location   = "Zul'Aman",
         season     = "midnight",
         type       = "level",
-        mythicPlus = true,
+        mythicPlus = false,
         bosses = {
             {
                 encounterID = 3212,
@@ -369,7 +374,7 @@ KwikTip.DUNGEONS = {
         location   = "Isle of Quel'Danas",
         season     = "midnight",
         type       = "max",
-        mythicPlus = true,
+        mythicPlus = false,
         bosses = {
             {
                 encounterID = 3071,  -- confirmed in-game
@@ -458,7 +463,7 @@ KwikTip.DUNGEONS = {
         location   = "Voidstorm",
         season     = "midnight",
         type       = "max",
-        mythicPlus = true,
+        mythicPlus = false,
         bosses = {
             {
                 encounterID = 3328,  -- confirmed in-game
@@ -524,7 +529,7 @@ KwikTip.DUNGEONS = {
         location   = "Harandar",
         season     = "midnight",
         type       = "max",
-        mythicPlus = false,
+        mythicPlus = true,
         bosses = {
             {
                 encounterID = 3199,  -- confirmed in-game
@@ -595,7 +600,7 @@ KwikTip.DUNGEONS = {
         location   = "Voidstorm",
         season     = "midnight",
         type       = "max",
-        mythicPlus = false,
+        mythicPlus = true,
         bosses = {
             {
                 encounterID = 3285,  -- confirmed in-game
@@ -655,7 +660,7 @@ KwikTip.DUNGEONS = {
         location   = "Thaldraszus",
         season     = "legacy",
         type       = "max",
-        mythicPlus = true,
+        mythicPlus = false,
         bosses = {
             {
                 encounterID = 2563,  -- confirmed in-game
@@ -732,7 +737,7 @@ KwikTip.DUNGEONS = {
         location   = "Icecrown",
         season     = "legacy",
         type       = "max",
-        mythicPlus = true,
+        mythicPlus = false,
         bosses = {
             {
                 encounterID = 1999,  -- confirmed in-game
@@ -800,7 +805,7 @@ KwikTip.DUNGEONS = {
         location   = "Argus",
         season     = "legacy",
         type       = "max",
-        mythicPlus = true,
+        mythicPlus = false,
         bosses = {
             {
                 encounterID = 2065,  -- confirmed in-game
@@ -1148,7 +1153,7 @@ KwikTip.DUNGEONS = {
         location   = "Spires of Arak",
         season     = "legacy",
         type       = "max",
-        mythicPlus = true,
+        mythicPlus = false,
         bosses = {
             {
                 encounterID = 1698,  -- confirmed in-game
@@ -1214,6 +1219,264 @@ KwikTip.DUNGEONS = {
             { subzone = "Lower Quarter",      bossIndex = 1 },  -- Ranjit; confirmed in-game
             { subzone = "Grand Spire",        bossIndex = 2 },  -- Araknath (mapID 601); confirmed in-game
             { subzone = "The Overlook",       bossIndex = 3 },  -- Rukhran; confirmed in-game
+        },
+    },
+
+    -- --------------------------------------------------------
+    -- SEASON 2 MYTHIC+ — Returning Legacy Dungeons
+    -- instanceIDs/encounterIDs/uiMapIDs = 0 — TODO: verify in-game
+    -- Tip content sourced from method.gg + Wowhead guides (pre-launch research)
+    -- --------------------------------------------------------
+
+    {
+        instanceID = 0,     -- TODO: verify in-game (BfA dungeon, likely 1763)
+        uiMapID    = 0,     -- TODO: verify in-game
+        name       = "Kings' Rest",
+        location   = "Zuldazar",
+        season     = "legacy",
+        type       = "max",
+        mythicPlus = true,
+        bosses = {
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "The Council of Tribes",
+                tip         = "Yazma (purple): interrupt Shadow Bolt; dispel Hex. Pa'ku (blue): dodge Gust of Wind charge — sidestep the path. Akunda (green): spread Static Discharge puddles near edges. Kimbul (red): tank swap for Rending Strikes. Kill order: Yazma → Pa'ku → Kimbul → Akunda.",
+                notes = {
+                    { role = "interrupt", text = "Yazma: Shadow Bolt." },
+                    { role = "general",   text = "Dodge Pa'ku's Gust of Wind charge path. Akunda: spread Static Discharge puddles." },
+                    { role = "healer",    text = "Dispel Yazma's Hex." },
+                    { role = "tank",      text = "Kimbul: swap on Rending Strikes stacks." },
+                    { role = "dps",       text = "Kill order: Yazma → Pa'ku → Kimbul → Akunda." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Shadow of Zul",
+                tip         = "Interrupt Skeletal Allies (adds) every cast. Spread 8 yards for Shadow Bolt Volley. Dodge Dark Revelation ground zones. Kill Dark Manifestation adds before they channel. Tank: defensive for Shadowstrike (bleed + teleport behind tank).",
+                notes = {
+                    { role = "interrupt", text = "Skeletal Allies add casts." },
+                    { role = "general",   text = "Spread 8 yards for Shadow Bolt Volley. Dodge Dark Revelation zones." },
+                    { role = "tank",      text = "Defensive for Shadowstrike — bleed + teleport behind." },
+                    { role = "dps",       text = "Kill Dark Manifestation adds before they complete their channel." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Mchimba the Embalmer",
+                tip         = "Interrupt Noxious Bolt. Purge Bloodrage (enrage) immediately. Dispel Plague of Decay from random players. Dodge Lingering Plague pools on the floor. Tank: defensive for Rend Flesh — stacking bleed.",
+                notes = {
+                    { role = "interrupt", text = "Noxious Bolt." },
+                    { role = "tank",      text = "Defensive for Rend Flesh — stacking bleed." },
+                    { role = "healer",    text = "Dispel Plague of Decay." },
+                    { role = "dps",       text = "Purge Bloodrage enrage immediately." },
+                    { role = "general",   text = "Dodge Lingering Plague ground pools." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "King Dazar",
+                tip         = "Kill Order of the Crown adds (Grimoire Guardians) before they empower Dazar. Interrupt Guardians' Shadow Wrath. Dodge Lashing Shadows tendrils. Tank: swap at 2 stacks of Crushing Stomp (armor reduction).",
+                notes = {
+                    { role = "general",   text = "Kill Order of the Crown adds before they empower Dazar." },
+                    { role = "tank",      text = "Swap at 2 stacks of Crushing Stomp — stacking armor reduction." },
+                    { role = "interrupt", text = "Guardians: Shadow Wrath." },
+                    { role = "general",   text = "Dodge Lashing Shadows tendrils." },
+                },
+            },
+        },
+        trash = {
+            { npcID = 0, name = "Skeletal Ally",            tip = "Interrupt Dark Mend (heals other adds) and Shadow Bolt." },
+            { npcID = 0, name = "Charged Skull",            tip = "Charged Pulse AoE on death — stagger kills or kite out." },
+            { npcID = 0, name = "Golden Scarab",            tip = "Carrion Swarm: frontal cone blind — tank faces away." },
+            { npcID = 0, name = "Grimoire Guardian",        tip = "Interrupt Shadow Wrath; avoid Lashing Shadows ground zones." },
+            { npcID = 0, name = "Dark Manifestation",        tip = "Channels powerful group damage — interrupt or kill immediately." },
+            { npcID = 0, name = "King's Guard",              tip = "Shield Bash stuns the tank — use stun break or CC to prevent." },
+        },
+    },
+    {
+        instanceID = 0,     -- TODO: verify in-game (BfA dungeon)
+        uiMapID    = 0,     -- TODO: verify in-game
+        name       = "Temple of Sethraliss",
+        location   = "Vol'dun",
+        season     = "legacy",
+        type       = "max",
+        mythicPlus = true,
+        bosses = {
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                altNpcIDs   = { 0 },
+                name        = "Adderis and Aspix",
+                tip         = "Keep Adderis and Aspix within 20 yards or they enrage (Covenant of Serpentis). Kill Adderis first (melee, Conductive Strike). Aspix: interrupt Lightning Bolt; dodge Chain Lightning spread. Tank: defensive for Aspix's Static Cling (nature DoT).",
+                notes = {
+                    { role = "general",   text = "Keep both bosses within 20 yards or they enrage (Covenant of Serpentis)." },
+                    { role = "dps",       text = "Kill Adderis first — Conductive Strike deals significant damage." },
+                    { role = "interrupt", text = "Aspix: Lightning Bolt." },
+                    { role = "tank",      text = "Defensive for Aspix's Static Cling — nature DoT." },
+                    { role = "general",   text = "Aspix: dodge Chain Lightning spread." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Merektha",
+                tip         = "Dodge Sand Trap circles and avoid the sandstorm perimeter. Dispel Noxious Cloud. When targeted by Infected Bite, a second player takes 50% reduced damage if they stand in the line between Merektha and the target. Tank: defensive for Toxic Fang (nature DoT + healing absorb).",
+                notes = {
+                    { role = "general",   text = "Dodge Sand Trap circles. Stay away from the sandstorm room perimeter." },
+                    { role = "healer",    text = "Dispel Noxious Cloud." },
+                    { role = "general",   text = "Infected Bite target: a second player standing in the line between Merektha and the target takes 50% reduced damage." },
+                    { role = "tank",      text = "Defensive for Toxic Fang — nature DoT + healing absorb." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Galvazzt",
+                tip         = "Interrupt Shadow Bolt. Purge Galvanizing Shield (75% DR) immediately. Avoid Dark Eruption ground zones. At 100 energy: Expel Void — destroy spawned Void Essence orbs before they reach Galvazzt (each orb absorbed heals for 10%). Tank: defensive for Shadowcleave.",
+                notes = {
+                    { role = "interrupt", text = "Shadow Bolt." },
+                    { role = "dps",       text = "Purge Galvanizing Shield. Destroy Void Essence orbs during Expel Void (100 energy)." },
+                    { role = "general",   text = "Avoid Dark Eruption ground zones." },
+                    { role = "tank",      text = "Defensive for Shadowcleave." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Avatar of Sethraliss",
+                tip         = "Storm phase: kill Eternal Flame Conduits to stop lightning totems. Interrupt Conduit's Static Burst. Rotating lightning beams: move with the rotation to avoid. Tank: swap after 2 stacks of Charged Blade (nature DoT + increased damage taken).",
+                notes = {
+                    { role = "general",   text = "Storm phase: kill Eternal Flame Conduits to stop lightning totems. Move with rotating lightning beams." },
+                    { role = "interrupt", text = "Conduits: Static Burst." },
+                    { role = "tank",      text = "Swap at 2 stacks of Charged Blade — nature DoT + increased damage taken." },
+                },
+            },
+        },
+        trash = {
+            { npcID = 0, name = "Sethraliss Devotee",      tip = "Interrupt Shadow Mend — heals nearby trash. Dispel Shadow Word: Pain." },
+            { npcID = 0, name = "Spectral Berserker",      tip = "Enrages below 40% — soothe or kite. Whirlwind — melee step out." },
+            { npcID = 0, name = "Spectral Hexer",          tip = "Interrupt Hex (priority) and Lightning Bolt (spare)." },
+            { npcID = 0, name = "Spectral Farseer",        tip = "Interrupt Chain Heal — top priority; this mob chains to other trash. Spare interrupts on Lightning Bolt." },
+            { npcID = 0, name = "Dustbound Warrior",       tip = "Shield Block gives 80% physical DR — interrupt or purge the buff." },
+            { npcID = 0, name = "Void-Touched Scalehide",  tip = "Void Lash frontal — tank faces away. Void Puddle on death — move out." },
+        },
+    },
+    {
+        instanceID = 0,     -- TODO: verify in-game (DF dungeon)
+        uiMapID    = 0,     -- TODO: verify in-game
+        name       = "Ruby Life Pools",
+        location   = "The Waking Shores",
+        season     = "legacy",
+        type       = "max",
+        mythicPlus = true,
+        bosses = {
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Melidrussa Chillworn",
+                tip         = "Dodge Chilling Aoe circles. Dispel Piercing Chill (magic — heavy single-target DoT). Kill Frostforged Magus adds quickly — interrupt their Frost Lance. Tank: defensive for Frigid Slam — large hit + frontal ice patch on impact.",
+                notes = {
+                    { role = "general",   text = "Dodge Chilling AoE ground circles." },
+                    { role = "healer",    text = "Dispel Piercing Chill — magic debuff with heavy single-target DoT." },
+                    { role = "dps",       text = "Kill Frostforged Magus adds; interrupt Frost Lance." },
+                    { role = "tank",      text = "Defensive for Frigid Slam — large hit + frontal ice patch." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Kokia Blazehoof",
+                tip         = "Stay stacked to soak Blazing Rush charges (charge fixes on a player and deals damage based on distance). Dodge Inferno Blast projectiles. At 100 energy: Lava Pool — run out of the expanding zone. Purge Molten Aegis (shield) on the boss. Tank: kite during Wrath of the Firelord (periodic flame patches).",
+                notes = {
+                    { role = "general",   text = "Stay stacked for Blazing Rush — damage scales with distance from the targeted player." },
+                    { role = "general",   text = "Dodge Inferno Blast projectiles. At 100 energy: run out of Lava Pool." },
+                    { role = "dps",       text = "Purge Molten Aegis shield from the boss." },
+                    { role = "tank",      text = "Kite during Wrath of the Firelord — periodic flame patches under you." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                altNpcIDs   = { 0 },
+                name        = "Kyrakka and Erkhart Stormvein",
+                tip         = "Stack for Storm Volley (shared damage). Dispel Raging Winds on the tank. Purge Tempest Barrier (shield). Land targeted players drop Searing Tempest puddles — place at edges. At 50%: Kyrakka flies away; kill Erkhart quickly to bring her back. Tank: swap on Erkhart's Thunderstrike (physical + nature DoT).",
+                notes = {
+                    { role = "general",   text = "Stack for Storm Volley — damage splits between players. Place Searing Tempest puddles at room edges." },
+                    { role = "dps",       text = "Purge Tempest Barrier shield. Phase 2 (50%): burn Erkhart to bring Kyrakka back." },
+                    { role = "tank",      text = "Swap on Thunderstrike — physical hit + nature DoT." },
+                    { role = "healer",    text = "Dispel Raging Winds (magic) from the tank." },
+                },
+            },
+        },
+        trash = {
+            { npcID = 0, name = "Frostforged Magus",      tip = "Interrupt Frost Lance (top priority) and Frostbolt (spare)." },
+            { npcID = 0, name = "Frostforged Zealot",     tip = "Fan of Frost: frontal cone bleed — tank faces away. Purge Shield of Frost on nearby mobs." },
+            { npcID = 0, name = "Frostforged Acolyte",    tip = "Frost Nova roots all players — use root breaks or dispel magic." },
+            { npcID = 0, name = "Proto-drake Handler",    tip = "Dodge Flare circles from the proto-drake's fire breath." },
+            { npcID = 0, name = "Primalist Flamedancer",  tip = "Interrupt Fireball. Avoid Flamestrike ground zone." },
+            { npcID = 0, name = "Primalist Stormcaster",  tip = "Interrupt Lightning Bolt. Dispel Static Shock from random players." },
+            { npcID = 0, name = "Thunderspine Raptor",    tip = "Thunderous Stomp interrupts casters — stop casting when it winds up." },
+        },
+    },
+    {
+        instanceID = 0,     -- TODO: verify in-game (new 12.1 mega-dungeon)
+        uiMapID    = 0,     -- TODO: verify in-game
+        name       = "Altar of Fangs",
+        location   = "The Coiled Isle",
+        season     = "midnight",
+        type       = "max",
+        mythicPlus = true,
+        bosses = {
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Arashi, the Sundered Sky",
+                tip         = "Dodge Tempest's Wrath expanding rings — Arashi targets random players. Stack to soak Lightning Rod chains. Spread for Hurricane zones (avoid overlapping). Interrupt Squall (knockback). Tank: defensive for Zephyr Strike (wind damage + knockback).",
+                notes = {
+                    { role = "general",   text = "Dodge Tempest's Wrath expanding rings." },
+                    { role = "general",   text = "Stack to soak Lightning Rod chain damage." },
+                    { role = "general",   text = "Spread for Hurricane zones — avoid overlapping." },
+                    { role = "tank",      text = "Defensive for Zephyr Strike — wind damage + knockback." },
+                    { role = "interrupt", text = "Squall — knockback channel." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Siela, the Soulforger",
+                tip         = "Kill Soulforged Anvil add before it completes its channel — if it finishes, it grants boss permanent damage. Dodge Molten Forge floor zones. Interrupt Searing Strike. Purge Forge Shield on boss. Tank: defensive for Anvil Strike (armor reduction stacking). Tank swap on Soulrend (shares damage between tanks).",
+                notes = {
+                    { role = "general",   text = "Dodge Molten Forge ground zones." },
+                    { role = "dps",       text = "Kill Soulforged Anvil add before its channel completes. Purge Forge Shield." },
+                    { role = "tank",      text = "Defensive for Anvil Strike — stacking armor reduction. Swap on Soulrend." },
+                    { role = "interrupt", text = "Searing Strike." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Xal'atath",
+                tip         = "Intercept Void Orbs — each orb reaching Xal'atath grants her a stacking damage buff (Void Infusion). Spread 6 yards for Void Bolt. Kill Nullification adds that spawn at 66%/33%. Dodge Oblivion's Reach tentacle ground lines. Tank: swap at 2 stacks of Shadowrend (magic DoT + increasing damage taken). Healer: dispel Void Corruption on random players.",
+                notes = {
+                    { role = "general",   text = "Intercept Void Orbs — each reaching Xal'atath stacks Void Infusion (damage buff)." },
+                    { role = "general",   text = "Spread 6 yards for Void Bolt. Dodge Oblivion's Reach tentacle lines." },
+                    { role = "dps",       text = "Kill Nullification adds at 66%/33%." },
+                    { role = "tank",      text = "Swap at 2 stacks of Shadowrend — magic DoT + increased damage taken." },
+                    { role = "healer",    text = "Dispel Void Corruption from random players." },
+                },
+            },
+        },
+        trash = {
+            { npcID = 0, name = "Void Touched Invoker",    tip = "Interrupt Void Bolt (top priority). Dispel Void Shell magic shield." },
+            { npcID = 0, name = "Fang Cultist",            tip = "Interrupt Dark Pact — heals nearby trash for 30% HP. Spare interrupts on Shadow Bolt." },
+            { npcID = 0, name = "Soulforged Guardian",    tip = "Frontal cone (Soul Cleave) — tank faces away. Dodge ground fissures." },
+            { npcID = 0, name = "Animated Storm",          tip = "Enrages — soothe or CC. Static Pulse AoE — group defensives." },
+            { npcID = 0, name = "Voidcrazed Raider",       tip = "Chaos Strike: heavy tank hit + bleed — use a defensive. Dispel bleed." },
+            { npcID = 0, name = "Nullification Warden",    tip = "Purge Nullification Barrier from nearby mobs (absorbs damage). Interrupt Null Bolt." },
         },
     },
 
