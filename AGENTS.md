@@ -36,7 +36,7 @@ Two concerns are handled separately: **game data** (IDs, names) and **tip conten
 **uiMapID values must be verified in-game.** External sources are unreliable for `C_Map.GetBestMapForUnit("player")` values:
 - Wowhead zone IDs (`/zone=XXXXX`) are **not** the same as uiMapIDs — they use a different ID space
 - LittleWigs/BigWigs use instanceMapIDs (from `GetInstanceInfo()`), which also differ from uiMapIDs
-- wow.tools shut down in May 2025
+- wow.tools was down May 2025 but is back up (verified 2026-08-11 via HTTP 200) — try it before falling back
 - wago.tools maps are JS-rendered and not programmatically queryable
 
 The only reliable method is running this command while standing inside the dungeon:
