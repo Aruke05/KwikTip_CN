@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  World of Warcraft: Midnight (12.0.1)
+  World of Warcraft: Midnight (12.1.0)
 </p>
 
 A World of Warcraft: Midnight addon that displays contextual tips for dungeons, raids, delves, and Timewalking. As your group moves through an instance, KwikTip surfaces relevant boss and trash tips in a small, unobtrusive HUD — no interaction required mid-pull.
@@ -36,8 +36,8 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 - **Sub-zone aware HUD** — the HUD updates automatically as your group moves through each area; boss room tips surface on entry before the encounter starts, and trash sections in supported dungeons get their own contextual tips
 - **Role-specific notes** — tips are categorized by role (tank, healer, DPS, general) and interrupt priority, each with a distinct color and icon so you can find what's relevant at a glance
 - **M+ affix display** — active keystone affix names and tips are shown in the HUD while waiting between encounters
-- **Raid support** — difficulty-aware tips for the Midnight Season 1 raids (The Voidspire, March on Quel'Danas, The Dreamrift). Enabled by default; tips show automatically inside raid instances
-- **Delve support** — boss tips for all 10 Midnight delves (opt-in via the **Enable in Delves** setting)
+- **Raid support** — difficulty-aware tips for Season 1 raids (The Voidspire, March on Quel'Danas, The Dreamrift) and a prepared skeleton for the Season 2 raid (Venomous Abyss — opens Aug 18). Enabled by default; tips show automatically inside raid instances
+- **Delve support** — boss tips for all 10 Season 1 delves (opt-in via the **Enable in Delves** setting), plus 3 Season 2 delve stubs (Ring of Glory, Gnarldor Isle, Venomfall Deeps)
 - **Timewalking support** — all 35 Timewalking dungeons are registered by expansion pool (Burning Crusade through Legion); boss tips are being filled in pool by pool
 - **Custom notes** — save your own per-subzone notes that appear alongside tips in the HUD
 - **Persistent Tip Window** — optionally keep the HUD visible throughout a run
@@ -52,7 +52,22 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 
 Boss tips are present for every dungeon, raid wing, delve, and (where filled) Timewalking entry below. Full area-tip coverage — boss rooms and trash sections — is live for the Midnight and legacy M+ dungeons.
 
-### Season 1 Mythic+ Rotation (8 dungeons)
+### Season 2 Mythic+ Rotation (8 dungeons, Patch 12.1)
+
+| Dungeon | Type |
+|---|---|
+| Altar of Fangs | New — Midnight (3 bosses) |
+| Murder Row | Promoted — Midnight |
+| Den of Nalorakk | Promoted — Midnight |
+| The Blinding Vale | Promoted — Midnight |
+| Voidscar Arena | Promoted — Midnight (method.gg guide pending) |
+| Kings' Rest | Legacy — BfA (method.gg guide pending) |
+| Temple of Sethraliss | Legacy — BfA |
+| Ruby Life Pools | Legacy — Dragonflight |
+
+All 8 dungeons have boss tips + role notes. Trash tips are complete for 7/8 (Voidscar Arena pending). Of the 8, 4 dungeons still have `instanceID = 0` / `uiMapID = 0` (Kings' Rest, Temple of Sethraliss, Ruby Life Pools, Altar of Fangs) — IDs will auto-fill from the in-game log once run with `/kwik debuglog` and `tools/sync_ids.py --apply`. Altar of Fangs and Ruby Life Pools tips were rewritten from the live S2 method.gg guides; Blinding Vale cross-verified with corrections; Murder Row, Den of Nalorakk, and Temple of Sethraliss confirmed clean. Voidscar Arena and Kings' Rest tips stand on Tactyks' YouTube S2 guides until method.gg publishes.
+
+### Season 1 Mythic+ Rotation (still supported)
 
 | Dungeon | Type |
 |---|---|
@@ -65,28 +80,20 @@ Boss tips are present for every dungeon, raid wing, delve, and (where filled) Ti
 | Seat of the Triumvirate | Legacy |
 | Skyreach | Legacy |
 
-### Additional Midnight Dungeons (not in M+)
-
-These are in the current season's content but are not part of the keystone rotation. They have full boss tips; trash/area tips vary.
-
-| Dungeon | Type |
-|---|---|
-| Murder Row | Level-up (81–88) |
-| Den of Nalorakk | Level-up (81–88) |
-| The Blinding Vale | Max level |
-| Voidscar Arena | Max level |
+Full boss + trash tips, all IDs confirmed in-game.
 
 ### Raids
 
 | Raid Wing | Notes |
 |---|---|
-| The Voidspire | 6 bosses — tips + role notes |
-| March on Quel'Danas | uiMapID pending in-game verification |
-| The Dreamrift | tips + role notes |
+| The Voidspire (S1) | 6 bosses — tips + role notes |
+| March on Quel'Danas (S1) | uiMapID pending in-game verification |
+| The Dreamrift (S1) | tips + role notes |
+| **Venomous Abyss (S2)** | **Opens Aug 18, 2026 — 8-boss skeleton present, tips TODO.** |
 
-### Delves (10)
+### Delves (13)
 
-Collegiate Calamity, The Shadow Enclave, Parhelion Plaza, Twilight Crypts, Atal'Aman, The Darkway, The Grudge Pit, Gulf of Memory, Sunkiller Sanctum, Shadowguard Point. Boss tips for all; **opt-in** via the **Enable in Delves** setting.
+10 Season 1 delves (Collegiate Calamity, The Shadow Enclave, Parhelion Plaza, Twilight Crypts, Atal'Aman, The Darkway, The Grudge Pit, Gulf of Memory, Sunkiller Sanctum, Shadowguard Point) — boss tips for all; **opt-in** via the **Enable in Delves** setting. 3 Season 2 delve stubs added (The Ring of Glory, Gnarldor Isle, Venomfall Deeps — Nemesis) — boss tips TODO, IDs 0.
 
 ### Timewalking (35 dungeons)
 
