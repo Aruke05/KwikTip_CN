@@ -167,7 +167,7 @@ KwikTip.DUNGEONS = {
                 encounterID = 3101,  -- confirmed in-game
                 npcID       = 252458,
                 name        = "Kystia Manaheart",
-                tip         = "Focus Nibbles at ~20% HP — he turns friendly and channels Destabilized (heavy group damage + 100% dmg amp window); keep healer CDs and DPS burst ready. Dodge Fel Nova AoE; face Nibbles away for her Fel Spray rotating frontal; purge Fog Felshield stacks to enable Nibbles focus; interrupt/CC the 5 Mirror Images; dispel Corroding Spittle asap; beware Chaos Barrage (tank-targeted, jumps to players).",
+                tip         = "Focus Nibbles at ~20% HP — he turns friendly and channels Destabilized (heavy group damage + 100% dmg amp window); keep healer CDs and DPS burst ready. Dodge Fel Nova AoE; face Nibbles away for her Fel Spray rotating frontal; purge Felshield stacks to enable Nibbles focus; interrupt/CC the 5 Mirror Images; dispel Corroding Spittle asap; beware Chaos Barrage (tank-targeted, jumps to players).",
                 notes = {
                     { role = "healer",    text = "Major CDs when Nibbles channels Destabilized at 20% — heavy group damage during the 100% dmg amp window." },
                     { role = "general",   text = "Dodge Fel Nova AoE; face Nibbles away so the group avoids her Fel Spray rotating frontal." },
@@ -543,43 +543,47 @@ KwikTip.DUNGEONS = {
                 npcID       = 243028,  -- Meittik
                 altNpcIDs   = { 243029, 243030 },  -- Kezkitt, Lekshi
                 name        = "Lightblossom Trinity",
-                tip         = "Block Lightblossom Beams to prevent Light-Gorged stacks on flowers before they detonate; all three bosses share damage. Avoid Fertile Loam puddles (50% slow). Interrupt Lightsower Dash and Thornblade (Lekshi bleeds).",
+                tip         = "Position the bosses near one of the 3 Fertile Loam circles. When Lightblossom Beam is cast, the circles become soaks — tank + 2 others step in ASAP to prevent the Lightbloom Overgrowth AoE. After the channel they turn into Light-Scorched Earth area denial — reposition before the next Bedrock Slam (tank defensive). Interrupt Kezkitt's Light Bolt; run out when Lekshi jumps to you on Thornblade (bleed), and dodge the Lightsower Dash line through all 3 circles.",
                 notes = {
-                    { role = "general",   text = "Block Lightblossom Beams to prevent Light-Gorged stacks on flowers; all three bosses share damage." },
-                    { role = "general",   text = "Avoid Fertile Loam puddles — 50% movement speed slow." },
-                    { role = "interrupt", text = "Lightsower Dash — stops seed planting. Thornblade (Lekshi) — stops bleed application." },
+                    { role = "general",   text = "Lightblossom Beam turns the 3 Fertile Loam circles into soaks — step in ASAP to stop the Lightbloom Overgrowth AoE; after the channel they become Light-Scorched Earth area denial." },
+                    { role = "tank",      text = "Use a defensive on Bedrock Slam, then reposition the bosses away from the Light-Scorched Earth before the next one." },
+                    { role = "interrupt", text = "Keep an interrupt rotation on Kezkitt's random-target Light Bolt. Dodge the Lightsower Dash line that passes through all 3 circles." },
+                    { role = "general",   text = "If targeted by Thornblade (Lekshi) move to avoid cleaving allies, run out of the effect when Lekshi jumps to you, and use a defensive or bleed cleanse on the DoT." },
                 },
             },
             {
                 encounterID = 3200,  -- confirmed in-game
                 npcID       = 244887,
                 name        = "Ikuzz the Light Hunter",
-                tip         = "Destroy Bloodthorn Roots quickly — rooted players are also hit by Crushing Footfalls; Bloodthirsty Gaze fixates Ikuzz on a player for 10s — maintain distance or be Incised.",
+                tip         = "Avoid the Bloodthorn Roots on the ground while the boss is in Lightcrazed Frenzy at 50% health — cleave them down or use a freedom effect if stepped on or pushed in. Watch position during Verdant Stomp so you're not knocked into a root. Bloodthirsty Gaze fixates Ikuzz on a random player — run away and kite him over existing roots to destroy them. Healers: CDs up for the pulsing Thorncaller Roar raid damage.",
                 notes = {
-                    { role = "general",   text = "Bloodthirsty Gaze fixates Ikuzz on a player for 10s — that player maintains distance." },
-                    { role = "dps",       text = "Destroy Bloodthorn Roots quickly — rooted players are also hit by Crushing Footfalls." },
+                    { role = "general",   text = "Bloodthirsty Gaze fixates Ikuzz on a random player — run from the boss and kite him over existing roots to destroy them." },
+                    { role = "dps",       text = "Avoid Bloodthorn Roots on the ground — especially dangerous during Lightcrazed Frenzy (50% HP). If rooted, cleave the roots or use a freedom effect; after Verdant Stomp, group up so the roots that spawn on players can be easily cleaved." },
+                    { role = "healer",    text = "Be ready with cooldowns for the pulsing raid damage from Thorncaller Roar." },
                 },
             },
             {
                 encounterID = 3201,  -- confirmed in-game
                 npcID       = 245912,
                 name        = "Lightwarden Ruia",
-                tip         = "Heal players to full to clear Grievous Thrash bleeds. Pulverizing Strikes marks several players — spread marked players apart (100% increased damage taken from subsequent strikes). Don't stand in Lightfire Beams (6s silence). At 40%, Ruia enters Haranir form and rapidly cycles all abilities.",
+                tip         = "Moonkin form (100-70%): interrupt Warden's Wrath to cut tank damage; avoid Lightfall circles; Lightfire debuffs 3 players — use defensives and avoid the tornadoes it shoots on expiry (stack up to dodge). Bear form (70-40%): Mangling Claws passive tanks watch; clear Grievous Thrash bleeds; spread on Pulverizing Strikes so the frontal doesn't cleave allies. Below 40% Ruia in Haranir form cycles Lightfire, Grievous Thrash, Lightfall and Pulverizing Strikes every 8s — use CDs.",
                 notes = {
-                    { role = "general",   text = "Pulverizing Strikes marks several players — spread marked players apart (100% increased damage taken from subsequent strikes)." },
-                    { role = "general",   text = "Don't stand in Lightfire Beams — 6s silence." },
-                    { role = "healer",    text = "Heal players to full to clear Grievous Thrash bleeds; at 40% Haranir form cycles all abilities rapidly — use CDs." },
+                    { role = "interrupt", text = "Keep interrupts on Warden's Wrath (Moonkin form) to mitigate tank damage." },
+                    { role = "general",   text = "Avoid the circles from Lightfall; if debuffed by Lightfire (3 players), stack up and dodge the tornadoes on expiry." },
+                    { role = "general",   text = "In bear form, spread out if targeted by Pulverizing Strikes so the frontal doesn't cleave allies; tanks watch the Mangling Claws passive." },
+                    { role = "healer",    text = "Use self-healing, bleed cleanses, or defensives to clear the Grievous Thrash bleed; below 40% Haranir form rotates all 4 abilities every 8s — CDs up." },
                 },
             },
             {
                 encounterID = 3202,  -- confirmed in-game
                 npcID       = 247676,
-                name        = "Ziekett",
-                tip         = "Intercept Lightbloom's Essence globules before the boss absorbs them — each absorbed globule grants a Florescent Outburst stack (stacking shield); touching them yourself grants Lightbloom's Might (+dmg/healing). Position boss's Lightbeam sweep over Dormant Lashers to vaporize them; dodge the beam and Lightsap puddles. Tank: defensive on Thornspike — stacking impale + bleed.",
+                name        = "Ziekket",
+                tip         = "Soak the Lightbloom's Essence orbs before they reach the boss — each absorbed orb triggers a Fluorescent Outburst and a stacking shield; touching one yourself grants Lightbloom's Might (dmg/healing up, Holy DoT). Cleave down the adds from Awaken the Lightbloom (interrupt Lightspore Shot); when they go Dormant, the boss's Concentrated Lightbeam liquefies them into Lightsap puddles — avoid the beam and puddles. Healers: Oozing Xylem pulses group damage all fight. Tank: defensive + bleed cleanse on Thornspike (impale + bleed, knockback).",
                 notes = {
-                    { role = "general",   text = "Intercept Lightbloom's Essence globules — each one the boss absorbs grants a stacking shield (Florescent Outburst); touching them yourself grants Lightbloom's Might." },
-                    { role = "general",   text = "Position boss's Lightbeam sweep over Dormant Lashers to vaporize them; dodge the beam and Lightsap puddles." },
-                    { role = "tank",      text = "Use a defensive on Thornspike — it applies a stacking impale + bleed." },
+                    { role = "general",   text = "Soak the Lightbloom's Essence orbs evenly before they reach the boss — the boss absorbing one triggers a Fluorescent Outburst (AoE + stacking shield); touching one yourself grants Lightbloom's Might (+10% dmg/healing, Holy DoT)." },
+                    { role = "dps",       text = "Cleave down the adds from Awaken the Lightbloom, interrupting Lightspore Shot. Once the lashers go Dormant, position the boss's Concentrated Lightbeam over them to liquefy them into Lightsap puddles — keep the boss and adds near the platform edge and avoid the beam/puddles." },
+                    { role = "healer",    text = "Oozing Xylem pulses group-wide Holy damage for the whole encounter — keep everyone topped." },
+                    { role = "tank",      text = "Use a defensive or bleed cleanse on Thornspike — it impales you, applies a bleed DoT, and knocks you back." },
                 },
             },
         },
@@ -596,7 +600,7 @@ KwikTip.DUNGEONS = {
             { subzone = "The Luminous Garden",  bossIndex = 1 },  -- Lightblossom Trinity; confirmed in-game
             { subzone = "The Gilded Tangle",    bossIndex = 2 },  -- Ikuzz the Light Hunter; confirmed in-game
             { subzone = "Warden's Retreat",     bossIndex = 3 },  -- Lightwarden Ruia; confirmed in-game
-            { subzone = "Conviction's Crucible", bossIndex = 4 }, -- Ziekett; confirmed in-game
+            { subzone = "Conviction's Crucible", bossIndex = 4 }, -- Ziekket; confirmed in-game
         },
     },
     {
@@ -1373,58 +1377,72 @@ KwikTip.DUNGEONS = {
                 npcID       = 0,
                 altNpcIDs   = { 0 },
                 name        = "Adderis and Aspix",
-                tip         = "Keep Adderis and Aspix within 20 yards or they enrage (Covenant of Serpentis). Kill Adderis first (melee, Conductive Strike). Aspix: interrupt Lightning Bolt; dodge Chain Lightning spread. Tank: defensive for Aspix's Static Cling (nature DoT).",
+                tip         = "Storm Blessed immunity swaps between the duo at 40% HP each — damage whoever lacks the buff. Gale Force knocks everyone back (back into a wall to stop) then always leads into Thunder And Lightning: collapse in melee to split the soak. Drop Tempest Winds puddles away from the group; healers top Gust targets. Tank: defensive when Adderis gains Overload. Kill Adderis first — Aspix enters Frenzy (more frequent Gust/Gale Force/Tempest Winds) after.",
                 notes = {
-                    { role = "general",   text = "Keep both bosses within 20 yards or they enrage (Covenant of Serpentis)." },
-                    { role = "dps",       text = "Kill Adderis first — Conductive Strike deals significant damage." },
-                    { role = "interrupt", text = "Aspix: Lightning Bolt." },
-                    { role = "tank",      text = "Defensive for Aspix's Static Cling — nature DoT." },
-                    { role = "general",   text = "Aspix: dodge Chain Lightning spread." },
+                    { role = "general",   text = "Storm Blessed immunity swaps between bosses at 40% HP — attack the one not currently immune." },
+                    { role = "general",   text = "Gale Force knocks everyone away (use a wall to stop the slide), then always leads into Thunder And Lightning — collapse in melee to split the group soak damage." },
+                    { role = "general",   text = "Tempest Winds: the 2 debuffed players move out and drop the puddles away from the group." },
+                    { role = "tank",      text = "Use a defensive when Adderis has the Overload buff. After Adderis dies, Aspix Frenzies — mechanics fire more often." },
+                    { role = "healer",    text = "Spot-heal players targeted by Gust." },
                 },
             },
             {
                 encounterID = 0,  -- TODO: verify in-game
                 npcID       = 0,
                 name        = "Merektha",
-                tip         = "Dodge Sand Trap circles and avoid the sandstorm perimeter. Dispel Noxious Cloud. When targeted by Infected Bite, a second player takes 50% reduced damage if they stand in the line between Merektha and the target. Tank: defensive for Toxic Fang (nature DoT + healing absorb).",
+                tip         = "Tank: defensive for every Lightning Bite. Knot of Snakes targets 2 — stack in melee so one AoE CC destroys them, then cleave the Snakes. If targeted by Thunder Spit, drop the circle near the arena edge and use a defensive for the DoT. Healers: ready for Serpentstorm AoE; mind positioning so no one is knocked into puddles. At full energy she summons 3 Toxic Vipers + a Storm Serpent and Burrows — interrupt Poison Spit on adds (poison-dispel DoTs), keep constant AoE healing; tank Storm Serpents near the room edge (they drop a puddle on Storm Catalyst).",
                 notes = {
-                    { role = "general",   text = "Dodge Sand Trap circles. Stay away from the sandstorm room perimeter." },
-                    { role = "healer",    text = "Dispel Noxious Cloud." },
-                    { role = "general",   text = "Infected Bite target: a second player standing in the line between Merektha and the target takes 50% reduced damage." },
-                    { role = "tank",      text = "Defensive for Toxic Fang — nature DoT + healing absorb." },
+                    { role = "tank",      text = "Defensive for every Lightning Bite cast. Tank Storm Serpents near existing puddles / the room edge — they drop one when casting Storm Catalyst." },
+                    { role = "general",   text = "Knot of Snakes targets 2 players: stack in melee so a single AoE CC destroys them, then cleave down the Snakes under the boss." },
+                    { role = "general",   text = "Thunder Spit: drop your circle near the outside of the arena and use a defensive for the DoT. Watch positioning so Serpentstorm doesn't knock you into a puddle." },
+                    { role = "healer",    text = "Ready for Serpentstorm AoE. During the Burrow phase keep constant healing vs the persistent AoE. Interrupt Poison Spit on adds; poison-dispel DoTs as needed." },
+                    { role = "interrupt", text = "Adds: Poison Spit (during Burrow phase)." },
                 },
             },
             {
                 encounterID = 0,  -- TODO: verify in-game
                 npcID       = 0,
                 name        = "Galvazzt",
-                tip         = "Interrupt Shadow Bolt. Purge Galvanizing Shield (75% DR) immediately. Avoid Dark Eruption ground zones. At 100 energy: Expel Void — destroy spawned Void Essence orbs before they reach Galvazzt (each orb absorbed heals for 10%). Tank: defensive for Shadowcleave.",
+                tip         = "Lightning Spires spawn in sets of 3 — a NON-tank must step between each spire and the boss to cut his energy gain. If he hits full energy he casts Consume Charge, which wipes — never let a spire feed him. Spread defensives and healing CDs during the spire soaks (consistent heavy damage). Tank: move the boss around the room to make spires easier to soak, and reposition whenever Induction leaves a puddle.",
                 notes = {
-                    { role = "interrupt", text = "Shadow Bolt." },
-                    { role = "dps",       text = "Purge Galvanizing Shield. Destroy Void Essence orbs during Expel Void (100 energy)." },
-                    { role = "general",   text = "Avoid Dark Eruption ground zones." },
-                    { role = "tank",      text = "Defensive for Shadowcleave." },
+                    { role = "general",   text = "Lightning Spire sets of 3: a non-tank steps between spire and boss to stop energy gain. Full energy = Consume Charge (wipe)." },
+                    { role = "tank",      text = "Move the boss to make spires easier to soak, and reposition after an Induction puddle. Defensives during spire soaks." },
+                    { role = "healer",    text = "Spread healing cooldowns for the consistent heavy damage during Lightning Spire sets." },
                 },
             },
             {
                 encounterID = 0,  -- TODO: verify in-game
                 npcID       = 0,
                 name        = "Avatar of Sethraliss",
-                tip         = "Storm phase: kill Eternal Flame Conduits to stop lightning totems. Interrupt Conduit's Static Burst. Rotating lightning beams: move with the rotation to avoid. Tank: swap after 2 stacks of Charged Blade (nature DoT + increased damage taken).",
+                tip         = "Prioritize the Corrupted Guardian — defensive if it targets you with Vile Charge; tanks watch its Tainted Strike buster. On death it does a 20yd AoE and drops 3 Corrupted Lifeforce soaks — grab them (DPS, or a tank with defensive) before Corruption Burst: soaking stacks a healing-done + physical-damage-taken debuff. Interrupt Twisted Hexxer Flame Shock; drop Latent Hex outside the room. After the Essence Defiler dies, the healer focuses the Avatar while the group CCs and AoEs the kiting Faithless Tormentors — each one heals her 0.6% — and stays off their Shadowlash debuff.",
                 notes = {
-                    { role = "general",   text = "Storm phase: kill Eternal Flame Conduits to stop lightning totems. Move with rotating lightning beams." },
-                    { role = "interrupt", text = "Conduits: Static Burst." },
-                    { role = "tank",      text = "Swap at 2 stacks of Charged Blade — nature DoT + increased damage taken." },
+                    { role = "general",   text = "Kill Corrupted Guardian first. On death: 20yd AoE + 3 Corrupted Lifeforce soaks — grab them fast (before the 4.5s Corruption Burst). Soaking stacks a healing-done + physical-damage-taken debuff, so DPS soak it (or a tank with a defensive)." },
+                    { role = "general",   text = "Faithless Tormentors: CC + AoE them down during the 30s wave — each heals the Avatar 0.6%. Avoid their stacking Shadowlash debuff." },
+                    { role = "interrupt", text = "Twisted Hexxer: Flame Shock. Drop Latent Hex puddles outside the room." },
+                    { role = "tank",      text = "Defensive for the Corrupted Guardian's Vile Charge (if on you) and its Tainted Strike buster." },
+                    { role = "healer",    text = "Focus the Avatar during the Faithless Tormentor wave after the Essence Defiler dies; top the ticking soak damage." },
                 },
             },
         },
         trash = {
-            { npcID = 0, name = "Sethraliss Devotee",      tip = "Interrupt Shadow Mend — heals nearby trash. Dispel Shadow Word: Pain." },
-            { npcID = 0, name = "Spectral Berserker",      tip = "Enrages below 40% — soothe or kite. Whirlwind — melee step out." },
-            { npcID = 0, name = "Spectral Hexer",          tip = "Interrupt Hex (priority) and Lightning Bolt (spare)." },
-            { npcID = 0, name = "Spectral Farseer",        tip = "Interrupt Chain Heal — top priority; this mob chains to other trash. Spare interrupts on Lightning Bolt." },
-            { npcID = 0, name = "Dustbound Warrior",       tip = "Shield Block gives 80% physical DR — interrupt or purge the buff." },
-            { npcID = 0, name = "Void-Touched Scalehide",  tip = "Void Lash frontal — tank faces away. Void Puddle on death — move out." },
+            { npcID = 0, name = "Storm Adept",        tip = "Interrupt Lightning Bolt — targets a random player." },
+            { npcID = 0, name = "Sandswept Hunter",   tip = "CC to stop Arrow Barrage channel. Avoid Sandburst Arrow circles." },
+            { npcID = 0, name = "Barbed Krolusk",     tip = "Beware Serrated Charge on a random target — healing absorb; use a defensive or bleed cleanse if it lines up with other damage." },
+            { npcID = 0, name = "Shrouded Fang",      tip = "Starts in stealth near a neutral Rogue Krolusk. If stealth isn't broken it uses Poisoned Cheap Shot — interrupt or poison-dispel the stun. Beware Slither Strike's extra damage." },
+            { npcID = 0, name = "Sandfury Stonefist", tip = "Immune to CC. Dodge Ground Pound AoE + knockback. Tank: defensive for Sunder Slam damage amp." },
+            { npcID = 0, name = "Sand-Sworn Rider",   tip = "Immune to CC. Swarming Krolusks spawn adds using Serrated Charge (bleed). Play close to dodge the Scouring Sand frontal." },
+            { npcID = 0, name = "Krolusk Matriarch",  tip = "Immune to CC. Play close to dodge Scouring Sand frontal. Head Butt hits the tank (minor)." },
+            { npcID = 0, name = "Poisonous Viper",    tip = "Cytotoxin debuffs a random player — poison-dispel or defensive." },
+            { npcID = 0, name = "Lightning Serpent",  tip = "Tank: defensive when it gains Serpent's Stormcall buff." },
+            { npcID = 0, name = "Brood Tender",       tip = "Interrupt Venom Bolt on random targets (spare)." },
+            { npcID = 0, name = "Faithless Subjugator", tip = "Addle Mind disorients a random player — interrupt or Curse-dispel." },
+            { npcID = 0, name = "Agitated Nimbus",    tip = "Immune to CC. Purge Accumulate Charge stacks or eat a big Release Charge hit; defensives if it has multiple stacks. Avoid Call Lightning circles." },
+            { npcID = 0, name = "Imbued Stormcaller", tip = "Dispel Imbued Conduction every time — it stuns on expiry. Interrupt rotation on its Lightning Bolt." },
+            { npcID = 0, name = "Static Anomaly",     tip = "Spread so Spark Step AoE doesn't cleave. Tank: extra magic damage from Static Shock passive." },
+            { npcID = 0, name = "Orb Watcher",        tip = "Immune to CC. Tank: defensive for Venomous Slash, watch the circles it spawns. Healer: prepare for Caustic Stomp group hit + DoT." },
+            { npcID = 0, name = "Temple Disruptor",   tip = "Channels Essence Disruption into the nearest eye — interrupt or CC to stop it (only channels while the eye is active)." },
+            { npcID = 0, name = "Twisted Hexxer",     tip = "Immune to CC. Interrupt rotation on Flame Shock. Move Latent Hex AoE away from the group and avoid its puddle." },
+            { npcID = 0, name = "Faithless Tormentor", tip = "Fixates a random player (favours the healer). Beware Shadowlash stacking debuff — CC/kite." },
         },
     },
     {
