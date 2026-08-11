@@ -1145,6 +1145,61 @@ KwikTip.DUNGEONS = {
         },
     },
 
+    -- --------------------------------------------------------
+    -- MIDNIGHT SEASON 2 DELVES (new in 12.1)
+    -- Located on the Coiled Isle. All IDs are 0 — verify in-game
+    -- with /run print(C_Map.GetBestMapForUnit("player")).
+    -- Tip content TODO: source from Icy Veins + Wowhead S2 delve guides.
+    -- --------------------------------------------------------
+    {
+        instanceID = 0,  -- TODO: verify in-game
+        uiMapID    = 0,  -- TODO: verify in-game
+        name       = "The Ring of Glory",
+        location   = "The Coiled Isle",
+        season     = "midnight",
+        type       = "delve",
+        mythicPlus = false,
+        bosses = {
+            {
+                encounterID = 0,
+                name        = "(TODO — new S2 delve; verify boss name from Icy Veins S2 guide)",
+                tip         = "(TODO — source from Icy Veins + Wowhead S2 delve guides)",
+            },
+        },
+    },
+    {
+        instanceID = 0,  -- TODO: verify in-game
+        uiMapID    = 0,  -- TODO: verify in-game
+        name       = "Gnarldor Isle",
+        location   = "The Coiled Isle",
+        season     = "midnight",
+        type       = "delve",
+        mythicPlus = false,
+        bosses = {
+            {
+                encounterID = 0,
+                name        = "(TODO — new S2 delve; verify boss name from Icy Veins S2 guide)",
+                tip         = "(TODO — source from Icy Veins + Wowhead S2 delve guides)",
+            },
+        },
+    },
+    {
+        instanceID = 0,  -- TODO: verify in-game
+        uiMapID    = 0,  -- TODO: verify in-game
+        name       = "Venomfall Deeps",
+        location   = "The Coiled Isle",
+        season     = "midnight",
+        type       = "delve",
+        mythicPlus = false,
+        bosses = {
+            {
+                encounterID = 0,
+                name        = "(TODO — Nemesis delve; verify boss name from Icy Veins S2 guide)",
+                tip         = "(TODO — source from Icy Veins + Wowhead S2 Nemesis delve guide)",
+            },
+        },
+    },
+
     {
         instanceID = 1209,  -- confirmed in-game
         uiMapID    = 601,   -- confirmed in-game
@@ -1432,41 +1487,40 @@ KwikTip.DUNGEONS = {
         mythicPlus = true,
         bosses = {
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 0,  -- TODO: verify in-game (new 12.1 mega-dungeon)
                 npcID       = 0,
-                name        = "Arashi, the Sundered Sky",
-                tip         = "Dodge Tempest's Wrath expanding rings — Arashi targets random players. Stack to soak Lightning Rod chains. Spread for Hurricane zones (avoid overlapping). Interrupt Squall (knockback). Tank: defensive for Zephyr Strike (wind damage + knockback).",
+                name        = "Rav'i",
+                tip         = "Top group for Ravenous Stomp. Tank: watch Bone Pile where NO Twinfang corpse lands — move boss there before Ssscavenging or boss gains Feeding Frenzy. Group: soak all Messy Eater pools to break shield quickly. Spread loosely for Triple Shot (avoid cleaving allies). Dodge Regurgitate waves; disease dispel if hit. Tank: Hydrastrike is consistent high melee output — use defensives.",
                 notes = {
-                    { role = "general",   text = "Dodge Tempest's Wrath expanding rings." },
-                    { role = "general",   text = "Stack to soak Lightning Rod chain damage." },
-                    { role = "general",   text = "Spread for Hurricane zones — avoid overlapping." },
-                    { role = "tank",      text = "Defensive for Zephyr Strike — wind damage + knockback." },
-                    { role = "interrupt", text = "Squall — knockback channel." },
+                    { role = "general",   text = "Soak all Messy Eater pools — pooling damage breaks the shield quickly, easing healing pressure." },
+                    { role = "general",   text = "Spread loosely for Triple Shot to avoid cleaving allies. Dodge Regurgitate wave lines." },
+                    { role = "tank",      text = "Watch Bone Pile positioning — move boss to the pile WITHOUT a Twinfang corpse before Ssscavenging; wrong pile = Feeding Frenzy. Defensive for Hydrastrike." },
+                    { role = "healer",    text = "Top group for Ravenous Stomp. Disease dispel any Regurgitate hits." },
                 },
             },
             {
                 encounterID = 0,  -- TODO: verify in-game
                 npcID       = 0,
-                name        = "Siela, the Soulforger",
-                tip         = "Kill Soulforged Anvil add before it completes its channel — if it finishes, it grants boss permanent damage. Dodge Molten Forge floor zones. Interrupt Searing Strike. Purge Forge Shield on boss. Tank: defensive for Anvil Strike (armor reduction stacking). Tank swap on Soulrend (shares damage between tanks).",
+                name        = "The Writhing Coil",
+                tip         = "Healers: Synchronized Venom = consistent AoE ticking damage throughout. Interrupt EVERY Toxic Atrophy cast (3x back-to-back). Vindictive Onslaught: dodge Burrowing Charge line then point Venom Jet frontal away from group. Death Rattle: snap tethers FAST with movement — 5 Uncoiled Writhes fixate; CC + stack + DPS cooldowns. 3 Writhes cast Toxic Atrophy. After 25s: dodge Undermining shockwave lines. Tank: Tail Scythe is manageable; face boss away during Venom Jet.",
                 notes = {
-                    { role = "general",   text = "Dodge Molten Forge ground zones." },
-                    { role = "dps",       text = "Kill Soulforged Anvil add before its channel completes. Purge Forge Shield." },
-                    { role = "tank",      text = "Defensive for Anvil Strike — stacking armor reduction. Swap on Soulrend." },
-                    { role = "interrupt", text = "Searing Strike." },
+                    { role = "general",   text = "Vindictive Onslaught: dodge Burrowing Charge line attack, then point Venom Jet frontal away from the group." },
+                    { role = "general",   text = "Death Rattle: use movement to snap tethers quickly — stops heavy AoE. CC and stack all 5 Uncoiled Writhes; pump DPS cooldowns. Dodge Undermining shockwave lines after 25s." },
+                    { role = "healer",    text = "Synchronized Venom ticks constantly for most of the fight — steady AoE healing required." },
+                    { role = "interrupt", text = "Toxic Atrophy (3x back-to-back) — interrupt every cast. 3 Uncoiled Writhes also cast it; CC or interrupt." },
+                    { role = "tank",      text = "Tail Scythe is manageable. Face boss away from group during Venom Jet frontal." },
                 },
             },
             {
                 encounterID = 0,  -- TODO: verify in-game
                 npcID       = 0,
-                name        = "Xal'atath",
-                tip         = "Intercept Void Orbs — each orb reaching Xal'atath grants her a stacking damage buff (Void Infusion). Spread 6 yards for Void Bolt. Kill Nullification adds that spawn at 66%/33%. Dodge Oblivion's Reach tentacle ground lines. Tank: swap at 2 stacks of Shadowrend (magic DoT + increasing damage taken). Healer: dispel Void Corruption on random players.",
+                name        = "Zul'jan",
+                tip         = "Soak all 4 beams during Ritual Of The Fang — pop healing CDs. Clear Ritual Venom stacks BEFORE expiry: take physical damage (stand in Boneslicer — clears up to 8 stacks via initial hit + 7s DoT). Bloodletting drops puddles for 30s. Tank: defensive for Chop Down combo; puddles spawn if Ritual Venom stacks active. Avoid Axegrinder: 3 spinning axes bouncing around room.",
                 notes = {
-                    { role = "general",   text = "Intercept Void Orbs — each reaching Xal'atath stacks Void Infusion (damage buff)." },
-                    { role = "general",   text = "Spread 6 yards for Void Bolt. Dodge Oblivion's Reach tentacle lines." },
-                    { role = "dps",       text = "Kill Nullification adds at 66%/33%." },
-                    { role = "tank",      text = "Swap at 2 stacks of Shadowrend — magic DoT + increased damage taken." },
-                    { role = "healer",    text = "Dispel Void Corruption from random players." },
+                    { role = "general",   text = "Soak all 4 beams in Ritual Of The Fang. Clear Ritual Venom stacks before expiry — stand in Boneslicer (clears up to 8 stacks). Avoid Axegrinder spinning axes." },
+                    { role = "general",   text = "Bloodletting drops puddles for 30s — position thoughtfully." },
+                    { role = "tank",      text = "Defensive for Chop Down combo. If Ritual Venom stacks are active, puddles spawn — plan positioning." },
+                    { role = "healer",    text = "Healing cooldowns during Ritual Of The Fang beam soaks." },
                 },
             },
         },
@@ -1667,6 +1721,36 @@ KwikTip.DUNGEONS = {
                     { role = "interrupt", text = "Fearsome Cry and Essence Bolt from Colossal Horror adds (Haunting Essence channel)." },
                 },
             },
+        },
+    },
+
+    -- --------------------------------------------------------
+    -- MIDNIGHT SEASON 2 RAID — Venomous Abyss (8 bosses)
+    -- Opens Aug 18, 2026 (Patch 12.1 "Curse of Ula'tek").
+    -- Located in the Vaults of Atal'Utek, the Coiled Isle.
+    -- All instanceID/uiMapID/encounterIDs/boss names are TODO — verify
+    -- in-game after Aug 18, and source mechanics from:
+    --   Tier 1: Wowhead Venomous Abyss raid guide + Tactyks YouTube
+    --   Tier 2: Icy Veins Venomous Abyss guide
+    -- RF wings 2-4 unlock Aug 25, Sep 1, Sep 8.
+    -- --------------------------------------------------------
+    {
+        instanceID = 0,  -- TODO: verify in-game (opens Week of Aug 18)
+        uiMapID    = 0,  -- TODO: verify in-game (Vaults of Atal'Utek subzone)
+        name       = "Venomous Abyss",
+        location   = "The Coiled Isle",
+        season     = "midnight",
+        type       = "raid",
+        mythicPlus = false,
+        bosses = {
+            { encounterID = 0, npcID = 0, name = "(TODO — boss 1 of 8)", tip = "(TODO — verify from Wowhead/Icy Veins S2 raid guide + Tactyks YouTube)" },
+            { encounterID = 0, npcID = 0, name = "(TODO — boss 2 of 8)", tip = "(TODO)" },
+            { encounterID = 0, npcID = 0, name = "(TODO — boss 3 of 8)", tip = "(TODO)" },
+            { encounterID = 0, npcID = 0, name = "(TODO — boss 4 of 8)", tip = "(TODO)" },
+            { encounterID = 0, npcID = 0, name = "(TODO — boss 5 of 8)", tip = "(TODO)" },
+            { encounterID = 0, npcID = 0, name = "(TODO — boss 6 of 8)", tip = "(TODO)" },
+            { encounterID = 0, npcID = 0, name = "(TODO — boss 7 of 8)", tip = "(TODO)" },
+            { encounterID = 0, npcID = 0, name = "(TODO — boss 8 of 8)", tip = "(TODO)" },
         },
     },
 }
