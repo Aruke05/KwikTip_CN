@@ -275,7 +275,7 @@ function KwikTip:InitHUD()
 
     printBtn:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-        GameTooltip:SetText(L["Print tip to instance chat"], 1, 1, 1)
+        GameTooltip:SetText(L.TOOLTIP_PRINT, 1, 1, 1)
         GameTooltip:Show()
     end)
 
@@ -323,7 +323,7 @@ function KwikTip:InitHUD()
 
     local notePopupTitle = notePopup:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     notePopupTitle:SetPoint("TOPLEFT", notePopup, "TOPLEFT", 8, -8)
-    notePopupTitle:SetText(L["Add Note"])
+    notePopupTitle:SetText(L.BTN_NOTE_ADD)
     KwikTip._notePopupTitle = notePopupTitle
 
     local noteEditBg = CreateFrame("Frame", nil, notePopup, "BackdropTemplate")
@@ -350,12 +350,12 @@ function KwikTip:InitHUD()
     local noteSaveBtn = CreateFrame("Button", nil, notePopup, "UIPanelButtonTemplate")
     noteSaveBtn:SetSize(80, 22)
     noteSaveBtn:SetPoint("BOTTOMLEFT", notePopup, "BOTTOMLEFT", 8, 6)
-    noteSaveBtn:SetText(L["Save"])
+    noteSaveBtn:SetText(L.BTN_NOTE_SAVE)
 
     local noteClearBtn = CreateFrame("Button", nil, notePopup, "UIPanelButtonTemplate")
     noteClearBtn:SetSize(80, 22)
     noteClearBtn:SetPoint("BOTTOMRIGHT", notePopup, "BOTTOMRIGHT", -8, 6)
-    noteClearBtn:SetText(L["Clear"])
+    noteClearBtn:SetText(L.BTN_NOTE_CLEAR)
 
     local function SaveNote()
         local key = KwikTip:GetNoteKey()
@@ -395,7 +395,7 @@ function KwikTip:InitHUD()
         local existing = (key and KwikTipDB.notes and KwikTipDB.notes[key]) or ""
         noteEditBox:SetText(existing)
         noteEditBox:SetCursorPosition(noteEditBox:GetNumLetters())
-        local titleStr = key and (L["Note"] .. ": " .. key) or L["Add Note"]
+        local titleStr = key and (L.LABEL_NOTE .. ": " .. key) or L.BTN_NOTE_ADD
         if #titleStr > 36 then titleStr = titleStr:sub(1, 33) .. "..." end
         KwikTip._notePopupTitle:SetText(titleStr)
         notePopup:ClearAllPoints()
@@ -406,7 +406,7 @@ function KwikTip:InitHUD()
 
     noteBtn:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText(L["Add a personal note for this area"], 1, 1, 1)
+        GameTooltip:SetText(L.TOOLTIP_NOTE, 1, 1, 1)
         GameTooltip:Show()
     end)
     noteBtn:SetScript("OnLeave", function()

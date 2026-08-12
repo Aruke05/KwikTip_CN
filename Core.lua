@@ -101,8 +101,12 @@ local ROLE_FMT = {
 -- filterRole: if provided, only notes of that role + "general" + "interrupt" are shown.
 -- Pass nil to show all notes (used for preview and flat-tip fallback).
 -- Returns nil if notes is nil, empty, or all entries are filtered out.
-local function FormatNotes(notes, filterRole)
-    if not notes or #notes == 0 then return nil end
+local function FormatNotes(notes, filterRole, alternative)
+    if not notes or #notes == 0 then
+        -- If primary notes are empty but alternative (e.g. translated fallback) exists, use it
+        if alternative then return FormatNotes(alternative, filterRole) end
+        return nil
+    end
     local lines = {}
     for _, note in ipairs(notes) do
         if not filterRole
@@ -117,6 +121,9 @@ local function FormatNotes(notes, filterRole)
                 table.insert(lines, fmt.color .. note.text .. RESET)
             end
         end
+    end
+    if #lines == 0 and alternative then
+        return FormatNotes(alternative, filterRole)
     end
     if #lines == 0 then return nil end
     return table.concat(lines, "\n")
@@ -172,32 +179,126 @@ end
 -- Filters structured notes to the player's assigned role (+ general + interrupt).
 -- If boss.difficulties[difficultyID] exists, its tip/notes override the base ones.
 -- Falls back to the flat tip string if no notes are defined.
+--
+-- Fallback chain for translated content (TIP_OVERRIDE_BY_ENCOUNTERID):
+--   1. difficultyID-specific translation override (e.g. mythic+)
+--   2. base translation override (no difficultyID)
+--   3. English DungeonData default (difficultyID-specific)
+--   4. English DungeonData default (base)
+-- Each level supports field-level fallback: if a role note is missing in the
+-- override, the same role from the next level is used.
 local function FormatBossContent(dungeon, boss, difficultyID)
     local override = difficultyID and boss.difficulties and boss.difficulties[difficultyID]
     local src  = override or boss
     local role = GetPlayerRole()
-    local body = FormatNotes(src.notes, role)
-    if not body and src.tip and src.tip ~= "" then
-        body = GRAY .. src.tip .. RESET
+
+    -- Check TIP_OVERRIDE_BY_ENCOUNTERID for translated content (keyed by encounterID)
+    local tipOver = KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID and KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID[boss.encounterID]
+    local tipOverDiff = tipOver and difficultyID and tipOver.difficulties and tipOver.difficulties[difficultyID]
+
+    -- Determine which notes to use: start with the most specific, fall back per role
+    local function NotesForRole(notesOverride, notesDefault, roleName)
+        if notesOverride then
+            for _, n in ipairs(notesOverride) do
+                if n.role == roleName then return n.text end
+            end
+        end
+        if notesDefault then
+            for _, n in ipairs(notesDefault) do
+                if n.role == roleName then return n.text end
+            end
+        end
+        return nil
     end
-    -- Fall back to base boss if override has neither tip nor notes
+
+    -- Build a notes array with field-level fallback
+    local function MergeNotes(primary, secondary)
+        if not primary then return secondary end
+        if not secondary then return primary end
+        local merged = {}
+        -- Take all roles from either source, preferring primary for each role
+        local seenRoles = {}
+        for _, n in ipairs(primary) do
+            seenRoles[n.role] = true
+            table.insert(merged, n)
+        end
+        for _, n in ipairs(secondary) do
+            if not seenRoles[n.role] then
+                table.insert(merged, n)
+            end
+        end
+        return merged
+    end
+
+    -- Resolve content from most specific to least
+    -- Level 1: difficultyID-specific translation
+    local body
+
+    -- Level 1: difficulty-specific translation
+    if tipOverDiff then
+        body = FormatNotes(tipOverDiff.notes, role, tipOver and tipOver.notes)
+        if not body then
+            local enDiffSrc = override or boss
+            body = FormatNotes(enDiffSrc.notes, role, enDiffSrc.tip ~= "" and { { role = "general", text = enDiffSrc.tip } })
+        end
+    end
+
+    -- Level 2: base translation (no difficultyID)
+    if not body and tipOver then
+        body = FormatNotes(tipOver.notes, role)
+        if not body and tipOver.tip and tipOver.tip ~= "" then
+            body = GRAY .. tipOver.tip .. RESET
+        end
+    end
+
+    -- Level 3: English difficulty-specific override in DungeonData
     if not body and override then
+        body = FormatNotes(override.notes, role)
+        if not body and override.tip and override.tip ~= "" then
+            body = GRAY .. override.tip .. RESET
+        end
+    end
+
+    -- Level 4: English base boss in DungeonData
+    if not body then
         body = FormatNotes(boss.notes, role)
         if not body and boss.tip and boss.tip ~= "" then
             body = GRAY .. boss.tip .. RESET
         end
     end
-    local header = FormatHeader(dungeon.name, boss.name)
+
+    -- Header: prefer localized names from Blizzard APIs
+    local bossName = boss.name
+    if KwikTip._activeEncounterName then
+        bossName = KwikTip._activeEncounterName
+    end
+    local dungeonName = dungeon.name
+    local _, instanceName = GetInstanceInfo()
+    if instanceName and instanceName ~= "" then
+        dungeonName = instanceName
+    end
+
+    local header = FormatHeader(dungeonName, bossName)
     return body and (header .. "\n" .. body) or header
 end
 
 
 -- Match a player's current subzone string against an area entry.
 -- Checks the canonical English subzone and any localized aliases stored
--- in area.subzoneLocales (populated by locale overlay files at load time).
+-- in a separate table keyed by area.id (populated by locale overlay files).
+-- This avoids mutating the English DungeonData table.
 local function SubzoneMatches(area, playerSubzone)
     if not playerSubzone or playerSubzone == "" then return false end
     if area.subzone and area.subzone == playerSubzone then return true end
+    if area.id and KwikTip.SUBZONE_LOCALE_BY_AREA_ID then
+        local aliases = KwikTip.SUBZONE_LOCALE_BY_AREA_ID[area.id]
+        if aliases then
+            for _, loc in ipairs(aliases) do
+                if loc == playerSubzone then return true end
+            end
+        end
+    end
+    -- Legacy fallback: area.subzoneLocales (deprecated, kept for backward compat)
     if area.subzoneLocales then
         for _, loc in ipairs(area.subzoneLocales) do
             if loc == playerSubzone then return true end
@@ -216,6 +317,10 @@ local function FormatAreaContent(dungeon, difficultyID)
     local subzone = GetSubZoneText()
     local mapID   = C_Map.GetBestMapForUnit("player")
     for _, a in ipairs(dungeon.areas) do
+        -- Assign stable area.id on first visit: "instanceID:1-based-index"
+        if not a.id then
+            a.id = tostring(dungeon.instanceID) .. ":" .. tostring(_)
+        end
         local match = (subzone ~= "" and SubzoneMatches(a, subzone))
                    or (a.mapID  and a.mapID  == mapID)
         if match then
@@ -225,11 +330,22 @@ local function FormatAreaContent(dungeon, difficultyID)
                     return FormatBossContent(dungeon, boss, difficultyID)
                 end
             end
+            -- Check for translated area tip via AREA_OVERRIDE_BY_ID
+            local areaText = nil
+            if a.id and KwikTip.AREA_OVERRIDE_BY_ID and KwikTip.AREA_OVERRIDE_BY_ID[a.id] then
+                areaText = KwikTip.AREA_OVERRIDE_BY_ID[a.id].tip
+            end
+            if not areaText then
+                areaText = a.tip
+            end
             -- Guard: if neither bossIndex nor tip is present, skip rather than showing a blank body.
-            if not a.tip or a.tip == "" then return nil end
-            return GOLD .. dungeon.name .. RESET .. "\n"
+            if not areaText or areaText == "" then return nil end
+            -- Header: prefer localized instance name from Blizzard API
+            local _, instanceName = GetInstanceInfo()
+            local displayName = (instanceName and instanceName ~= "") and instanceName or dungeon.name
+            return GOLD .. displayName .. RESET .. "\n"
                 .. WHITE .. (subzone ~= "" and subzone or "") .. RESET .. "\n"
-                .. GRAY .. a.tip .. RESET
+                .. GRAY .. areaText .. RESET
         end
     end
     return nil
@@ -290,6 +406,7 @@ function KwikTip:OnEncounterStart(encounterID, encounterName, difficultyID, grou
     end
 
     self._activeEncounterID  = encounterID
+    self._activeEncounterName = encounterName
     self._activeBossEntry    = nil
     self._activeDifficultyID = difficultyID
 
@@ -319,6 +436,7 @@ function KwikTip:OnEncounterEnd(success)
     local lastDifficultyID   = self._activeDifficultyID
     self._activeBossEntry    = nil
     self._activeEncounterID  = nil
+    self._activeEncounterName = nil
     self._activeDifficultyID = nil
     self.bossActive = false
     if success == 1 then
@@ -482,7 +600,7 @@ function KwikTip:UpdateContent()
         if affixDetails then
             self:SetContent(GOLD .. dungeon.name .. RESET .. "\n" .. affixDetails)
         elseif dungeon.mythicPlus then
-            self:SetContent(GRAY .. L["Waiting for relevant encounter..."] .. RESET)
+            self:SetContent(GRAY .. L.WAITING_ENCOUNTER .. RESET)
         else
             self:SetContent("")
         end
@@ -573,7 +691,7 @@ local DEMO_NOTES = {
 function KwikTip:ShowPreview()
     self.previewActive = true
     self:InitHUD()
-    self:SetContent(FormatHeader(L["Demo Dungeon"], L["Example Boss"]) .. "\n" .. FormatNotes(DEMO_NOTES))
+    self:SetContent(FormatHeader(L.DEMO_DUNGEON, L.DEMO_BOSS) .. "\n" .. FormatNotes(DEMO_NOTES))
     self:UpdateVisibility()
 end
 
@@ -677,16 +795,16 @@ SlashCmdList["KWIKTIP"] = function(msg)
     elseif cmd == "config" or cmd == "" then
         KwikTip:ToggleConfig()
     elseif cmd == "help" then
-        print("|cff00ff00KwikTip|r " .. L["commands:"])
-        print(L["  /kwik           — open settings"])
-        print(L["  /kwik move      — toggle move/lock mode"])
-        print(L["  /kwik preview   — toggle role notes preview in the HUD"])
-        print(L["  /kwik debug     — print current detection state to chat"])
-        print(L["  /kwik debuglog  — toggle map/mob ID logging to SavedVariables"])
-        print(L["  /kwik clearlog  — clear all debug logs from SavedVariables"])
-        print(L["  /kwik feedback  — print the feedback/issue link"])
-        print(L["  /kwik help      — show this command list"])
+        print("|cff00ff00KwikTip|r " .. L.COMMANDS)
+        print(L.CMD_OPEN)
+        print(L.CMD_MOVE)
+        print(L.CMD_PREVIEW)
+        print(L.CMD_DEBUG)
+        print(L.CMD_DEBUGLOG)
+        print(L.CMD_CLEARLOG)
+        print(L.CMD_FEEDBACK)
+        print(L.CMD_HELP)
     else
-        print("|cff00ff00KwikTip|r " .. L["unknown command. Type /kwik help for a list of commands."])
+        print("|cff00ff00KwikTip|r " .. L.CMD_UNKNOWN)
     end
 end

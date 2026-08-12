@@ -22,6 +22,10 @@ Locale\deDE.lua
 Init.lua
 DungeonData.lua
 DungeonData_Timewalking.lua
+
+Locale\tips_enUS.lua
+Locale\tips_deDE.lua
+
 Core.lua
 Frames.lua
 UI_Config.lua

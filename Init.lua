@@ -75,5 +75,5 @@ function KwikTip:OnLogin()
     if self.UpdateVisibility then self:UpdateVisibility() end
     if self.UpdateContent then self:UpdateContent() end
     if self._PlaceMinimapBtn then self:_PlaceMinimapBtn() end
-    print("|cff00ff00KwikTip|r " .. L["loaded. Type /kwik for settings."])
-end
+        print("|cff00ff00KwikTip|r " .. L.LOADED_MSG)
+    end
