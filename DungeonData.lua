@@ -617,31 +617,35 @@ KwikTip.DUNGEONS = {
                 encounterID = 3285,  -- confirmed in-game
                 npcID       = 238887,
                 name        = "Taz'Rah",
-                tip         = "Stay out of Dark Rift gravity pull; kill Ethereal Shades quickly to stop Nether Dash chain lines.",
+                tip         = "Nether Dash fires a line through every player — spread loosely near the room edge and position shades close together to clump Umbral Rupture puddles. Void Blast hits the tank — defensive, and don't get knocked into existing puddles. Dark Bloom fires orbs from puddles — dodge, and keep rotating around the room after Umbral Rupture.",
                 notes = {
-                    { role = "general",   text = "Stay out of Dark Rift gravity pull." },
-                    { role = "dps",       text = "Kill Ethereal Shades quickly — each active shade triggers Nether Dash lines." },
+                    { role = "general",   text = "Nether Dash: line through each player — spread near the edge; clump shade puddles to keep Umbral Rupture zones together." },
+                    { role = "tank",      text = "Void Blast — defensive; don't get knocked into puddles." },
+                    { role = "general",   text = "Dark Bloom fires orbs from puddles — dodge and keep rotating after Umbral Rupture." },
                 },
             },
             {
                 encounterID = 3286,  -- confirmed in-game
                 npcID       = 239008,
                 name        = "Atroxus",
-                tip         = "Avoid Noxious Breath frontal; when Toxic Creepers fixate on a player, spread out to avoid the 8-yard toxic aura. Tank: defensive for Hulking Claw — applies a 10s nature DoT.",
+                tip         = "Poison Splash: group AoE + puddles that apply Mind-Numbing Poison — stay out. Noxious Breath aims a frontal at a random player — stay close to the boss to sidestep it. After Monstrous Roar, swap to the Toxic Creeper — it pulses AoE while alive and fixates the tank (each melee applies Sickening Bite, making Hulking Claw lethal — kite). Tank: defensive for Hulking Claw.",
                 notes = {
-                    { role = "general",   text = "Avoid Noxious Breath frontal." },
-                    { role = "general",   text = "When Toxic Creepers fixate, spread to avoid the 8-yard toxic aura." },
-                    { role = "tank",      text = "Defensive for Hulking Claw — applies a 10s nature DoT." },
+                    { role = "healer",    text = "Poison Splash: group AoE; keep players out of the Mind-Numbing Poison puddles." },
+                    { role = "general",   text = "Noxious Breath frontal — stay close to the boss so it's easy to dodge." },
+                    { role = "dps",       text = "Swap to the Toxic Creeper after Monstrous Roar — it pulses AoE while alive." },
+                    { role = "tank",      text = "Kite the fixating Toxic Creeper (Sickening Bite stacks make Hulking Claw deadly). Defensive for Hulking Claw." },
                 },
             },
             {
                 encounterID = 3287,  -- confirmed in-game
                 npcID       = 248015,
                 name        = "Charonus",
-                tip         = "Lead Gravitic Orbs into Singularities to consume them before stacks get too high; avoid the gravity well. Cosmic Blast hits the whole group — healer CDs.",
+                tip         = "Avoid Unstable Singularity orbs — touching applies Atomized (they pulse AoE while active). Cosmic Crash hits AoE around every player — spread loosely. Gravitic Orbs fixate DPS and stack Condensed Mass — kite them through an Unstable Singularity to destroy both; use defensives/freedom to clear stacks. Dark Waves is a tank frontal — point away. Void Cascade fires projectiles at a player — run away from the boss to dodge.",
                 notes = {
-                    { role = "general",   text = "Lead Gravitic Orbs into Singularities to consume them before stacks get too high; avoid the Unstable Singularity gravity well." },
-                    { role = "healer",    text = "CDs for Cosmic Blast — group-wide shadow damage + knockback." },
+                    { role = "general",   text = "Avoid Unstable Singularity orbs (Atomized). Cosmic Crash — spread to avoid cleaving allies." },
+                    { role = "general",   text = "Gravitic Orbs fixate DPS — kite through an Unstable Singularity to destroy both; defensive/freedom to clear Condensed Mass." },
+                    { role = "tank",      text = "Dark Waves frontal — point away from the group." },
+                    { role = "general",   text = "Void Cascade projectiles — run away from the boss to dodge; others move out of the path." },
                 },
             },
         },
@@ -1306,61 +1310,66 @@ KwikTip.DUNGEONS = {
             {
                 encounterID = 0,  -- TODO: verify in-game
                 npcID       = 0,
-                name        = "The Council of Tribes",
-                tip         = "Yazma (purple): interrupt Shadow Bolt; dispel Hex. Pa'ku (blue): dodge Gust of Wind charge — sidestep the path. Akunda (green): spread Static Discharge puddles near edges. Kimbul (red): tank swap for Rending Strikes. Kill order: Yazma → Pa'ku → Kimbul → Akunda.",
+                name        = "The Golden Serpent",
+                tip         = "Spit Gold targets 2 players — use a defensive and drop the puddles near existing ones. When Lucre's Call is cast, the puddles turn into Animated Gold blobs — cleave them down, using slows/CC to stop them empowering the boss. Group defensives/healing CDs for Serpentine Gust channel. Tank: Tail Thrash is not particularly dangerous.",
                 notes = {
-                    { role = "interrupt", text = "Yazma: Shadow Bolt." },
-                    { role = "general",   text = "Dodge Pa'ku's Gust of Wind charge path. Akunda: spread Static Discharge puddles." },
-                    { role = "healer",    text = "Dispel Yazma's Hex." },
-                    { role = "tank",      text = "Kimbul: swap on Rending Strikes stacks." },
-                    { role = "dps",       text = "Kill order: Yazma → Pa'ku → Kimbul → Akunda." },
-                },
-            },
-            {
-                encounterID = 0,  -- TODO: verify in-game
-                npcID       = 0,
-                name        = "Shadow of Zul",
-                tip         = "Interrupt Skeletal Allies (adds) every cast. Spread 8 yards for Shadow Bolt Volley. Dodge Dark Revelation ground zones. Kill Dark Manifestation adds before they channel. Tank: defensive for Shadowstrike (bleed + teleport behind tank).",
-                notes = {
-                    { role = "interrupt", text = "Skeletal Allies add casts." },
-                    { role = "general",   text = "Spread 8 yards for Shadow Bolt Volley. Dodge Dark Revelation zones." },
-                    { role = "tank",      text = "Defensive for Shadowstrike — bleed + teleport behind." },
-                    { role = "dps",       text = "Kill Dark Manifestation adds before they complete their channel." },
+                    { role = "general",   text = "Spit Gold: drop puddles near existing ones. On Lucre's Call they become Animated Gold — cleave + slow/CC so they can't empower the boss." },
+                    { role = "healer",    text = "Serpentine Gust channel — group defensives or healing cooldowns." },
+                    { role = "tank",      text = "Tail Thrash — manageable." },
                 },
             },
             {
                 encounterID = 0,  -- TODO: verify in-game
                 npcID       = 0,
                 name        = "Mchimba the Embalmer",
-                tip         = "Interrupt Noxious Bolt. Purge Bloodrage (enrage) immediately. Dispel Plague of Decay from random players. Dodge Lingering Plague pools on the floor. Tank: defensive for Rend Flesh — stacking bleed.",
+                tip         = "Drain Fluids channels into a random player — avoid the circles; if targeted use a defensive or combat-drop to break it. If it fully channels, heal that player above 90% to remove the debuff. Burn Corruption: drop fire puddles away from the boss and sarcophagi. Top the group for Awakening Slam, then cleave the two Half-Finished Mummies while interrupting Wretched Discharge. Entomb locks a player in one of four sarcophagi — spread out to find the shaking one to stop extra mummy spawns.",
                 notes = {
-                    { role = "interrupt", text = "Noxious Bolt." },
-                    { role = "tank",      text = "Defensive for Rend Flesh — stacking bleed." },
-                    { role = "healer",    text = "Dispel Plague of Decay." },
-                    { role = "dps",       text = "Purge Bloodrage enrage immediately." },
-                    { role = "general",   text = "Dodge Lingering Plague ground pools." },
+                    { role = "general",   text = "Drain Fluids: avoid circles; targeted player uses a defensive or combat-drop to stop the channel." },
+                    { role = "healer",    text = "If Drain Fluids fully channels, heal the target above 90% to remove their debuff. Top the group for Awakening Slam." },
+                    { role = "general",   text = "Burn Corruption: drop fire puddles away from boss and sarcophagi so they don't block the path." },
+                    { role = "dps",       text = "Cleave the two Half-Finished Mummies after Awakening Slam; interrupt Wretched Discharge." },
+                    { role = "general",   text = "Entomb: spread out and find the shaking sarcophagus to prevent extra mummy spawns." },
                 },
             },
             {
                 encounterID = 0,  -- TODO: verify in-game
                 npcID       = 0,
-                name        = "King Dazar",
-                tip         = "Kill Order of the Crown adds (Grimoire Guardians) before they empower Dazar. Interrupt Guardians' Shadow Wrath. Dodge Lashing Shadows tendrils. Tank: swap at 2 stacks of Crushing Stomp (armor reduction).",
+                name        = "The Council of Tribes",
+                tip         = "Severing Axe hits a random player — bleed cleanse or defensive; focus healing into them. Avoid the initial Whirling Axes AoE and its spinning projectiles. Tank Kula in the centre — Whirling Axes keeps casting from her body even after she dies. Group up in a safe spot to soak Barrel Through (still cast after Aka'ali dies). Tank: Debilitating Backhand knockback + debuff — kite or large defensive. Interrupt Poison Nova. Call the Elements: kill Explosive Totem → Thundering Totem → Torrent Totem.",
                 notes = {
-                    { role = "general",   text = "Kill Order of the Crown adds before they empower Dazar." },
-                    { role = "tank",      text = "Swap at 2 stacks of Crushing Stomp — stacking armor reduction." },
-                    { role = "interrupt", text = "Guardians: Shadow Wrath." },
-                    { role = "general",   text = "Dodge Lashing Shadows tendrils." },
+                    { role = "general",   text = "Severing Axe: bleed cleanse or defensive on the target; avoid Whirling Axes initial AoE + spinning projectiles." },
+                    { role = "tank",      text = "Tank Kula in the centre (Whirling Axes continues from her corpse). Debilitating Backhand — kite or big defensive. Arc Lightning always cleaves off the tank." },
+                    { role = "general",   text = "Group up in a safe spot to soak Barrel Through (persists after Aka'ali dies)." },
+                    { role = "interrupt", text = "Poison Nova." },
+                    { role = "dps",       text = "Call the Elements: kill Explosive Totem, then Thundering Totem, then Torrent Totem." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Dazar, the First King",
+                tip         = "On pull Dazar summons Reban; at 80% he mounts T'zala (Eternal Bond). Focus Reban first to remove mechanics before empowerment. Reban: Hunting Leap jumps to the tank and frontals through their position — dodge; interrupt Deathly Roar. Aerial Smash targets 2 players — spread. When mounted it becomes Quaking Leap (4 players, more AoE — combat-drop if furthest to cancel). Tank: defensive for the ramping Blade Combo buster (Savage Maul right before when mounted — bleed cleanse). Healing ready for Gilded Destruction; point boss away (melee becomes frontal). Avoid Impaling Spear circles.",
+                notes = {
+                    { role = "general",   text = "Focus Reban first. Dodge Hunting Leap frontal; interrupt Deathly Roar." },
+                    { role = "general",   text = "Aerial Smash → spread. When mounted (80%): Quaking Leap hits 4 players — combat-drop if furthest to cancel." },
+                    { role = "tank",      text = "Defensive for the ramping Blade Combo buster; Savage Maul hits right before it when mounted — use a bleed cleanse. Point boss away during Gilded Destruction (melee becomes frontal)." },
+                    { role = "healer",    text = "Healing CDs for Gilded Destruction AoE and Quaking Leap." },
+                    { role = "general",   text = "Avoid Impaling Spear circles — defensive or bleed cleanse if hit." },
                 },
             },
         },
         trash = {
-            { npcID = 0, name = "Skeletal Ally",            tip = "Interrupt Dark Mend (heals other adds) and Shadow Bolt." },
-            { npcID = 0, name = "Charged Skull",            tip = "Charged Pulse AoE on death — stagger kills or kite out." },
-            { npcID = 0, name = "Golden Scarab",            tip = "Carrion Swarm: frontal cone blind — tank faces away." },
-            { npcID = 0, name = "Grimoire Guardian",        tip = "Interrupt Shadow Wrath; avoid Lashing Shadows ground zones." },
-            { npcID = 0, name = "Dark Manifestation",        tip = "Channels powerful group damage — interrupt or kill immediately." },
-            { npcID = 0, name = "King's Guard",              tip = "Shield Bash stuns the tank — use stun break or CC to prevent." },
+            { npcID = 0, name = "Shadow of Zul",            tip = "CC immune. Shadow Barrage hits random players — defensive if overlapping. Pool of Darkness spawns 2 soaks — stand in them quickly to prevent AoE. Dark Revelation targets 2 players — move away to avoid cleave; purge/focus the Minions of Zul that spawn." },
+            { npcID = 0, name = "King Rahu'ai",             tip = "CC immune. Forked Lightning bounces — healers beware. Run out of the Overload AoE." },
+            { npcID = 0, name = "Guard Captain Atu",        tip = "Purge Captain's Bulwark from enemies, or CC to delay the cast." },
+            { npcID = 0, name = "Seneschal M'bara",         tip = "Interrupt every Unholy Mending cast; purge if one goes off." },
+            { npcID = 0, name = "King Timaji",              tip = "CC immune, shares health with Queen Wasi. Erupting Slam targets a random player — move away. Kite if fixated by Bladestorm." },
+            { npcID = 0, name = "Queen Wasi",               tip = "CC immune, shares health with King Timaji. Interrupt every Bind Soul; spare interrupts on Soul Bolt." },
+            { npcID = 0, name = "Queen Patlaa",             tip = "CC immune. Dodge Shoot; avoid the puddles it leaves." },
+            { npcID = 0, name = "Spectral Shaman",          tip = "Swap to Healing Tide Totem immediately. Frost Shock slow — magic dispel or freedom." },
+            { npcID = 0, name = "Phantom Hex Priest",       tip = "Interrupt or curse-dispel every Hex. Spare interrupts on Spectral Bolt." },
+            { npcID = 0, name = "Royal Berserker",          tip = "CC immune. Bloodthirsty Axe hits 2 players — defensive or bleed cleanse. Avoid Violent Lunge AoE." },
+            { npcID = 0, name = "Ghostly Brute",            tip = "CC immune. Soul Crush amps tank damage — defensive. Avoid Seismic Upheaval AoE." },
         },
     },
     {
@@ -1789,14 +1798,99 @@ KwikTip.DUNGEONS = {
         type       = "raid",
         mythicPlus = false,
         bosses = {
-            { encounterID = 0, npcID = 0, name = "(TODO — boss 1 of 8)", tip = "(TODO — verify from Wowhead/Icy Veins S2 raid guide + Tactyks YouTube)" },
-            { encounterID = 0, npcID = 0, name = "(TODO — boss 2 of 8)", tip = "(TODO)" },
-            { encounterID = 0, npcID = 0, name = "(TODO — boss 3 of 8)", tip = "(TODO)" },
-            { encounterID = 0, npcID = 0, name = "(TODO — boss 4 of 8)", tip = "(TODO)" },
-            { encounterID = 0, npcID = 0, name = "(TODO — boss 5 of 8)", tip = "(TODO)" },
-            { encounterID = 0, npcID = 0, name = "(TODO — boss 6 of 8)", tip = "(TODO)" },
-            { encounterID = 0, npcID = 0, name = "(TODO — boss 7 of 8)", tip = "(TODO)" },
-            { encounterID = 0, npcID = 0, name = "(TODO — boss 8 of 8)", tip = "(TODO)" },
+            {
+                encounterID = 0,  -- TODO: verify in-game (raid opened Aug 18)
+                npcID       = 0,
+                name        = "Nek'zali the Soulcoiler",
+                tip         = "Kill Raised Amani adds before Gravebound Advance shields land. Avoid Soulcoil Wells and Corpse Blight zones. Tank: swap on Sever → Hollowed (stacking DoT). Soak/heal through Possession Barrage between add waves. Soft enrage: Uncoiling → Uncoiled Rage — push DPS. Intermission (Ritual of Awakening): break Summoner Jawae's Tethers, handle Echoes, and stay out of Hungering Pyre and Cremation.",
+                notes = {
+                    { role = "dps",       text = "Kill Raised Amani before they gain Gravebound Advance shields. Burn during Uncoiled Rage soft enrage." },
+                    { role = "general",   text = "Avoid Soulcoil Wells and Corpse Blight ground zones." },
+                    { role = "tank",      text = "Swap on Sever → Hollowed (stacking DoT forces disciplined swaps)." },
+                    { role = "healer",    text = "Possession Barrage pressures the raid between waves; ready for Hungering Pyre in the intermission." },
+                    { role = "general",   text = "Ritual of Awakening: break Summoner Jawae's Tethers, kill Echoes." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Entombed Sentinels",
+                tip         = "Two golems (Breath of Ula'tek + Blood of Ula'tek). Ula'tek's Dominance: both gain 99% damage reduction within 25 yards of each other — tanks keep them permanently apart. Marks (Acid + Blood) build Helical Toxins — stack EXACTLY 4 (2+2 or 1+3) for a controlled Cultivated Burst; wrong math = raid damage. Dodge Toxic Droplets → Noxious Blast; kill Living Venom/Blighted Blood adds; avoid Unstable Miasma → Clinging Murk. Tank: defensive for Empowering Slam. Kill Venom Coagulation before Contaminate. Healer: Vitriolic Stasis.",
+                notes = {
+                    { role = "general",   text = "Keep golems 25+ yards apart or they take 99% reduced damage (Ula'tek's Dominance)." },
+                    { role = "general",   text = "Build exactly 4 Helical Toxins stacks (2+2 or 1+3) to trigger a controlled Cultivated Burst — assign stack groups before pull." },
+                    { role = "general",   text = "Dodge Toxic Droplets/Noxious Blast; avoid Unstable Miasma/Clinging Murk zones." },
+                    { role = "tank",      text = "Defensive for Empowering Slam. Keep golems split." },
+                    { role = "dps",       text = "Kill Venom Coagulation before Contaminate completes." },
+                    { role = "healer",    text = "Vitriolic Stasis healing check." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "The Lost Explorers",
+                tip         = "Council fight: four possessed Tortollans (Mor'zahi). Coordinate CC on the quartet and spread pressure — never tunnel one target while the others free-cast. Abilities to manage: Evil Eyes, Dark Whispers, Malevolent Presence, Mor'zahi's Command, and the Final Ascension cast that ends the possession arc. CC assignments matter more than the damage plan.",
+                notes = {
+                    { role = "general",   text = "Council rules — spread pressure across all four possessed Tortollans; don't tunnel one." },
+                    { role = "general",   text = "Assign CC chains: Evil Eyes, Dark Whispers, Malevolent Presence, Mor'zahi's Command." },
+                    { role = "general",   text = "Handle Final Ascension — the cast that closes the possession arc." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Vashnik the Malignant",
+                tip         = "The raid's alchemist — Vashnik combines venoms mid-fight to brew a world-ending toxin. Interrupt and control his ritual-crafting windows; if a brew completes, the raid eats the consequences. Expect dispel discipline and tank-swap timing to decide the fight.",
+                notes = {
+                    { role = "general",   text = "Interrupt/control Vashnik's venom-combining ritual windows — a completed brew is heavily punishing." },
+                    { role = "healer",    text = "Dispel discipline is the core check; watch for stacked toxin debuffs." },
+                    { role = "tank",      text = "Tank-swap timing around brew phases." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Ssorak",
+                tip         = "Raw-damage check + wind caller. Plan healer cooldowns for Raging Crosswinds, Turbulent Gusts, Howling Maelstrom, and Tempest phases; reposition cleanly through the wind. Tank/heal through the raw hits: Mutilate, Apex Predator, and To the Slaughter. If throughput is honest this boss confirms it — if not, Heroic groups stall here.",
+                notes = {
+                    { role = "healer",    text = "Cooldown-plan for wind phases (Raging Crosswinds, Turbulent Gusts, Howling Maelstrom, Tempest) plus Mutilate/To the Slaughter burst." },
+                    { role = "general",   text = "Reposition cleanly through wind mechanics." },
+                    { role = "tank",      text = "Defensive for Apex Predator and To the Slaughter." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "The Twin Fangs",
+                tip         = "Dual boss — Vexhul (venom) and Ithraz (blood). Split positioning and tank-swap between them; their frontals punish stacking. Vexhul: Caustic Deluge, Vile Flood, Venomous Emergence. Ithraz: Blood Torrent, Ravenous Feast, Sanguine Storm, Submerge, and Rouse the Brood add calls.",
+                notes = {
+                    { role = "tank",      text = "Split the twins and swap per plan; never stack both frontals on the group." },
+                    { role = "general",   text = "Vexhul (venom): avoid Caustic Deluge/Vile Flood. Ithraz (blood): avoid Blood Torrent/Sanguine Storm." },
+                    { role = "dps",       text = "Kill Rouse the Brood adds; handle Venomous Emergence." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "The Coiled Altar",
+                tip         = "The ritual gate before Ula'tek — an add-control encounter. Control and burn the adds while keeping the raid alive; losing players here stalls the final-boss unlock. Full ability list pending live testing.",
+                notes = {
+                    { role = "general",   text = "Add-control fight — priority-interrupt and burn adds." },
+                    { role = "healer",    text = "Sustained raid healing through the add waves." },
+                },
+            },
+            {
+                encounterID = 0,  -- TODO: verify in-game
+                npcID       = 0,
+                name        = "Ula'tek",
+                tip         = "Final boss — five-headed serpent goddess, three phases with an intermission. Area denial: dodge Caustic Waves and Circling Prey. Blightscale Spawn hatch into Blightscale Vipers on venom contact (each applies Putrid Membrane raid-wide) — kill them and the Blightscale Clutch. Doomscale Wardens cast Writhing Gestation on Spawn; Doomscale Eggs hatch. Spectral Coils: stack at impact to reduce raid damage. Tank: Unchecked Rage / Rattler Slam when not in melee; Mother's Wrath hits raid if no one is in its zone. Burn during Rage of the Shackled (+100% damage window).",
+                notes = {
+                    { role = "general",   text = "Dodge Caustic Waves and Circling Prey area-denial. Stack for Spectral Coils impact." },
+                    { role = "dps",       text = "Kill Blightscale Spawn (they hatch Vipers on venom contact) and the Blightscale Clutch. Burn during Rage of the Shackled (+100% window)." },
+                    { role = "healer",    text = "Every Blightscale Viper hatched applies Putrid Membrane raid-wide — constant AoE healing." },
+                    { role = "tank",      text = "Unchecked Rage / Rattler Slam if not in melee; be inside Mother's Wrath zone to prevent raid-wide damage." },
+                },
+            },
         },
     },
 }
