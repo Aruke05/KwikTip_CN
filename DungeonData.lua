@@ -960,7 +960,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2953,
-        uiMapID    = 0,  -- TODO: verify in-game (Parhelion Plaza activates week of March 31, 2026)
+        uiMapID    = 2545,  -- synced from wago.tools UiMap.db2
         name       = "Parhelion Plaza",
         location   = "Isle of Quel'Danas",
         season     = "midnight",
@@ -982,7 +982,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2961,
-        uiMapID    = 0,  -- TODO: verify in-game
+        uiMapID    = 2503,  -- synced from wago.tools UiMap.db2
         name       = "Twilight Crypts",
         location   = "Zul'Aman",
         season     = "midnight",
@@ -1003,7 +1003,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2962,
-        uiMapID    = 0,  -- TODO: verify in-game
+        uiMapID    = 2535,  -- synced from wago.tools UiMap.db2
         name       = "Atal'Aman",
         location   = "Zul'Aman",
         season     = "midnight",
@@ -1025,7 +1025,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 3003,
-        uiMapID    = 0,  -- TODO: verify in-game
+        uiMapID    = 2525,  -- synced from wago.tools UiMap.db2
         name       = "The Darkway",
         location   = "Zul'Aman",
         season     = "midnight",
@@ -1046,7 +1046,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2963,
-        uiMapID    = 0,  -- TODO: verify in-game
+        uiMapID    = 2525,  -- synced from wago.tools UiMap.db2
         name       = "The Grudge Pit",
         location   = "Harandar",
         season     = "midnight",
@@ -1087,7 +1087,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2964,
-        uiMapID    = 0,  -- TODO: verify in-game
+        uiMapID    = 2505,  -- synced from wago.tools UiMap.db2
         name       = "Gulf of Memory",
         location   = "Harandar",
         season     = "midnight",
@@ -1119,7 +1119,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2965,
-        uiMapID    = 0,  -- TODO: verify in-game
+        uiMapID    = 2528,  -- synced from wago.tools UiMap.db2
         name       = "Sunkiller Sanctum",
         location   = "Harandar",
         season     = "midnight",
@@ -1140,7 +1140,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2979,
-        uiMapID    = 0,  -- TODO: verify in-game
+        uiMapID    = 2506,  -- synced from wago.tools UiMap.db2
         name       = "Shadowguard Point",
         location   = "Voidstorm",
         season     = "midnight",
@@ -1168,8 +1168,8 @@ KwikTip.DUNGEONS = {
     -- --------------------------------------------------------
     {
         instanceID = 0,  -- TODO: verify in-game
-        uiMapID    = 0,  -- TODO: verify in-game
-        name       = "The Ring of Glory",
+        uiMapID    = 0,  -- TODO: verify in-game (delves are Type-3 zones, not Type-4 instance maps)
+                name       = "The Ring of Glory",
         location   = "The Coiled Isle",
         season     = "midnight",
         type       = "delve",
@@ -1184,7 +1184,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 0,  -- TODO: verify in-game
-        uiMapID    = 0,  -- TODO: verify in-game
+        uiMapID    = 2635,  -- synced from wago.tools UiMap.db2
         name       = "Gnarldor Isle",
         location   = "The Coiled Isle",
         season     = "midnight",
@@ -1200,7 +1200,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 0,  -- TODO: verify in-game
-        uiMapID    = 0,  -- TODO: verify in-game
+        uiMapID    = 2634,  -- synced from wago.tools UiMap.db2
         name       = "Venomfall Deeps",
         location   = "The Coiled Isle",
         season     = "midnight",
@@ -1299,8 +1299,8 @@ KwikTip.DUNGEONS = {
     -- --------------------------------------------------------
 
     {
-        instanceID = 0,     -- TODO: verify in-game (BfA dungeon, likely 1763)
-        uiMapID    = 0,     -- TODO: verify in-game
+        instanceID = 1762,  -- synced from wago.tools Map.db2
+        uiMapID    = 1004,  -- synced from wago.tools UiMap.db2
         name       = "Kings' Rest",
         location   = "Zuldazar",
         season     = "legacy",
@@ -1308,7 +1308,7 @@ KwikTip.DUNGEONS = {
         mythicPlus = true,
         bosses = {
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2139,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "The Golden Serpent",
                 tip         = "Spit Gold targets 2 players — use a defensive and drop the puddles near existing ones. When Lucre's Call is cast, the puddles turn into Animated Gold blobs — cleave them down, using slows/CC to stop them empowering the boss. Group defensives/healing CDs for Serpentine Gust channel. Tank: Tail Thrash is not particularly dangerous.",
@@ -1319,7 +1319,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2142,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "Mchimba the Embalmer",
                 tip         = "Drain Fluids channels into a random player — avoid the circles; if targeted use a defensive or combat-drop to break it. If it fully channels, heal that player above 90% to remove the debuff. Burn Corruption: drop fire puddles away from the boss and sarcophagi. Top the group for Awakening Slam, then cleave the two Half-Finished Mummies while interrupting Wretched Discharge. Entomb locks a player in one of four sarcophagi — spread out to find the shaking one to stop extra mummy spawns.",
@@ -1332,7 +1332,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2140,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "The Council of Tribes",
                 tip         = "Severing Axe hits a random player — bleed cleanse or defensive; focus healing into them. Avoid the initial Whirling Axes AoE and its spinning projectiles. Tank Kula in the centre — Whirling Axes keeps casting from her body even after she dies. Group up in a safe spot to soak Barrel Through (still cast after Aka'ali dies). Tank: Debilitating Backhand knockback + debuff — kite or large defensive. Interrupt Poison Nova. Call the Elements: kill Explosive Totem → Thundering Totem → Torrent Totem.",
@@ -1345,7 +1345,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2143,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "Dazar, the First King",
                 tip         = "On pull Dazar summons Reban; at 80% he mounts T'zala (Eternal Bond). Focus Reban first to remove mechanics before empowerment. Reban: Hunting Leap jumps to the tank and frontals through their position — dodge; interrupt Deathly Roar. Aerial Smash targets 2 players — spread. When mounted it becomes Quaking Leap (4 players, more AoE — combat-drop if furthest to cancel). Tank: defensive for the ramping Blade Combo buster (Savage Maul right before when mounted — bleed cleanse). Healing ready for Gilded Destruction; point boss away (melee becomes frontal). Avoid Impaling Spear circles.",
@@ -1373,8 +1373,8 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 0,     -- TODO: verify in-game (BfA dungeon)
-        uiMapID    = 0,     -- TODO: verify in-game
+        instanceID = 1877,  -- synced from wago.tools Map.db2
+        uiMapID    = 1038,  -- synced from wago.tools UiMap.db2
         name       = "Temple of Sethraliss",
         location   = "Vol'dun",
         season     = "legacy",
@@ -1382,7 +1382,7 @@ KwikTip.DUNGEONS = {
         mythicPlus = true,
         bosses = {
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2124,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 altNpcIDs   = { 0 },
                 name        = "Adderis and Aspix",
@@ -1396,7 +1396,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2125,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "Merektha",
                 tip         = "Tank: defensive for every Lightning Bite. Knot of Snakes targets 2 — stack in melee so one AoE CC destroys them, then cleave the Snakes. If targeted by Thunder Spit, drop the circle near the arena edge and use a defensive for the DoT. Healers: ready for Serpentstorm AoE; mind positioning so no one is knocked into puddles. At full energy she summons 3 Toxic Vipers + a Storm Serpent and Burrows — interrupt Poison Spit on adds (poison-dispel DoTs), keep constant AoE healing; tank Storm Serpents near the room edge (they drop a puddle on Storm Catalyst).",
@@ -1409,7 +1409,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2126,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "Galvazzt",
                 tip         = "Lightning Spires spawn in sets of 3 — a NON-tank must step between each spire and the boss to cut his energy gain. If he hits full energy he casts Consume Charge, which wipes — never let a spire feed him. Spread defensives and healing CDs during the spire soaks (consistent heavy damage). Tank: move the boss around the room to make spires easier to soak, and reposition whenever Induction leaves a puddle.",
@@ -1420,7 +1420,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2127,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "Avatar of Sethraliss",
                 tip         = "Prioritize the Corrupted Guardian — defensive if it targets you with Vile Charge; tanks watch its Tainted Strike buster. On death it does a 20yd AoE and drops 3 Corrupted Lifeforce soaks — grab them (DPS, or a tank with defensive) before Corruption Burst: soaking stacks a healing-done + physical-damage-taken debuff. Interrupt Twisted Hexxer Flame Shock; drop Latent Hex outside the room. After the Essence Defiler dies, the healer focuses the Avatar while the group CCs and AoEs the kiting Faithless Tormentors — each one heals her 0.6% — and stays off their Shadowlash debuff.",
@@ -1455,8 +1455,8 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 0,     -- TODO: verify in-game (DF dungeon)
-        uiMapID    = 0,     -- TODO: verify in-game
+        instanceID = 2521,  -- synced from wago.tools Map.db2
+        uiMapID    = 2094,  -- synced from wago.tools UiMap.db2
         name       = "Ruby Life Pools",
         location   = "The Waking Shores",
         season     = "midnight",
@@ -1464,7 +1464,7 @@ KwikTip.DUNGEONS = {
         mythicPlus = true,
         bosses = {
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2609,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "Melidrussa Chillworn",
                 tip         = "Interrupt Frigid Shard to cut tank damage. Stay grouped to bait the ice from Hailburst in one spot, then rotate around the room as it fills. If targeted by Chillstorm, drop it off away from the group and fight the pull-in effect with healing/defensive cooldowns. At 66% and 33% she casts Awaken Whelps — tanks pick up the Infused Whelps. She then shields with Ice Bulwark and channels Frost Overload until it breaks — save damage to end the group-wide damage quickly.",
@@ -1477,7 +1477,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2606,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "Kokia Blazehoof",
                 tip         = "If targeted by Ritual of Blazebinding, move to an accessible spot that won't cleave the group — it spawns a Blazebound Firestorm add to focus. Healers: heal the add's Inferno cast. Tanks/DPS: interrupt Blaze Volley. Bait Molten Boulder projectiles away from your path (they explode on terrain impact). Tank: defensive for every Searing Blows.",
@@ -1490,7 +1490,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 2623,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 altNpcIDs   = { 0 },
                 name        = "Kyrakka and Erkhart Stormvein",
@@ -1526,8 +1526,8 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 0,     -- TODO: verify in-game (new 12.1 mega-dungeon)
-        uiMapID    = 0,     -- TODO: verify in-game
+        instanceID = 2993,  -- synced from wago.tools Map.db2
+        uiMapID    = 2588,  -- synced from wago.tools UiMap.db2
         name       = "Altar of Fangs",
         location   = "The Coiled Isle",
         season     = "midnight",
@@ -1535,7 +1535,7 @@ KwikTip.DUNGEONS = {
         mythicPlus = true,
         bosses = {
             {
-                encounterID = 0,  -- TODO: verify in-game (new 12.1 mega-dungeon)
+                encounterID = 3456,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "Rav'i",
                 tip         = "Top group for Ravenous Stomp. Tank: watch Bone Pile where NO Twinfang corpse lands — move boss there before Ssscavenging or boss gains Feeding Frenzy. Group: soak all Messy Eater pools to break shield quickly. Spread loosely for Triple Shot (avoid cleaving allies). Dodge Regurgitate waves; disease dispel if hit. Tank: Hydrastrike is consistent high melee output — use defensives.",
@@ -1547,7 +1547,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 3457,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "The Writhing Coil",
                 tip         = "Healers: Synchronized Venom = consistent AoE ticking damage throughout. Interrupt EVERY Toxic Atrophy cast (3x back-to-back). Vindictive Onslaught: dodge Burrowing Charge line then point Venom Jet frontal away from group. Death Rattle: snap tethers FAST with movement — 5 Uncoiled Writhes fixate; CC + stack + DPS cooldowns. 3 Writhes cast Toxic Atrophy. After 25s: dodge Undermining shockwave lines. Tank: Tail Scythe is manageable; face boss away during Venom Jet.",
@@ -1560,7 +1560,7 @@ KwikTip.DUNGEONS = {
                 },
             },
             {
-                encounterID = 0,  -- TODO: verify in-game
+                encounterID = 3458,  -- synced from wago.tools JournalEncounter.db2
                 npcID       = 0,
                 name        = "Zul'jan",
                 tip         = "Soak all 4 beams during Ritual Of The Fang — pop healing CDs. Clear Ritual Venom stacks BEFORE expiry: take physical damage (stand in Boneslicer — clears up to 8 stacks via initial hit + 7s DoT). Bloodletting drops puddles for 30s. Tank: defensive for Chop Down combo; puddles spawn if Ritual Venom stacks active. Avoid Axegrinder: 3 spinning axes bouncing around room.",
@@ -1709,7 +1709,7 @@ KwikTip.DUNGEONS = {
     -- Wing 2: March on Quel'Danas (2 bosses)
     {
         instanceID = 2913,  -- BigWigs Midnight/MarchOnQuelDanas/; unverified in-game
-        uiMapID    = 0,     -- TODO: verify in-game
+        uiMapID    = 2533,  -- synced from wago.tools UiMap.db2
         name       = "March on Quel'Danas",
         location   = "Isle of Quel'Danas",
         season     = "midnight",
