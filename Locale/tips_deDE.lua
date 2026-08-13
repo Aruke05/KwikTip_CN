@@ -74,12 +74,41 @@ local area = KwikTip.AREA_OVERRIDE_BY_ID
 -- }
 
 -- ============================================================
--- Subzone locale aliases — keyed by "instanceID:areaIndex"
+-- Subzone locale aliases — keyed by stable area ID ("instanceID:areaIndex")
 -- Makes subzone-based area matching work on non-English clients
 -- without mutating the English DungeonData table.
+-- Verified German subzone names from WoW client AreaTable.db2.
 -- ============================================================
 local sz = KwikTip.SUBZONE_LOCALE_BY_AREA_ID
 
--- Example:
--- sz["2805:1"] = { "Die Promenade" }  -- The Promenade
--- sz["2805:3"] = { "Königin Sylvanas' Gemächer" }  -- Sylvanas's Quarters
+-- Windrunner Spire (instanceID 2805)
+sz["2805:1"] = { "Die Promenade" }          -- The Promenade
+sz["2805:4"] = { "Königin Sylvanas' Gemächer" }  -- Sylvanas's Quarters
+sz["2805:5"] = { "Windrunner-Gruft" }       -- Windrunner Vault
+sz["2805:6"] = { "Der Gipfel" }             -- The Pinnacle
+
+-- Murder Row (instanceID 2813)
+sz["2813:1"] = { "Silbermond-Tierhandlung" }  -- Silvermoon Pet Shop
+sz["2813:2"] = { "Der Illegale Regen" }       -- The Illicit Rain
+sz["2813:3"] = { "Terrasse der Auguren" }     -- Augurs' Terrace
+sz["2813:4"] = { "Lithiels Anlegestelle" }    -- Lithiel's Landing
+
+-- Den of Nalorakk (instanceID 2825)
+sz["2825:1"] = { "Anhaltender Winter" }       -- Enduring Winter
+sz["2825:2"] = { "Die Nahrungssuche" }        -- The Foraging
+sz["2825:3"] = { "Traumwandler-Passage" }     -- Dreamer's Passage
+sz["2825:4"] = { "Das Herz der Wut" }         -- The Heart of Rage
+
+-- Magisters' Terrace (instanceID 2811)
+sz["2811:1"] = { "Arkane Bibliothek" }        -- Arcane Atheneum
+sz["2811:2"] = { "Beobachtungsgelände" }      -- Observation Grounds
+sz["2811:3"] = { "Großmagistrix' Asyl" }      -- Grand Magister Asylum
+sz["2811:4"] = { "Turm der Theorie" }         -- Tower of Theory
+sz["2811:5"] = { "Konstellarium" }            -- Constellarium
+sz["2811:6"] = { "Himmelsorrery" }            -- Celestial Orrery
+
+-- Nexus-Point Xenas (instanceID 2915)
+sz["2915:1"] = { "Der Basar" }                -- The Bazaar
+sz["2915:2"] = { "Corespark-Triebwerk" }      -- Corespark Engineway
+sz["2915:3"] = { "Kernverteidigung Nullfeld" } -- Core Defense Nullward
+sz["2915:4"] = { "Der Nexus-Kern" }           -- The Nexus Core

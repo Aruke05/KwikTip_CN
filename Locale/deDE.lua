@@ -5,6 +5,8 @@
 local ADDON_NAME, KwikTip = ...
 local L = KwikTip.L
 
+if GetLocale() ~= "deDE" then return end
+
 -- ============================================================
 -- Set UI translations: override L table values for deDE locale
 -- ============================================================

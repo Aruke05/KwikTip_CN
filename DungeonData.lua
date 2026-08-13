@@ -145,12 +145,12 @@ KwikTip.DUNGEONS = {
             { npcID = 232447, name = "Spectral Axethrower",    tip = "Throw Axe bleeds a random player — use a defensive or bleed cleanse; chain CC to delay subsequent casts." },
         },
         areas = {
-            { subzone = "The Promenade",       tip = "Interrupt Spirit Bolt from Restless Stewards — dispel Soul Torment on debuffed players immediately. Use a personal defensive for Creeping Spindleweb's Poison Spray." },
-            { mapID = 2493, bossIndex = 1 },  -- Emberdawn's wing; confirmed in-game
-            { mapID = 2494, bossIndex = 2 },  -- Derelict Duo's wing; confirmed in-game
-            { subzone = "Sylvanas's Quarters", tip = "Spellguard Magus drops a 99% damage-reduction zone at 50% — move the pack out immediately. Use defensives for Arcane Salvo." },
-            { subzone = "Windrunner Vault",    bossIndex = 3 },  -- Commander Kroluk's arena; confirmed in-game
-            { subzone = "The Pinnacle",        bossIndex = 4 },  -- The Restless Heart; confirmed in-game
+            { id = "2805:1", subzone = "The Promenade",       mapID = 2492, tip = "Interrupt Spirit Bolt from Restless Stewards — dispel Soul Torment on debuffed players immediately. Use a personal defensive for Creeping Spindleweb's Poison Spray." },
+            { id = "2805:2", mapID = 2493, bossIndex = 1 },  -- Emberdawn's wing; confirmed in-game
+            { id = "2805:3", mapID = 2494, bossIndex = 2 },  -- Derelict Duo's wing; confirmed in-game
+            { id = "2805:4", subzone = "Sylvanas's Quarters", tip = "Spellguard Magus drops a 99% damage-reduction zone at 50% — move the pack out immediately. Use defensives for Arcane Salvo." },
+            { id = "2805:5", subzone = "Windrunner Vault",    bossIndex = 3 },  -- Commander Kroluk's arena; confirmed in-game
+            { id = "2805:6", subzone = "The Pinnacle",        bossIndex = 4 },  -- The Restless Heart; confirmed in-game
         },
     },
     {
@@ -225,10 +225,10 @@ KwikTip.DUNGEONS = {
             { npcID = 0, name = "Doomguard Sentry",    tip = "Cleave and War Stomp — tank faces away; dodge the War Stomp ground indicator. Interrupt Shadowbolt Volley." },
         },
         areas = {
-            { subzone = "Silvermoon Pet Shop", bossIndex = 1 },  -- Kystia Manaheart; confirmed in-game
-            { subzone = "The Illicit Rain",    bossIndex = 2 },  -- Zaen Bladesorrow; confirmed in-game
-            { subzone = "Augurs' Terrace",     bossIndex = 3 },  -- Xathuux the Annihilator; confirmed in-game
-            { subzone = "Lithiel's Landing",   bossIndex = 4 },  -- Lithiel Cinderfury; confirmed in-game
+            { id = "2813:1", subzone = "Silvermoon Pet Shop", bossIndex = 1 },  -- Kystia Manaheart; confirmed in-game
+            { id = "2813:2", subzone = "The Illicit Rain",    bossIndex = 2 },  -- Zaen Bladesorrow; confirmed in-game
+            { id = "2813:3", subzone = "Augurs' Terrace",     bossIndex = 3 },  -- Xathuux the Annihilator; confirmed in-game
+            { id = "2813:4", subzone = "Lithiel's Landing",   bossIndex = 4 },  -- Lithiel Cinderfury; confirmed in-game
         },
     },
     {
@@ -286,10 +286,10 @@ KwikTip.DUNGEONS = {
             { npcID = 0, name = "Spirit-Touched Jaguar",  tip = "Prowl — stealth detection or AoE to reveal. Spirit Bite applies a bleed that stacks — dispel." },
         },
         areas = {
-            { subzone = "Enduring Winter",    bossIndex = 1 },  -- first two bosses share this subzone (Hoardmonger + Sentinel of Winter); confirmed in-game (mapID 2514); bossIndex=1 shows Hoardmonger tip on entry — ENCOUNTER_START overrides for Sentinel of Winter
-            { subzone = "The Foraging",       tip = "Beasts patrol this area — pull carefully." },  -- confirmed in-game (mapID 2514); between first two bosses and Dreamer's Passage
-            { subzone = "Dreamer's Passage",  bossIndex = 3 },  -- transition to Nalorakk; confirmed in-game (mapID 2564)
-            { subzone = "The Heart of Rage",  bossIndex = 3 },  -- Nalorakk's arena; confirmed in-game (mapIDs 2564, 2513)
+            { id = "2825:1", subzone = "Enduring Winter",    bossIndex = 1 },  -- first two bosses share this subzone (Hoardmonger + Sentinel of Winter); confirmed in-game (mapID 2514); bossIndex=1 shows Hoardmonger tip on entry — ENCOUNTER_START overrides for Sentinel of Winter
+            { id = "2825:2", subzone = "The Foraging",       tip = "Beasts patrol this area — pull carefully." },  -- confirmed in-game (mapID 2514); between first two bosses and Dreamer's Passage
+            { id = "2825:3", subzone = "Dreamer's Passage",  bossIndex = 3 },  -- transition to Nalorakk; confirmed in-game (mapID 2564)
+            { id = "2825:4", subzone = "The Heart of Rage",  bossIndex = 3 },  -- Nalorakk's arena; confirmed in-game (mapIDs 2564, 2513)
         },
     },
     {
@@ -364,9 +364,9 @@ KwikTip.DUNGEONS = {
             { npcID = 253473, name = "Gloomwing Bat",       tip = "Piercing Screech is a frontal aimed at the tank — point away from the group." },
         },
         areas = {
-            { subzone = "Wailing Depths",    bossIndex = 1 },  -- Muro'jin and Nekraxx; confirmed in-game
-            { subzone = "Dais of Suffering", bossIndex = 2 },  -- Vordaza's arena; confirmed in-game
-            { subzone = "Echoing Span",      bossIndex = 3 },  -- Rak'tul's arena; gauntlet runs during the fight (spirit realm bridge); confirmed in-game
+            { id = "2874:1", subzone = "Wailing Depths",    bossIndex = 1 },  -- Muro'jin and Nekraxx; confirmed in-game
+            { id = "2874:2", subzone = "Dais of Suffering", bossIndex = 2 },  -- Vordaza's arena; confirmed in-game
+            { id = "2874:3", subzone = "Echoing Span",      bossIndex = 3 },  -- Rak'tul's arena; gauntlet runs during the fight (spirit realm bridge); confirmed in-game
         },
     },
 
@@ -455,12 +455,12 @@ KwikTip.DUNGEONS = {
             { npcID = 0,      name = "Unstable Voidling",    tip = "Void Eruption on death — stagger kills to avoid overwhelming group damage." },
         },
         areas = {
-            { subzone = "Arcane Atheneum",        tip = "Interrupt Arcane Magisters' Polymorph first — targets a random player. Limit Animated Codex pulls — Arcane Volley is sustained group AoE. Dispel Holy Fire from Lightward Healers." },
-            { subzone = "Observation Grounds",    bossIndex = 1 },  -- Arcanotron Custos; confirmed in-game
-            { subzone = "Grand Magister Asylum",  bossIndex = 2 },  -- Seranel Sunlash; confirmed in-game
-            { subzone = "Tower of Theory",        tip = "Interrupt Terror Wave from Void Infusers every cast. Stagger Brightscale Wyrm kills — simultaneous deaths chain Energy Release through the group. Line of sight Consuming Shadows from Shadowrift Voidcallers." },
-            { subzone = "Constellarium",          bossIndex = 3 },  -- Gemellus; confirmed in-game
-            { subzone = "Celestial Orrery",       bossIndex = 4 },  -- Degentrius; confirmed in-game
+            { id = "2811:1", subzone = "Arcane Atheneum",        tip = "Interrupt Arcane Magisters' Polymorph first — targets a random player. Limit Animated Codex pulls — Arcane Volley is sustained group AoE. Dispel Holy Fire from Lightward Healers." },
+            { id = "2811:2", subzone = "Observation Grounds",    bossIndex = 1 },  -- Arcanotron Custos; confirmed in-game
+            { id = "2811:3", subzone = "Grand Magister Asylum",  bossIndex = 2 },  -- Seranel Sunlash; confirmed in-game
+            { id = "2811:4", subzone = "Tower of Theory",        tip = "Interrupt Terror Wave from Void Infusers every cast. Stagger Brightscale Wyrm kills — simultaneous deaths chain Energy Release through the group. Line of sight Consuming Shadows from Shadowrift Voidcallers." },
+            { id = "2811:5", subzone = "Constellarium",          bossIndex = 3 },  -- Gemellus; confirmed in-game
+            { id = "2811:6", subzone = "Celestial Orrery",       bossIndex = 4 },  -- Degentrius; confirmed in-game
         },
     },
     {
@@ -523,10 +523,10 @@ KwikTip.DUNGEONS = {
             { npcID = 0,      name = "Lingering Image",        tip = "Searing Rend: leaps at the tank and lands two heavy physical hits followed by a holy DoT — use a defensive. Drops a puddle that lasts 10 minutes; drop it away from the fight area." },
         },
         areas = {
-            { subzone = "The Bazaar",             tip = "Shadowguard Defenders stack Null Sunder — control pull size. Interrupt Umbra Bolt from Nexus Adepts. Cursed Voidcaller casts Creeping Void on death — brace for the hit." },  -- entrance section; subzone confirmed in-game; mob assignments unverified
-            { subzone = "Corespark Engineway",    bossIndex = 1 },  -- Chief Corewright Kasreth; confirmed in-game
-            { subzone = "Core Defense Nullward",  bossIndex = 2 },  -- Corewarden Nysarra; confirmed in-game
-            { subzone = "The Nexus Core",         bossIndex = 3 },  -- Lothraxion's boss room; confirmed in-game
+            { id = "2915:1", subzone = "The Bazaar",             tip = "Shadowguard Defenders stack Null Sunder — control pull size. Interrupt Umbra Bolt from Nexus Adepts. Cursed Voidcaller casts Creeping Void on death — brace for the hit." },  -- entrance section; subzone confirmed in-game; mob assignments unverified
+            { id = "2915:2", subzone = "Corespark Engineway",    bossIndex = 1 },  -- Chief Corewright Kasreth; confirmed in-game
+            { id = "2915:3", subzone = "Core Defense Nullward",  bossIndex = 2 },  -- Corewarden Nysarra; confirmed in-game
+            { id = "2915:4", subzone = "The Nexus Core",         bossIndex = 3 },  -- Lothraxion's boss room; confirmed in-game
         },
     },
     {
@@ -597,10 +597,10 @@ KwikTip.DUNGEONS = {
             { npcID = 0, name = "Sunblaze Warden",        tip = "Radiant Slash is a frontal cone — tank faces away. Interrupt Gleaming Barrier when possible." },
         },
         areas = {
-            { subzone = "The Luminous Garden",  bossIndex = 1 },  -- Lightblossom Trinity; confirmed in-game
-            { subzone = "The Gilded Tangle",    bossIndex = 2 },  -- Ikuzz the Light Hunter; confirmed in-game
-            { subzone = "Warden's Retreat",     bossIndex = 3 },  -- Lightwarden Ruia; confirmed in-game
-            { subzone = "Conviction's Crucible", bossIndex = 4 }, -- Ziekket; confirmed in-game
+            { id = "2859:1", subzone = "The Luminous Garden",  bossIndex = 1 },  -- Lightblossom Trinity; confirmed in-game
+            { id = "2859:2", subzone = "The Gilded Tangle",    bossIndex = 2 },  -- Ikuzz the Light Hunter; confirmed in-game
+            { id = "2859:3", subzone = "Warden's Retreat",     bossIndex = 3 },  -- Lightwarden Ruia; confirmed in-game
+            { id = "2859:4", subzone = "Conviction's Crucible", bossIndex = 4 }, -- Ziekket; confirmed in-game
         },
     },
     {
@@ -658,9 +658,9 @@ KwikTip.DUNGEONS = {
             { npcID = 0, name = "Phase Spider",          tip = "Shadowstep blinks to random players — loosely spread. Apply a slow or root if it fixates." },
         },
         areas = {
-            { subzone = "The Den", bossIndex = 1 },  -- Taz'Rah's arena; confirmed in-game
-            { mapID = 2573,        bossIndex = 2 },  -- Atroxus; confirmed in-game
-            { mapID = 2574,        bossIndex = 3 },  -- Charonus; confirmed in-game
+            { id = "2923:1", subzone = "The Den", bossIndex = 1 },  -- Taz'Rah's arena; confirmed in-game
+            { id = "2923:2", mapID = 2573,        bossIndex = 2 },  -- Atroxus; confirmed in-game
+            { id = "2923:3", mapID = 2574,        bossIndex = 3 },  -- Charonus; confirmed in-game
         },
     },
 
@@ -739,10 +739,10 @@ KwikTip.DUNGEONS = {
             { npcID = 0,      name = "Spellbound Battle Axe", tip = "Spellbound Weapon passive deals arcane damage on every melee — very dangerous when multiple Axes sync up. Limit pull size; use a defensive when facing more than one." },
         },
         areas = {
-            { subzone = "Terrace of Lectures",      bossIndex = 3 },  -- Vexamus; confirmed in-game
-            { subzone = "The Botanica",              bossIndex = 1 },  -- Overgrown Ancient; confirmed in-game
-            { subzone = "The Pitch",                 bossIndex = 2 },  -- Crawth; spans mapIDs 2097+2098; confirmed in-game
-            { subzone = "The Headteacher's Enclave", bossIndex = 4 },  -- Echo of Doragosa; confirmed in-game
+            { id = "2526:1", subzone = "Terrace of Lectures",      bossIndex = 3 },  -- Vexamus; confirmed in-game
+            { id = "2526:2", subzone = "The Botanica",              bossIndex = 1 },  -- Overgrown Ancient; confirmed in-game
+            { id = "2526:3", subzone = "The Pitch",                 bossIndex = 2 },  -- Crawth; spans mapIDs 2097+2098; confirmed in-game
+            { id = "2526:4", subzone = "The Headteacher's Enclave", bossIndex = 4 },  -- Echo of Doragosa; confirmed in-game
         },
     },
     {
@@ -810,7 +810,7 @@ KwikTip.DUNGEONS = {
         areas = {
             -- Garfrost and Ick & Krick have no named subzone (empty string throughout).
             -- Only Tyrannus has a distinct boss room subzone.
-            { subzone = "Scourgelord's Command", bossIndex = 3 },  -- Scourgelord Tyrannus; confirmed in-game
+            { id = "658:1", subzone = "Scourgelord's Command", bossIndex = 3 },  -- Scourgelord Tyrannus; confirmed in-game
         },
     },
     {
@@ -887,9 +887,9 @@ KwikTip.DUNGEONS = {
             { npcID = 0,      name = "Dire Voidbender",       tip = "Interrupt or purge Abyssal Enhancement every cast." },
         },
         areas = {
-            { subzone = "Triad's Conservatory",        bossIndex = 1 },  -- Zuraal the Ascended; confirmed in-game
-            { subzone = "Shadowguard Incursion",        bossIndex = 2 },  -- Saprish; confirmed in-game
-            { subzone = "The Seat of the Triumvirate",  bossIndex = 3 },  -- Viceroy Nezhar; confirmed in-game
+            { id = "1753:1", subzone = "Triad's Conservatory",        bossIndex = 1 },  -- Zuraal the Ascended; confirmed in-game
+            { id = "1753:2", subzone = "Shadowguard Incursion",        bossIndex = 2 },  -- Saprish; confirmed in-game
+            { id = "1753:3", subzone = "The Seat of the Triumvirate",  bossIndex = 3 },  -- Viceroy Nezhar; confirmed in-game
             -- L'ura (bossIndex=4) shares this subzone — ENCOUNTER_START overrides the area tip when L'ura's fight begins.
         },
     },
@@ -1285,10 +1285,10 @@ KwikTip.DUNGEONS = {
             -- "Grand Spire" appears on both mapID 601 (Araknath) and 602 (High Sage Viryx).
             -- mapID=602 entry must come first — it matches only on that specific map.
             -- The subzone-only entry below it catches mapID 601 without ambiguity.
-            { mapID = 602,                    bossIndex = 4 },  -- High Sage Viryx; confirmed in-game
-            { subzone = "Lower Quarter",      bossIndex = 1 },  -- Ranjit; confirmed in-game
-            { subzone = "Grand Spire",        bossIndex = 2 },  -- Araknath (mapID 601); confirmed in-game
-            { subzone = "The Overlook",       bossIndex = 3 },  -- Rukhran; confirmed in-game
+            { id = "1209:1", mapID = 602,                    bossIndex = 4 },  -- High Sage Viryx; confirmed in-game
+            { id = "1209:2", subzone = "Lower Quarter",      bossIndex = 1 },  -- Ranjit; confirmed in-game
+            { id = "1209:3", subzone = "Grand Spire",        bossIndex = 2 },  -- Araknath (mapID 601); confirmed in-game
+            { id = "1209:4", subzone = "The Overlook",       bossIndex = 3 },  -- Rukhran; confirmed in-game
         },
     },
 
@@ -1608,11 +1608,11 @@ KwikTip.DUNGEONS = {
         type       = "raid",
         mythicPlus = false,
         areas = {
-            { subzone = "The Approach",        bossIndex = 1 },  -- Imperator Averzian; confirmed in-game
-            { subzone = "Behemoth's Rise",     bossIndex = 2 },  -- Vorasius; confirmed in-game
-            { subzone = "The Riftlabs",        bossIndex = 3 },  -- Fallen-King Salhadaar; confirmed in-game
-            { subzone = "Devouring Stronghold", bossIndex = 4 }, -- Vaelgor & Ezzorak approach corridor; confirmed in-game (fight room has no subzone)
-            { subzone = "Celestial Orrery",    bossIndex = 6 },  -- Crown of the Cosmos approach corridor; confirmed in-game (fight room has no subzone)
+            { id = "2912:1", subzone = "The Approach",        bossIndex = 1 },  -- Imperator Averzian; confirmed in-game
+            { id = "2912:2", subzone = "Behemoth's Rise",     bossIndex = 2 },  -- Vorasius; confirmed in-game
+            { id = "2912:3", subzone = "The Riftlabs",        bossIndex = 3 },  -- Fallen-King Salhadaar; confirmed in-game
+            { id = "2912:4", subzone = "Devouring Stronghold", bossIndex = 4 }, -- Vaelgor & Ezzorak approach corridor; confirmed in-game (fight room has no subzone)
+            { id = "2912:5", subzone = "Celestial Orrery",    bossIndex = 6 },  -- Crown of the Cosmos approach corridor; confirmed in-game (fight room has no subzone)
         },
         bosses = {
             {
@@ -1716,8 +1716,8 @@ KwikTip.DUNGEONS = {
         type       = "raid",
         mythicPlus = false,
         areas = {
-            { subzone = "Court of the Phoenix", bossIndex = 1 },  -- Belo'ren; sourced from warcraft.wiki.gg; verify in-game
-            { subzone = "The Darkwell",          bossIndex = 2 },  -- Midnight Falls; sourced from warcraft.wiki.gg; verify in-game
+            { id = "2913:1", subzone = "Court of the Phoenix", bossIndex = 1 },  -- Belo'ren; sourced from warcraft.wiki.gg; verify in-game
+            { id = "2913:2", subzone = "The Darkwell",          bossIndex = 2 },  -- Midnight Falls; sourced from warcraft.wiki.gg; verify in-game
         },
         bosses = {
             {
@@ -1759,7 +1759,7 @@ KwikTip.DUNGEONS = {
         type       = "raid",
         mythicPlus = false,
         areas = {
-            { subzone = "Den of the Undreamt", bossIndex = 1 },  -- Chimaerus; confirmed in-game
+            { id = "2939:1", subzone = "Den of the Undreamt", bossIndex = 1 },  -- Chimaerus; confirmed in-game
         },
         bosses = {
             {

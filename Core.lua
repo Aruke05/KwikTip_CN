@@ -101,12 +101,8 @@ local ROLE_FMT = {
 -- filterRole: if provided, only notes of that role + "general" + "interrupt" are shown.
 -- Pass nil to show all notes (used for preview and flat-tip fallback).
 -- Returns nil if notes is nil, empty, or all entries are filtered out.
-local function FormatNotes(notes, filterRole, alternative)
-    if not notes or #notes == 0 then
-        -- If primary notes are empty but alternative (e.g. translated fallback) exists, use it
-        if alternative then return FormatNotes(alternative, filterRole) end
-        return nil
-    end
+local function FormatNotes(notes, filterRole)
+    if not notes or #notes == 0 then return nil end
     local lines = {}
     for _, note in ipairs(notes) do
         if not filterRole
@@ -121,9 +117,6 @@ local function FormatNotes(notes, filterRole, alternative)
                 table.insert(lines, fmt.color .. note.text .. RESET)
             end
         end
-    end
-    if #lines == 0 and alternative then
-        return FormatNotes(alternative, filterRole)
     end
     if #lines == 0 then return nil end
     return table.concat(lines, "\n")
@@ -187,83 +180,51 @@ end
 --   4. English DungeonData default (base)
 -- Each level supports field-level fallback: if a role note is missing in the
 -- override, the same role from the next level is used.
+-- A translated general note does NOT suppress untranslated English tank/healer/dps notes.
 local function FormatBossContent(dungeon, boss, difficultyID)
     local override = difficultyID and boss.difficulties and boss.difficulties[difficultyID]
-    local src  = override or boss
     local role = GetPlayerRole()
 
     -- Check TIP_OVERRIDE_BY_ENCOUNTERID for translated content (keyed by encounterID)
     local tipOver = KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID and KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID[boss.encounterID]
     local tipOverDiff = tipOver and difficultyID and tipOver.difficulties and tipOver.difficulties[difficultyID]
 
-    -- Determine which notes to use: start with the most specific, fall back per role
-    local function NotesForRole(notesOverride, notesDefault, roleName)
-        if notesOverride then
-            for _, n in ipairs(notesOverride) do
-                if n.role == roleName then return n.text end
+    -- Collect up to 4 candidate notes tables (most specific first)
+    -- Each candidate is { notes = {...}, tip = "..." } or nil
+    local candidates = {
+        tipOverDiff,              -- 1. difficulty-specific translation
+        tipOver,                  -- 2. base translation
+        override,                 -- 3. English difficulty-specific
+        boss,                     -- 4. English base
+    }
+
+    -- Merge notes from earliest-to-latest, filling missing roles from later candidates.
+    -- This gives per-role field-level fallback: a translated general note coexists
+    -- with an English tank note because they cover different roles.
+    local merged = {}
+    local seenRoles = {}
+    -- Collect all roles from all sources, preferring earliest (most specific)
+    for _, candidate in ipairs(candidates) do
+        if candidate and candidate.notes then
+            for _, note in ipairs(candidate.notes) do
+                if not seenRoles[note.role] then
+                    seenRoles[note.role] = true
+                    table.insert(merged, note)
+                end
             end
         end
-        if notesDefault then
-            for _, n in ipairs(notesDefault) do
-                if n.role == roleName then return n.text end
-            end
-        end
-        return nil
     end
 
-    -- Build a notes array with field-level fallback
-    local function MergeNotes(primary, secondary)
-        if not primary then return secondary end
-        if not secondary then return primary end
-        local merged = {}
-        -- Take all roles from either source, preferring primary for each role
-        local seenRoles = {}
-        for _, n in ipairs(primary) do
-            seenRoles[n.role] = true
-            table.insert(merged, n)
-        end
-        for _, n in ipairs(secondary) do
-            if not seenRoles[n.role] then
-                table.insert(merged, n)
-            end
-        end
-        return merged
-    end
-
-    -- Resolve content from most specific to least
-    -- Level 1: difficultyID-specific translation
-    local body
-
-    -- Level 1: difficulty-specific translation
-    if tipOverDiff then
-        body = FormatNotes(tipOverDiff.notes, role, tipOver and tipOver.notes)
-        if not body then
-            local enDiffSrc = override or boss
-            body = FormatNotes(enDiffSrc.notes, role, enDiffSrc.tip ~= "" and { { role = "general", text = enDiffSrc.tip } })
-        end
-    end
-
-    -- Level 2: base translation (no difficultyID)
-    if not body and tipOver then
-        body = FormatNotes(tipOver.notes, role)
-        if not body and tipOver.tip and tipOver.tip ~= "" then
-            body = GRAY .. tipOver.tip .. RESET
-        end
-    end
-
-    -- Level 3: English difficulty-specific override in DungeonData
-    if not body and override then
-        body = FormatNotes(override.notes, role)
-        if not body and override.tip and override.tip ~= "" then
-            body = GRAY .. override.tip .. RESET
-        end
-    end
-
-    -- Level 4: English base boss in DungeonData
+    -- Build body from merged notes (filtered by role)
+    local body = FormatNotes(merged, role)
+    -- If no notes at all, fall back to flat tip from the most specific source
+    -- that has one
     if not body then
-        body = FormatNotes(boss.notes, role)
-        if not body and boss.tip and boss.tip ~= "" then
-            body = GRAY .. boss.tip .. RESET
+        for _, candidate in ipairs(candidates) do
+            if candidate and candidate.tip and candidate.tip ~= "" then
+                body = GRAY .. candidate.tip .. RESET
+                break
+            end
         end
     end
 
@@ -273,7 +234,7 @@ local function FormatBossContent(dungeon, boss, difficultyID)
         bossName = KwikTip._activeEncounterName
     end
     local dungeonName = dungeon.name
-    local _, instanceName = GetInstanceInfo()
+    local instanceName = GetInstanceInfo()
     if instanceName and instanceName ~= "" then
         dungeonName = instanceName
     end
@@ -317,10 +278,6 @@ local function FormatAreaContent(dungeon, difficultyID)
     local subzone = GetSubZoneText()
     local mapID   = C_Map.GetBestMapForUnit("player")
     for _, a in ipairs(dungeon.areas) do
-        -- Assign stable area.id on first visit: "instanceID:1-based-index"
-        if not a.id then
-            a.id = tostring(dungeon.instanceID) .. ":" .. tostring(_)
-        end
         local match = (subzone ~= "" and SubzoneMatches(a, subzone))
                    or (a.mapID  and a.mapID  == mapID)
         if match then
@@ -341,8 +298,11 @@ local function FormatAreaContent(dungeon, difficultyID)
             -- Guard: if neither bossIndex nor tip is present, skip rather than showing a blank body.
             if not areaText or areaText == "" then return nil end
             -- Header: prefer localized instance name from Blizzard API
-            local _, instanceName = GetInstanceInfo()
-            local displayName = (instanceName and instanceName ~= "") and instanceName or dungeon.name
+            local displayName = dungeon.name
+            local instanceName = GetInstanceInfo()
+            if instanceName and instanceName ~= "" then
+                displayName = instanceName
+            end
             return GOLD .. displayName .. RESET .. "\n"
                 .. WHITE .. (subzone ~= "" and subzone or "") .. RESET .. "\n"
                 .. GRAY .. areaText .. RESET
@@ -598,7 +558,9 @@ function KwikTip:UpdateContent()
         self.dungeonActive = true
         local affixDetails = dungeon.mythicPlus and FormatAffixDetails()
         if affixDetails then
-            self:SetContent(GOLD .. dungeon.name .. RESET .. "\n" .. affixDetails)
+            local instanceName = GetInstanceInfo()
+            local displayName = (instanceName and instanceName ~= "") and instanceName or dungeon.name
+            self:SetContent(GOLD .. displayName .. RESET .. "\n" .. affixDetails)
         elseif dungeon.mythicPlus then
             self:SetContent(GRAY .. L.WAITING_ENCOUNTER .. RESET)
         else
