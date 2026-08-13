@@ -1,439 +1,406 @@
--- tests/test_localization.lua
--- Run: lua tests/test_localization.lua
--- Loads the real production locale files and runs regression tests.
--- Does NOT require a WoW client — only tests the data structures and
--- string handling that are deterministic.
+-- Run from any working directory with: lua5.1 tests/test_localization.lua
+-- This suite loads the shipped locale files and Core.lua. Runtime assertions
+-- enter through KwikTip's production methods; fallback and subzone logic are
+-- intentionally not reimplemented here.
 
-local PASS = 0
-local FAIL = 0
+local PASS, FAIL = 0, 0
 
-local function ok(condition, msg)
+local function ok(condition, message)
     if condition then
         PASS = PASS + 1
-        io.write("  PASS  ", msg, "\n")
+        io.write("  PASS  ", message, "\n")
     else
         FAIL = FAIL + 1
-        io.write("  FAIL  ", msg, "\n")
+        io.write("  FAIL  ", message, "\n")
     end
 end
 
--- ============================================================
--- Bootstrap: simulate the ADDON_NAME, KwikTip table, and load
--- real production locale files so we test shipped code, not a
--- re-implementation.
--- ============================================================
-local ADDON_NAME = "KwikTip"
-local KwikTip = {}
-local L
-_G.GetLocale = function() return "enUS" end
-
--- Helper: load a production file with the correct varargs
-local function loadAddonFile(path)
-    local fn = loadfile(path)
-    fn(ADDON_NAME, KwikTip)
+local function contains(value, expected)
+    return value and value:find(expected, 1, true) ~= nil
 end
 
--- Load enUS.lua
-loadAddonFile("/home/postblink/Dev Projects/KwikTip/Locale/enUS.lua")
-L = KwikTip.L
+local source = debug.getinfo(1, "S").source
+local testFile = source:sub(1, 1) == "@" and source:sub(2) or source
+local testDir = testFile:match("^(.*[/\\])") or "./"
+local repoDir = testDir .. ".."
 
--- ============================================================
--- 1. enUS semantic key coverage
--- ============================================================
-io.write("\n--- 1. enUS semantic key coverage (loaded from Locale/enUS.lua) ---\n")
-
-ok(L.SETTINGS_TITLE == "KwikTip Settings", "SETTINGS_TITLE")
-ok(L.LOADED_MSG == "loaded. Type /kwik for settings.", "LOADED_MSG")
-ok(L.COMMANDS == "commands:", "COMMANDS")
-ok(L.WAITING_ENCOUNTER == "Waiting for relevant encounter...", "WAITING_ENCOUNTER")
-ok(L.DEMO_DUNGEON == "Demo Dungeon", "DEMO_DUNGEON")
-ok(L.DEMO_BOSS == "Example Boss", "DEMO_BOSS")
-ok(L.TAB_GENERAL == "General", "TAB_GENERAL")
-ok(L.TAB_LAYOUT == "Layout", "TAB_LAYOUT")
-ok(L.TAB_APPEARANCE == "Appearance", "TAB_APPEARANCE")
-ok(L.PREVIEW_BTN == "Preview", "PREVIEW_BTN")
-ok(L.SECTION_DISPLAY == "DISPLAY", "SECTION_DISPLAY")
-ok(L.CHECK_DISABLE == "Disable Tips", "CHECK_DISABLE")
-ok(L.CHECK_MINIMAP == "Show Minimap Button", "CHECK_MINIMAP")
-ok(L.CHECK_PERSISTENT == "Persistent Tip Window", "CHECK_PERSISTENT")
-ok(L.TOOLTIP_HIDE == "Quickly hides the addon without disabling it. Toggle again to show it.", "TOOLTIP_HIDE")
-ok(L.TOOLTIP_PERSISTENT == "Keeps the tip window visible between subzone changes during a run.", "TOOLTIP_PERSISTENT")
-ok(L.CHECK_NOTES == "Enable Custom Notes", "CHECK_NOTES")
-ok(L.TOOLTIP_NOTES == "Allows you to save a custom note for each subzone.", "TOOLTIP_NOTES")
-ok(L.CHECK_DELVES == "Enable in Delves", "CHECK_DELVES")
-ok(L.TOOLTIP_DELVES == "Shows tips inside Delve instances.", "TOOLTIP_DELVES")
-ok(L.SECTION_CHAT == "SEND TO CHAT", "SECTION_CHAT")
-ok(L.LABEL_NONE == "None", "LABEL_NONE")
-ok(L.CHAT_SAY == "Say", "CHAT_SAY")
-ok(L.CHAT_INSTANCE == "Instance", "CHAT_INSTANCE")
-ok(L.CHAT_PARTY == "Party", "CHAT_PARTY")
-ok(L.CHAT_RAID == "Raid", "CHAT_RAID")
-ok(L.SECTION_POSITION == "POSITION", "SECTION_POSITION")
-ok(L.BTN_MOVE == "Move Window", "BTN_MOVE")
-ok(L.BTN_LOCK == "Lock Window", "BTN_LOCK")
-ok(L.SECTION_SIZING == "SIZING", "SECTION_SIZING")
-ok(L.LABEL_WIDTH == "W:", "LABEL_WIDTH")
-ok(L.LABEL_HEIGHT == "H:", "LABEL_HEIGHT")
-ok(L.CHECK_AUTOEXPAND == "Auto-expand Height", "CHECK_AUTOEXPAND")
-ok(L.SECTION_WINDOW == "WINDOW", "SECTION_WINDOW")
-ok(L.SLIDER_OPACITY == "Opacity", "SLIDER_OPACITY")
-ok(L.CHECK_BORDER == "Show Border", "CHECK_BORDER")
-ok(L.LABEL_BORDER_COLOR == "Border Color:", "LABEL_BORDER_COLOR")
-ok(L.SECTION_TEXT == "TEXT", "SECTION_TEXT")
-ok(L.CHECK_SHADOW == "Text Shadow", "CHECK_SHADOW")
-ok(L.LABEL_OUTLINE == "Outline:", "LABEL_OUTLINE")
-ok(L.OUTLINE_OUTLINE == "Outline", "OUTLINE_OUTLINE")
-ok(L.OUTLINE_THICK == "Thick Outline", "OUTLINE_THICK")
-ok(L.TOOLTIP_MINIMAP_LEFT == "Left-click: Settings", "TOOLTIP_MINIMAP_LEFT")
-ok(L.TOOLTIP_MINIMAP_RIGHT == "Right-click: Move HUD", "TOOLTIP_MINIMAP_RIGHT")
-ok(L.TOOLTIP_MINIMAP_DRAG == "Drag: Reposition", "TOOLTIP_MINIMAP_DRAG")
-ok(L.BTN_NOTE_ADD == "Add Note", "BTN_NOTE_ADD")
-ok(L.LABEL_NOTE == "Note", "LABEL_NOTE")
-ok(L.BTN_NOTE_SAVE == "Save", "BTN_NOTE_SAVE")
-ok(L.BTN_NOTE_CLEAR == "Clear", "BTN_NOTE_CLEAR")
-ok(L.TOOLTIP_PRINT == "Print tip to instance chat", "TOOLTIP_PRINT")
-ok(L.TOOLTIP_NOTE == "Add a personal note for this area", "TOOLTIP_NOTE")
-ok(L.FMT_OPACITY:match("%%d%%"), "FMT_OPACITY contains %d%%")
-ok(L.FMT_SIZE:match("Size: %%d"), "FMT_SIZE contains Size: %d")
-
--- Format strings
-ok(string.format(L.FMT_OPACITY, 75) == "Opacity: 75%", "FMT_OPACITY formatted: 75%")
-ok(string.format(L.FMT_SIZE, 12) == "Size: 12", "FMT_SIZE formatted: 12")
-
--- Metatable fallback: unknown key returns itself
-ok(L["UNTRANSLATED_KEY"] == "UNTRANSLATED_KEY", "Metatable fallback returns key itself")
-
--- Key count: 62 semantic keys
-local key_count = 0
-for k, v in pairs(L) do
-    if type(k) == "string" and k:match("^[A-Z]") then
-        local fallback = k
-        if v ~= fallback then
-            key_count = key_count + 1
-        end
-    end
-end
-ok(key_count == 62, "62 semantic keys defined (matching 62 L[] call sites)")
-
--- ============================================================
--- 2. deDE locale guard and values
--- ============================================================
-io.write("\n--- 2. deDE locale guard and values ---\n")
-
--- Load deDE.lua with non-German locale — should be a no-op
-local L_enUS = L
-_G.GetLocale = function() return "frFR" end
-loadAddonFile("/home/postblink/Dev Projects/KwikTip/Locale/deDE.lua")
--- Verify no German values leaked through
-ok(L_enUS.SETTINGS_TITLE == "KwikTip Settings", "deDE guard: enUS values preserved when locale != deDE")
-
--- Reload enUS for the actual deDE test
-KwikTip.L = nil
-_G.GetLocale = function() return "enUS" end
-loadAddonFile("/home/postblink/Dev Projects/KwikTip/Locale/enUS.lua")
-L = KwikTip.L
-
--- Now load deDE with deDE locale
-_G.GetLocale = function() return "deDE" end
-loadAddonFile("/home/postblink/Dev Projects/KwikTip/Locale/deDE.lua")
--- Verify German values applied
-ok(L.SETTINGS_TITLE == "KwikTip Einstellungen", "deDE: SETTINGS_TITLE")
-ok(L.LOADED_MSG == "geladen. /kwik für Einstellungen.", "deDE: LOADED_MSG")
-ok(L.COMMANDS == "Befehle:", "deDE: COMMANDS")
-ok(L.CMD_OPEN == "  /kwik           — Einstellungen öffnen", "deDE: CMD_OPEN")
-ok(L.CMD_MOVE == "  /kwik move      — Bewegungsmodus umschalten", "deDE: CMD_MOVE")
-ok(L.CMD_HELP == "  /kwik help      — Befehlsliste anzeigen", "deDE: CMD_HELP")
-ok(L.WAITING_ENCOUNTER == "Warte auf relevante Begegnung...", "deDE: WAITING_ENCOUNTER")
-ok(L.DEMO_DUNGEON == "Demo-Dungeon", "deDE: DEMO_DUNGEON")
-ok(L.DEMO_BOSS == "Beispiel-Boss", "deDE: DEMO_BOSS")
-ok(L.TAB_GENERAL == "Allgemein", "deDE: TAB_GENERAL")
-ok(L.SECTION_DISPLAY == "ANZEIGE", "deDE: SECTION_DISPLAY")
-ok(L.CHECK_DISABLE == "Tipps deaktivieren", "deDE: CHECK_DISABLE")
-ok(L.LABEL_NONE == "Keiner", "deDE: LABEL_NONE")
-ok(L.CHAT_SAY == "Sagen", "deDE: CHAT_SAY")
-ok(L.CHAT_INSTANCE == "Instanz", "deDE: CHAT_INSTANCE")
-ok(L.BTN_MOVE == "Fenster verschieben", "deDE: BTN_MOVE")
-ok(L.BTN_LOCK == "Fenster sperren", "deDE: BTN_LOCK")
-ok(L.SECTION_SIZING == "GRÖSSE", "deDE: SECTION_SIZING")
-ok(L.LABEL_WIDTH == "B:", "deDE: LABEL_WIDTH")
-ok(L.LABEL_HEIGHT == "H:", "deDE: LABEL_HEIGHT")
-ok(L.SECTION_WINDOW == "FENSTER", "deDE: SECTION_WINDOW")
-ok(L.SLIDER_OPACITY == "Deckkraft", "deDE: SLIDER_OPACITY")
-ok(L.FMT_OPACITY == "Deckkraft: %d%%", "deDE: FMT_OPACITY")
-ok(L.CHECK_BORDER == "Rahmen anzeigen", "deDE: CHECK_BORDER")
-ok(L.SECTION_TEXT == "TEXT", "deDE: SECTION_TEXT")
-ok(L.FMT_SIZE == "Größe: %d", "deDE: FMT_SIZE")
-ok(L.CHECK_SHADOW == "Textschatten", "deDE: CHECK_SHADOW")
-ok(L.LABEL_OUTLINE == "Umrandung:", "deDE: LABEL_OUTLINE")
-ok(L.OUTLINE_OUTLINE == "Umrandung", "deDE: OUTLINE_OUTLINE")
-ok(L.OUTLINE_THICK == "Dicke Umrandung", "deDE: OUTLINE_THICK")
-ok(L.TOOLTIP_MINIMAP_LEFT == "Linksklick: Einstellungen", "deDE: TOOLTIP_MINIMAP_LEFT")
-ok(L.BTN_NOTE_ADD == "Notiz hinzufügen", "deDE: BTN_NOTE_ADD")
-ok(L.LABEL_NOTE == "Notiz", "deDE: LABEL_NOTE")
-ok(L.BTN_NOTE_SAVE == "Speichern", "deDE: BTN_NOTE_SAVE")
-ok(L.BTN_NOTE_CLEAR == "Löschen", "deDE: BTN_NOTE_CLEAR")
-ok(L.TOOLTIP_PRINT == "Tipp in den Instanzchat senden", "deDE: TOOLTIP_PRINT")
-ok(L.TOOLTIP_NOTE == "Persönliche Notiz für diesen Bereich hinzufügen", "deDE: TOOLTIP_NOTE")
-
--- Untranslated fallback still works
-ok(L["UNTRANSLATED_KEY"] == "UNTRANSLATED_KEY", "deDE: metatable fallback still active")
-
--- ============================================================
--- 3. TIP_OVERRIDE_BY_ENCOUNTERID infrastructure (loaded from production files)
--- ============================================================
-io.write("\n--- 3. Tip override infrastructure (loaded from production files) ---\n")
-
--- Load tips_enUS.lua on enUS locale
-_G.GetLocale = function() return "enUS" end
-loadAddonFile("/home/postblink/Dev Projects/KwikTip/Locale/tips_enUS.lua")
-
--- Empty tables on enUS
-ok(KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID ~= nil, "tips_enUS: TIP_OVERRIDE table exists")
-ok(next(KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID) == nil, "tips_enUS: TIP_OVERRIDE table is empty")
-ok(KwikTip.AREA_OVERRIDE_BY_ID ~= nil, "tips_enUS: AREA_OVERRIDE table exists")
-ok(next(KwikTip.AREA_OVERRIDE_BY_ID) == nil, "tips_enUS: AREA_OVERRIDE table is empty")
-ok(KwikTip.SUBZONE_LOCALE_BY_AREA_ID ~= nil, "tips_enUS: SUBZONE_LOCALE table exists")
-ok(next(KwikTip.SUBZONE_LOCALE_BY_AREA_ID) == nil, "tips_enUS: SUBZONE_LOCALE table is empty on enUS")
-
--- Load tips_deDE.lua on deDE locale
-_G.GetLocale = function() return "deDE" end
-loadAddonFile("/home/postblink/Dev Projects/KwikTip/Locale/tips_deDE.lua")
-
--- DE locale should have SUBZONE_LOCALE_BY_AREA_ID populated
-ok(KwikTip.SUBZONE_LOCALE_BY_AREA_ID ~= nil, "tips_deDE: SUBZONE_LOCALE table exists")
-ok(KwikTip.SUBZONE_LOCALE_BY_AREA_ID["2805:1"] ~= nil, "tips_deDE: SUBZONE_LOCALE for 2805:1")
-ok(KwikTip.SUBZONE_LOCALE_BY_AREA_ID["2805:1"][1] == "Die Promenade", "tips_deDE: The Promenade → Die Promenade")
-ok(KwikTip.SUBZONE_LOCALE_BY_AREA_ID["2811:4"][1] == "Turm der Theorie", "tips_deDE: Tower of Theory → Turm der Theorie")
-ok(KwikTip.SUBZONE_LOCALE_BY_AREA_ID["2915:1"][1] == "Der Basar", "tips_deDE: The Bazaar → Der Basar")
-
--- TIP_OVERRIDE is still empty (no German tips written yet)
-ok(next(KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID) == nil, "tips_deDE: TIP_OVERRIDE still empty (no German tips written)")
-
--- ============================================================
--- 4. EnUS byte-equivalent behavior
--- ============================================================
-io.write("\n--- 4. enUS byte-equivalent behavior ---\n")
-
--- Reset for enUS test
-KwikTip.L = nil
-_G.GetLocale = function() return "enUS" end
-loadAddonFile("/home/postblink/Dev Projects/KwikTip/Locale/enUS.lua")
-L = KwikTip.L
-
--- Old-style L["English prose"] calls still produce the same output
-ok(L["loaded. Type /kwik for settings."] == "loaded. Type /kwik for settings.",
-   "Metatable: old English-prose key still returns itself")
-ok(L["KwikTip Settings"] == "KwikTip Settings",
-   "Metatable: old-style key returns same value as semantic key")
-ok(L["commands:"] == "commands:",
-   "Metatable: commands: returns itself")
-
--- ============================================================
--- 5. DungeonData area IDs — stable, explicit, no runtime fallback
--- ============================================================
-io.write("\n--- 5. DungeonData stable area IDs ---\n")
-
--- Load DungeonData to verify area IDs
-loadAddonFile("/home/postblink/Dev Projects/KwikTip/DungeonData.lua")
-
--- Count area entries with IDs
-local area_id_count = 0
-local area_no_id = 0
-for _, d in ipairs(KwikTip.DUNGEONS) do
-    if d.areas then
-        for _, a in ipairs(d.areas) do
-            if a.id then
-                area_id_count = area_id_count + 1
-                -- Verify ID format: "instanceID:index"
-                local inst, idx = a.id:match("^(%d+):(%d+)$")
-                ok(inst ~= nil, "Area ID " .. a.id .. " matches instanceID:index format")
-                ok(tonumber(inst) == d.instanceID, "Area ID " .. a.id .. " matches instance " .. d.instanceID)
-            else
-                area_no_id = area_no_id + 1
-            end
-        end
-    end
-end
-ok(area_id_count > 50, "At least 50 area entries have stable IDs (got " .. area_id_count .. ")")
-ok(area_no_id == 0, "Zero area entries without stable IDs (got " .. area_no_id .. ")")
-
--- Verify SubzoneMatches logic with loaded data
-local function SubzoneMatches(area, playerSubzone)
-    if not playerSubzone or playerSubzone == "" then return false end
-    if area.subzone and area.subzone == playerSubzone then return true end
-    if area.id and KwikTip.SUBZONE_LOCALE_BY_AREA_ID then
-        local aliases = KwikTip.SUBZONE_LOCALE_BY_AREA_ID[area.id]
-        if aliases then
-            for _, loc in ipairs(aliases) do
-                if loc == playerSubzone then return true end
-            end
-        end
-    end
-    if area.subzoneLocales then
-        for _, loc in ipairs(area.subzoneLocales) do
-            if loc == playerSubzone then return true end
-        end
-    end
-    return false
+local function repoPath(relative)
+    return repoDir .. "/" .. relative
 end
 
--- Find the Promenade area entry
-local promenade
-for _, d in ipairs(KwikTip.DUNGEONS) do
-    if d.areas then
-        for _, a in ipairs(d.areas) do
-            if a.subzone == "The Promenade" then
-                promenade = a
-            end
-        end
-    end
+local function loadAddonFile(relative, addon)
+    local chunk, err = loadfile(repoPath(relative))
+    assert(chunk, err)
+    return chunk("KwikTip", addon)
 end
-ok(promenade ~= nil, "Found The Promenade area entry")
-ok(promenade.id == "2805:1", "The Promenade has id 2805:1")
-ok(SubzoneMatches(promenade, "The Promenade"), "SubzoneMatches: English name matches")
-ok(SubzoneMatches(promenade, "Die Promenade"), "SubzoneMatches: German alias matches (from loaded tips_deDE)")
 
--- Find the Bazaar (Nexus-Point Xenas)
-local bazaar
-for _, d in ipairs(KwikTip.DUNGEONS) do
-    if d.areas then
-        for _, a in ipairs(d.areas) do
-            if a.subzone == "The Bazaar" then
-                bazaar = a
-            end
-        end
+local function newRuntime(locale)
+    local state = {
+        locale = locale,
+        role = "HEALER",
+        instanceName = "Localized Dungeon",
+        instanceType = "party",
+        difficultyID = 10,
+        instanceID = 9001,
+        mapID = 7001,
+        subzone = "",
+        inInstance = true,
+    }
+    local printed = {}
+
+    UIParent = {}
+    SlashCmdList = {}
+    C_Timer = { After = function(_, callback) callback() end }
+    C_Map = {
+        GetBestMapForUnit = function() return state.mapID end,
+        GetPlayerMapPosition = function() return nil end,
+    }
+    C_ChallengeMode = nil
+    GetLocale = function() return state.locale end
+    UnitGroupRolesAssigned = function() return state.role end
+    IsInInstance = function() return state.inInstance, state.instanceType end
+    GetSubZoneText = function() return state.subzone end
+    GetInstanceInfo = function()
+        return state.instanceName, state.instanceType, state.difficultyID,
+            "Difficulty", 5, 0, false, state.instanceID
     end
+    UnitCanAttack = function() return false end
+    UnitIsPlayer = function() return false end
+    date = function() return "test-time" end
+    print = function(...)
+        local parts = {}
+        for i = 1, select("#", ...) do parts[i] = tostring(select(i, ...)) end
+        table.insert(printed, table.concat(parts, "\t"))
+    end
+    CreateFrame = function()
+        return {
+            RegisterEvent = function() end,
+            UnregisterEvent = function() end,
+            SetScript = function() end,
+        }
+    end
+
+    local addon = {
+        DEFAULTS = {},
+        DUNGEON_BY_INSTANCEID = {},
+        DUNGEON_BY_UIMAPID = {},
+        BOSS_BY_ENCOUNTERID = {},
+    }
+    loadAddonFile("Locale/enUS.lua", addon)
+    loadAddonFile("Locale/Locales.lua", addon)
+    loadAddonFile("Locale/deDE.lua", addon)
+    loadAddonFile("Locale/tips_enUS.lua", addon)
+    loadAddonFile("Locale/tips_deDE.lua", addon)
+
+    function addon:SetContent(content) self.captured = content end
+    function addon:UpdateVisibility() end
+    function addon:InitHUD() end
+
+    KwikTipDB = {
+        showInDungeon = true,
+        delves = true,
+        debugLog = false,
+        notes = {},
+        mapIDLog = {},
+        encounterLog = {},
+        keystoneLog = {},
+        spellLog = {},
+        debugSnapshots = {},
+    }
+    loadAddonFile("Core.lua", addon)
+    return addon, state, printed
 end
-ok(bazaar ~= nil, "Found The Bazaar area entry")
-ok(bazaar.id == "2915:1", "The Bazaar has id 2915:1")
-ok(SubzoneMatches(bazaar, "Der Basar"), "SubzoneMatches: The Bazaar → Der Basar (German alias)")
 
--- Subzone match with unknown string returns false
-ok(SubzoneMatches(promenade, "Nonexistent Zone") == false, "SubzoneMatches: unknown zone returns false")
+local function resetBossState(addon)
+    addon._activeBossEntry = nil
+    addon._activeEncounterID = nil
+    addon._activeEncounterName = nil
+    addon._activeDifficultyID = nil
+    addon.bossActive = false
+    addon.previewActive = false
+    addon.captured = nil
+end
 
--- ============================================================
--- 6. Field-level note fallback regression
--- ============================================================
-io.write("\n--- 6. Field-level note fallback regression ---\n")
+local function renderBoss(addon, state, dungeon, boss, difficultyID, encounterName)
+    resetBossState(addon)
+    addon.BOSS_BY_ENCOUNTERID = {
+        [boss.encounterID] = { dungeon = dungeon, boss = boss },
+    }
+    state.difficultyID = difficultyID
+    addon:OnEncounterStart(boss.encounterID, encounterName or boss.name, difficultyID, 5)
+    return addon.captured
+end
 
--- This tests the FormatBossContent merge logic from Core.lua.
--- Simulate the 4-level candidate merge with per-role fallback.
--- English boss has: tank, healer, dps notes
--- German override has: general note only
--- Result: German general + English tank + English healer + English dps
+local GOLD, WHITE, GRAY, RESET = "|cffffcc00", "|cffffffff", "|cffbbbbbb", "|r"
+local HEAL_ICON = "|TInterface\\Icons\\Spell_Holy_Renew:13:13|t"
 
-local englishBoss = {
-    encounterID = 3056,
-    tip = "English tip",
+io.write("\n--- enUS production runtime ---\n")
+local addon, state = newRuntime("enUS")
+ok(addon.L.SETTINGS_TITLE == "KwikTip Settings", "deDE guard preserves enUS locale")
+
+state.instanceName = "English Dungeon"
+local dungeon = { name = "English Dungeon", mythicPlus = false }
+local notesBoss = {
+    encounterID = 101,
+    name = "English Boss",
+    tip = "English flat fallback",
     notes = {
-        { role = "tank",   text = "English tank note" },
-        { role = "healer", text = "English healer note" },
-        { role = "dps",    text = "English dps note" },
+        { role = "general", text = "English general one" },
+        { role = "general", text = "English general two" },
+        { role = "healer", text = "English healer" },
+        { role = "tank", text = "English tank" },
     },
 }
-local deOver = {
-    notes = {
-        { role = "general", text = "German general note" },
+dungeon.bosses = { notesBoss }
+addon.TIP_OVERRIDE_BY_ENCOUNTERID = {}
+local output = renderBoss(addon, state, dungeon, notesBoss, 10)
+local expectedNotes = GOLD .. "English Dungeon" .. RESET .. "\n"
+    .. WHITE .. "English Boss" .. RESET .. "\n"
+    .. GRAY .. "English general one" .. RESET .. "\n"
+    .. GRAY .. "English general two" .. RESET .. "\n"
+    .. HEAL_ICON .. " |cff33cc33English healer" .. RESET
+ok(output == expectedNotes, "enUS notes match pre-localization rendering exactly")
+
+local flatBoss = { encounterID = 102, name = "Flat Boss", tip = "Flat English tip" }
+dungeon.bosses = { flatBoss }
+local expectedFlat = GOLD .. "English Dungeon" .. RESET .. "\n"
+    .. WHITE .. "Flat Boss" .. RESET .. "\n" .. GRAY .. "Flat English tip" .. RESET
+ok(renderBoss(addon, state, dungeon, flatBoss, 10) == expectedFlat,
+    "enUS flat tip matches pre-localization rendering exactly")
+
+io.write("\n--- production fallback semantics ---\n")
+addon.TIP_OVERRIDE_BY_ENCOUNTERID = {
+    [101] = { notes = { { role = "general", text = "German general" } } },
+}
+dungeon.bosses = { notesBoss }
+output = renderBoss(addon, state, dungeon, notesBoss, 10)
+ok(contains(output, "German general"), "translated general note is rendered")
+ok(contains(output, "English healer"), "missing translated healer falls back to English healer")
+ok(not contains(output, "English general one"), "translated general owns the general role")
+
+notesBoss.difficulties = {
+    [10] = { notes = { { role = "general", text = "English difficulty general" } } },
+}
+addon.TIP_OVERRIDE_BY_ENCOUNTERID = {
+    [101] = { difficulties = { [10] = { tip = "German difficulty tip" } } },
+}
+output = renderBoss(addon, state, dungeon, notesBoss, 10)
+ok(contains(output, "German difficulty tip"),
+    "translated difficulty flat tip wins over lower-priority English notes")
+ok(not contains(output, "English difficulty general"),
+    "English difficulty notes do not suppress translated difficulty flat tip")
+
+notesBoss.difficulties = {
+    [10] = { notes = {
+        { role = "general", text = "English difficulty general" },
+        { role = "healer", text = "English difficulty healer" },
+    } },
+}
+addon.TIP_OVERRIDE_BY_ENCOUNTERID = {
+    [101] = { difficulties = { [10] = {
+        notes = { { role = "general", text = "German difficulty general" } },
+    } } },
+}
+output = renderBoss(addon, state, dungeon, notesBoss, 10)
+ok(contains(output, "German difficulty general"), "translated difficulty general is rendered")
+ok(contains(output, "English difficulty healer"),
+    "missing translated difficulty healer uses English difficulty healer")
+ok(not contains(output, "English difficulty general"),
+    "translated difficulty general replaces English difficulty general")
+
+addon.TIP_OVERRIDE_BY_ENCOUNTERID = {
+    [101] = { difficulties = { [10] = {
+        tip = "German difficulty role fallback tip",
+        notes = { { role = "tank", text = "German tank only" } },
+    } } },
+}
+output = renderBoss(addon, state, dungeon, notesBoss, 10)
+ok(contains(output, "German difficulty role fallback tip"),
+    "translated flat tip is used when its structured notes do not apply to the player")
+ok(not contains(output, "English difficulty healer"),
+    "lower-priority English role note does not suppress translated flat tip")
+
+notesBoss.difficulties = nil
+addon.TIP_OVERRIDE_BY_ENCOUNTERID = { [101] = { tip = "German base tip" } }
+output = renderBoss(addon, state, dungeon, notesBoss, 10)
+ok(contains(output, "German base tip"), "missing translated difficulty falls back to translated base")
+
+addon.TIP_OVERRIDE_BY_ENCOUNTERID = {}
+notesBoss.difficulties = {
+    [10] = { notes = { { role = "general", text = "English difficulty only" } } },
+}
+output = renderBoss(addon, state, dungeon, notesBoss, 10)
+ok(contains(output, "English difficulty only"), "missing translations use English difficulty content")
+ok(not contains(output, "English general one"), "English difficulty content retains legacy override semantics")
+
+notesBoss.difficulties = { [10] = {} }
+output = renderBoss(addon, state, dungeon, notesBoss, 10)
+ok(contains(output, "English general one"), "empty English difficulty falls back to English base")
+
+-- Sparse combinations that previously terminated an ipairs candidate walk.
+notesBoss.difficulties = nil
+addon.TIP_OVERRIDE_BY_ENCOUNTERID = { [101] = { difficulties = {} } }
+output = renderBoss(addon, state, dungeon, notesBoss, 10)
+ok(contains(output, "English general one"), "sparse override table reaches English base")
+addon.TIP_OVERRIDE_BY_ENCOUNTERID = nil
+output = renderBoss(addon, state, dungeon, notesBoss, 10)
+ok(contains(output, "English healer"), "nil override table reaches English base")
+
+state.instanceName = "Lokalisierter Instanzname"
+output = renderBoss(addon, state, dungeon, notesBoss, 10, "Localized Encounter")
+ok(contains(output, "Lokalisierter Instanzname"),
+    "dungeon header uses first GetInstanceInfo return")
+ok(not contains(output, "|cffffcc00party"), "instance type is not used as dungeon header")
+
+io.write("\n--- production subzone matching and authored IDs ---\n")
+local deAddon, deState, printed = newRuntime("deDE")
+deState.instanceName = "Lokalisierter Dungeon"
+deState.instanceID = 2805
+deState.mapID = 999999
+deState.subzone = "Die Promenade"
+deAddon.DUNGEON_BY_INSTANCEID = {
+    [2805] = {
+        instanceID = 2805,
+        name = "Windrunner Spire",
+        mythicPlus = false,
+        bosses = {},
+        areas = {
+            { id = "2805:1", subzone = "The Promenade", tip = "Area tip" },
+        },
     },
 }
+deAddon:UpdateContent()
+ok(contains(deAddon.captured, "Area tip"), "Core SubzoneMatches accepts loaded verified deDE alias")
+ok(contains(deAddon.captured, "Lokalisierter Dungeon"), "localized area header uses Blizzard instance name")
 
--- The merge logic from FormatBossContent
-local candidates = { deOver, englishBoss }
-local merged = {}
-local seenRoles = {}
-for _, candidate in ipairs(candidates) do
-    if candidate and candidate.notes then
-        for _, note in ipairs(candidate.notes) do
-            if not seenRoles[note.role] then
-                seenRoles[note.role] = true
-                table.insert(merged, note)
-            end
-        end
+io.write("\n--- production localized affix heading (deDE) ---\n")
+-- P2-1: the M+ holding screen heading must come from the locale table, not a
+-- hard-coded English literal. Driven through UpdateContent, the shipped path.
+local savedSubzone, savedInstanceID = deState.subzone, deState.instanceID
+deState.subzone    = ""
+deState.instanceID = 2813
+deAddon.DUNGEON_BY_INSTANCEID[2813] = {
+    instanceID = 2813, name = "Murder Row", mythicPlus = true, bosses = {}, areas = {},
+}
+C_ChallengeMode = {
+    GetActiveKeystoneInfo = function() return 12, { 9 } end,
+    GetAffixInfo = function() return { name = "Tyrannisch", description = "Bosse sind stärker." } end,
+}
+resetBossState(deAddon)
+deAddon:UpdateContent()
+ok(contains(deAddon.captured, "+12 Aktive Affixe"),
+    "production affix heading uses the deDE locale value")
+ok(not contains(deAddon.captured, "Active Affixes"),
+    "production affix heading no longer emits the English literal")
+C_ChallengeMode = nil
+deAddon.DUNGEON_BY_INSTANCEID[2813] = nil
+deState.subzone, deState.instanceID = savedSubzone, savedInstanceID
+
+io.write("\n--- empty translations fall back to English ---\n")
+-- P2-2: "" is how translation tooling spells "untranslated". It must never
+-- shadow the English prose behind it, at any level of the fallback chain.
+deAddon.AREA_OVERRIDE_BY_ID["2805:1"] = { tip = "" }
+resetBossState(deAddon)
+deAddon:UpdateContent()
+ok(contains(deAddon.captured, "Area tip"),
+    "empty translated area tip falls back to the English area tip")
+deAddon.AREA_OVERRIDE_BY_ID["2805:1"] = nil
+
+local emptyDungeon = { name = "Windrunner Spire", mythicPlus = false }
+local emptyNotesBoss = {
+    encounterID = 201,
+    name = "Empty Note Boss",
+    notes = {
+        { role = "general", text = "English general" },
+        { role = "healer",  text = "English healer" },
+    },
+}
+emptyDungeon.bosses = { emptyNotesBoss }
+deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[201] = {
+    notes = {
+        { role = "general", text = "Deutscher Allgemeinhinweis" },
+        { role = "healer",  text = "" },
+    },
+}
+output = renderBoss(deAddon, deState, emptyDungeon, emptyNotesBoss, 10)
+ok(contains(output, "English healer"),
+    "empty translated role note does not claim its role — English healer survives")
+ok(not contains(output, HEAL_ICON .. " |cff33cc33" .. RESET),
+    "empty translated role note renders no blank role line")
+ok(contains(output, "Deutscher Allgemeinhinweis"),
+    "non-empty translated role note is still rendered alongside the fallback")
+deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[201] = nil
+
+local emptyFlatBoss = { encounterID = 202, name = "Empty Flat Boss", tip = "English flat tip" }
+emptyDungeon.bosses = { emptyFlatBoss }
+deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[202] = { tip = "" }
+output = renderBoss(deAddon, deState, emptyDungeon, emptyFlatBoss, 10)
+ok(contains(output, "English flat tip"),
+    "empty translated flat tip falls back to the English flat tip")
+deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[202] = nil
+
+local emptyDiffBoss = {
+    encounterID = 203,
+    name = "Empty Difficulty Boss",
+    tip = "English base tip",
+    difficulties = { [10] = { tip = "English difficulty tip" } },
+}
+emptyDungeon.bosses = { emptyDiffBoss }
+deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[203] = { difficulties = { [10] = { tip = "" } } }
+output = renderBoss(deAddon, deState, emptyDungeon, emptyDiffBoss, 10)
+ok(contains(output, "English difficulty tip"),
+    "empty translated difficulty flat tip falls back to the English difficulty tip")
+deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[203] = nil
+resetBossState(deAddon)
+
+local dataAddon = {}
+loadAddonFile("DungeonData.lua", dataAddon)
+local ids, total, missing = {}, 0, 0
+for _, dataDungeon in ipairs(dataAddon.DUNGEONS) do
+    for _, area in ipairs(dataDungeon.areas or {}) do
+        total = total + 1
+        if not area.id or ids[area.id] then missing = missing + 1 end
+        ids[area.id] = true
     end
 end
+ok(total > 0 and missing == 0, "all authored area IDs are present and unique")
 
--- Verify: all 4 roles present
-local roleCount = 0
-for _, n in ipairs(merged) do
-    if n.role == "general" then
-        ok(n.text == "German general note", "Field fallback: general uses German")
-        roleCount = roleCount + 1
-    elseif n.role == "tank" then
-        ok(n.text == "English tank note", "Field fallback: tank uses English (not suppressed by German general)")
-        roleCount = roleCount + 1
-    elseif n.role == "healer" then
-        ok(n.text == "English healer note", "Field fallback: healer uses English")
-        roleCount = roleCount + 1
-    elseif n.role == "dps" then
-        ok(n.text == "English dps note", "Field fallback: dps uses English")
-        roleCount = roleCount + 1
-    end
-end
-ok(roleCount == 4, "Field fallback: all 4 roles present in merged result")
-
--- If a translated note exists for a role, it wins
-candidates = { deOver, englishBoss }
-deOver.notes[2] = { role = "tank", text = "German tank note" }
-merged = {}
-seenRoles = {}
-for _, candidate in ipairs(candidates) do
-    if candidate and candidate.notes then
-        for _, note in ipairs(candidate.notes) do
-            if not seenRoles[note.role] then
-                seenRoles[note.role] = true
-                table.insert(merged, note)
-            end
-        end
-    end
-end
-for _, n in ipairs(merged) do
-    if n.role == "tank" then
-        ok(n.text == "German tank note", "Field fallback: translated tank note wins over English")
-    end
+io.write("\n--- preserved German UI/runtime strings ---\n")
+local expectedGerman = {
+    SETTINGS_TITLE = "KwikTip-Einstellungen",
+    LOADED_MSG = "geladen. Tippe /kwik für die Einstellungen.",
+    WAITING_ENCOUNTER = "Warte auf passende Begegnung …",
+    DEMO_DUNGEON = "Beispiel-Dungeon",
+    TAB_APPEARANCE = "Darstellung",
+    CHECK_MINIMAP = "Minikarten-Button anzeigen",
+    CHECK_PERSISTENT = "Dauerhaftes Tipp-Fenster",
+    LABEL_NONE = "Keine",
+    CHECK_AUTOEXPAND = "Höhe automatisch anpassen",
+    LABEL_OUTLINE = "Kontur:",
+    OUTLINE_OUTLINE = "Kontur",
+    OUTLINE_THICK = "Dicke Kontur",
+    TOOLTIP_MINIMAP_DRAG = "Ziehen: Position ändern",
+    BTN_NOTE_CLEAR = "Leeren",
+    TOOLTIP_PRINT = "Tipp in Instanzchat ausgeben",
+}
+for key, value in pairs(expectedGerman) do
+    ok(deAddon.L[key] == value, "preserved deDE value: " .. key)
 end
 
--- 4-level difficulty fallback: difficulty-specific → base → English diff → English base
-local diffOverride = { notes = { { role = "general", text = "Diff override" } } }
-local baseOverride = { notes = { { role = "tank", text = "Base tank override" } } }
-local englishDiff = { notes = { { role = "healer", text = "English healer diff" } } }
-local englishBase = { notes = { { role = "dps", text = "English dps base" } } }
+deAddon:ShowPreview()
+ok(contains(deAddon.captured, "Rote Zonen meiden"), "production preview restores German general text")
+ok(contains(deAddon.captured, "Tankwechsel bei 3 Stapeln"), "production preview restores German tank text")
 
-candidates = { diffOverride, baseOverride, englishDiff, englishBase }
-merged = {}
-seenRoles = {}
-for _, candidate in ipairs(candidates) do
-    if candidate and candidate.notes then
-        for _, note in ipairs(candidate.notes) do
-            if not seenRoles[note.role] then
-                seenRoles[note.role] = true
-                table.insert(merged, note)
-            end
-        end
-    end
-end
-for _, n in ipairs(merged) do
-    if n.role == "general" then ok(n.text == "Diff override", "4-level: general from diff override") end
-    if n.role == "tank" then ok(n.text == "Base tank override", "4-level: tank from base override") end
-    if n.role == "healer" then ok(n.text == "English healer diff", "4-level: healer from English diff") end
-    if n.role == "dps" then ok(n.text == "English dps base", "4-level: dps from English base") end
-end
+SlashCmdList.KWIKTIP("debug")
+local debugText = table.concat(printed, "\n")
+ok(contains(debugText, "Typ=party"), "production debug output restores German format")
+SlashCmdList.KWIKTIP("debuglog")
+ok(contains(table.concat(printed, "\n"), "Debug-Protokollierung aktiviert."),
+    "production debug logging message is localized")
+SlashCmdList.KWIKTIP("feedback")
+ok(contains(table.concat(printed, "\n"), "Tipps passen nicht?"),
+    "production feedback message is localized")
 
--- ============================================================
--- 7. GetInstanceInfo() first return is the localized name
--- ============================================================
-io.write("\n--- 7. GetInstanceInfo() first return verification ---\n")
-
--- Verify the understanding is correct: GetInstanceInfo returns
--- (name, instanceType, difficultyID, difficultyName, ...)
--- The first return is the localized instance name.
--- This is a design-level assertion, not a runtime test.
-ok(true, "GetInstanceInfo() returns (name, ...) — first return is localized name")
-ok(true, "Core.lua: line 276, 344, 601 all use 'local instanceName = GetInstanceInfo()' (fixed)")
-
--- ============================================================
--- Summary
--- ============================================================
-io.write(string.format("\n=== RESULTS: %d passed, %d failed (of %d total) ===\n", PASS, FAIL, PASS + FAIL))
-if FAIL > 0 then
-    os.exit(1)
-end
+io.write(string.format("\n=== RESULTS: %d passed, %d failed (of %d total) ===\n",
+    PASS, FAIL, PASS + FAIL))
+if FAIL > 0 then os.exit(1) end

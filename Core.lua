@@ -122,6 +122,15 @@ local function FormatNotes(notes, filterRole)
     return table.concat(lines, "\n")
 end
 
+-- Normalize a localizable prose field: an empty string means "not translated"
+-- and must never suppress the English content behind it. Translation tooling
+-- routinely emits "" for untranslated fields, so every fallback chain treats
+-- "" exactly like nil.
+local function Prose(value)
+    if value and value ~= "" then return value end
+    return nil
+end
+
 -- Shared header: "Dungeon Name\nEntity Name"
 local function FormatHeader(dungeonName, entityName)
     return GOLD .. dungeonName .. RESET .. "\n" .. WHITE .. entityName .. RESET
@@ -150,7 +159,7 @@ local function FormatAffixDetails()
     if not C_ChallengeMode then return nil end
     local level, affixes = C_ChallengeMode.GetActiveKeystoneInfo()
     if not level or not affixes or #affixes == 0 then return nil end
-    local lines = { GOLD .. "+" .. level .. " Active Affixes" .. RESET }
+    local lines = { GOLD .. string.format(L.AFFIX_HEADING, level) .. RESET }
     for _, id in ipairs(affixes) do
         local data = KwikTip.AFFIXES and KwikTip.AFFIXES[id]
         local info = C_ChallengeMode.GetAffixInfo(id)
@@ -174,13 +183,14 @@ end
 -- Falls back to the flat tip string if no notes are defined.
 --
 -- Fallback chain for translated content (TIP_OVERRIDE_BY_ENCOUNTERID):
---   1. difficultyID-specific translation override (e.g. mythic+)
---   2. base translation override (no difficultyID)
---   3. English DungeonData default (difficultyID-specific)
---   4. English DungeonData default (base)
--- Each level supports field-level fallback: if a role note is missing in the
--- override, the same role from the next level is used.
--- A translated general note does NOT suppress untranslated English tank/healer/dps notes.
+--   1. difficulty-specific translation
+--   2. English difficulty-specific content
+--   3. base translation
+--   4. English base content
+-- A flat tip at a more-specific level wins immediately. Translated structured
+-- notes fill missing roles from the matching English level; base content is
+-- consulted only when the difficulty level produces no body. This preserves
+-- the legacy English difficulty override while allowing per-role translation.
 local function FormatBossContent(dungeon, boss, difficultyID)
     local override = difficultyID and boss.difficulties and boss.difficulties[difficultyID]
     local role = GetPlayerRole()
@@ -189,46 +199,64 @@ local function FormatBossContent(dungeon, boss, difficultyID)
     local tipOver = KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID and KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID[boss.encounterID]
     local tipOverDiff = tipOver and difficultyID and tipOver.difficulties and tipOver.difficulties[difficultyID]
 
-    -- Collect up to 4 candidate notes tables (most specific first)
-    -- Each candidate is { notes = {...}, tip = "..." } or nil
-    local candidates = {
-        tipOverDiff,              -- 1. difficulty-specific translation
-        tipOver,                  -- 2. base translation
-        override,                 -- 3. English difficulty-specific
-        boss,                     -- 4. English base
-    }
+    local function NoteApplies(note)
+        return not role
+            or note.role == "general"
+            or note.role == "interrupt"
+            or note.role == role
+    end
 
-    -- Merge notes from earliest-to-latest, filling missing roles from later candidates.
-    -- This gives per-role field-level fallback: a translated general note coexists
-    -- with an English tank note because they cover different roles.
-    local merged = {}
-    local seenRoles = {}
-    -- Collect all roles from all sources, preferring earliest (most specific)
-    for _, candidate in ipairs(candidates) do
-        if candidate and candidate.notes then
-            for _, note in ipairs(candidate.notes) do
-                if not seenRoles[note.role] then
-                    seenRoles[note.role] = true
-                    table.insert(merged, note)
+    -- Resolve one specificity level. The translated source owns any role it
+    -- defines; the matching English source supplies only missing role fields.
+    -- All notes for an owned role are retained (bosses commonly have several
+    -- general notes). If no translated note applies, its flat tip wins before
+    -- consulting English content at this level.
+    -- A translated note with empty text is untranslated: it neither renders nor
+    -- claims its role, so the English note for that role is still used.
+    local function ResolveLevel(translated, english)
+        local translatedNotes = {}
+        local translatedRoles = {}
+        if translated and translated.notes then
+            for _, note in ipairs(translated.notes) do
+                if NoteApplies(note) and Prose(note.text) then
+                    table.insert(translatedNotes, note)
+                    translatedRoles[note.role] = true
                 end
             end
         end
-    end
 
-    -- Build body from merged notes (filtered by role)
-    local body = FormatNotes(merged, role)
-    -- If no notes at all, fall back to flat tip from the most specific source
-    -- that has one
-    if not body then
-        for _, candidate in ipairs(candidates) do
-            if candidate and candidate.tip and candidate.tip ~= "" then
-                body = GRAY .. candidate.tip .. RESET
-                break
-            end
+        if #translatedNotes == 0 and translated and Prose(translated.tip) then
+            return GRAY .. translated.tip .. RESET
         end
+
+        if #translatedNotes > 0 then
+            local merged = translatedNotes
+            if english and english.notes then
+                for _, note in ipairs(english.notes) do
+                    if NoteApplies(note) and not translatedRoles[note.role] then
+                        table.insert(merged, note)
+                    end
+                end
+            end
+            return FormatNotes(merged, role)
+        end
+
+        -- With no applicable translated field, retain the exact legacy English
+        -- rule: applicable structured notes first, then the flat tip.
+        local body = english and FormatNotes(english.notes, role)
+        if not body and english and Prose(english.tip) then
+            body = GRAY .. english.tip .. RESET
+        end
+        return body
     end
 
-    -- Header: prefer localized names from Blizzard APIs
+    local body = ResolveLevel(tipOverDiff, override)
+    if not body then body = ResolveLevel(tipOver, boss) end
+
+    -- Header: the instance name is always available localized. Blizzard only
+    -- supplies the localized boss name to this addon through ENCOUNTER_START,
+    -- so pre-encounter and next-boss previews intentionally keep the authored
+    -- English boss.name fallback rather than fabricating locale translations.
     local bossName = boss.name
     if KwikTip._activeEncounterName then
         bossName = KwikTip._activeEncounterName
@@ -287,16 +315,17 @@ local function FormatAreaContent(dungeon, difficultyID)
                     return FormatBossContent(dungeon, boss, difficultyID)
                 end
             end
-            -- Check for translated area tip via AREA_OVERRIDE_BY_ID
+            -- Check for translated area tip via AREA_OVERRIDE_BY_ID.
+            -- An empty translated tip is untranslated and falls back to English.
             local areaText = nil
             if a.id and KwikTip.AREA_OVERRIDE_BY_ID and KwikTip.AREA_OVERRIDE_BY_ID[a.id] then
-                areaText = KwikTip.AREA_OVERRIDE_BY_ID[a.id].tip
+                areaText = Prose(KwikTip.AREA_OVERRIDE_BY_ID[a.id].tip)
             end
             if not areaText then
-                areaText = a.tip
+                areaText = Prose(a.tip)
             end
             -- Guard: if neither bossIndex nor tip is present, skip rather than showing a blank body.
-            if not areaText or areaText == "" then return nil end
+            if not areaText then return nil end
             -- Header: prefer localized instance name from Blizzard API
             local displayName = dungeon.name
             local instanceName = GetInstanceInfo()
@@ -640,11 +669,11 @@ end
 
 -- Static demo notes — module-scoped so ShowPreview doesn't reallocate on every call.
 local DEMO_NOTES = {
-    { role = "general",   text = "Avoid the red zones; use a personal defensive on the big hit." },
-    { role = "tank",      text = "Tank swap at 3 stacks of the debuff." },
-    { role = "healer",    text = "Major healing CDs after every Cataclysm cast." },
-    { role = "dps",       text = "Kill adds before switching back to the boss." },
-    { role = "interrupt", text = "Shadowbolt — interrupt every cast, no exceptions." },
+    { role = "general",   text = L.DEMO_GENERAL },
+    { role = "tank",      text = L.DEMO_TANK },
+    { role = "healer",    text = L.DEMO_HEALER },
+    { role = "dps",       text = L.DEMO_DPS },
+    { role = "interrupt", text = L.DEMO_INTERRUPT },
 }
 
 -- Show a demo tip in the HUD with one note of every role category.
@@ -700,18 +729,18 @@ SlashCmdList["KWIKTIP"] = function(msg)
         local snapshotCount  = KwikTipDB.debugSnapshots and #KwikTipDB.debugSnapshots or 0
         local keyLevel, keyAffixes
         if C_ChallengeMode then keyLevel, keyAffixes = C_ChallengeMode.GetActiveKeystoneInfo() end
-        print("|cff00ff00KwikTip|r debug:")
-        print(string.format("  inInstance=%s  type=%s  boss=%s  area=%s  dungeon=%s",
+        print("|cff00ff00KwikTip|r " .. L.DEBUG_HEADING)
+        print(string.format(L.DEBUG_STATE,
             tostring(inInstance), tostring(instanceType),
             tostring(KwikTip.bossActive),
             tostring(KwikTip.areaActive), tostring(KwikTip.dungeonActive)))
-        print(string.format("  instanceID=%s  mapID=%s  dungeon=%s",
+        print(string.format(L.DEBUG_INSTANCE,
             tostring(instanceID), tostring(mapID), dungeonName))
-        print(string.format("  subzone=%q  role=%s", subzone or "", tostring(GetPlayerRole())))
+        print(string.format(L.DEBUG_SUBZONE, subzone or "", tostring(GetPlayerRole())))
         if keyLevel then
-            print(string.format("  keystone=+%d  affixes=%d", keyLevel, keyAffixes and #keyAffixes or 0))
+            print(string.format(L.DEBUG_KEYSTONE, keyLevel, keyAffixes and #keyAffixes or 0))
         end
-        print(string.format("  mapIDLog=%d  encounterLog=%d  keystoneLog=%d  spellLog=%d  snapshots=%d",
+        print(string.format(L.DEBUG_COUNTS,
             mapIDCount, encounterCount, keystoneCount, spellCount, snapshotCount))
         -- Save snapshot to SavedVariables for post-session inspection.
         if KwikTipDB then
@@ -741,7 +770,8 @@ SlashCmdList["KWIKTIP"] = function(msg)
     elseif cmd == "debuglog" then
         KwikTipDB.debugLog = not KwikTipDB.debugLog
         KwikTip:UpdateContent()
-        print(string.format("|cff00ff00KwikTip|r debug logging %s.", KwikTipDB.debugLog and "enabled" or "disabled"))
+        print(string.format("|cff00ff00KwikTip|r " .. L.DEBUG_LOGGING,
+            KwikTipDB.debugLog and L.ENABLED or L.DISABLED))
     elseif cmd == "preview" then
         KwikTip:TogglePreview()
     elseif cmd == "clearlog" then
@@ -751,9 +781,9 @@ SlashCmdList["KWIKTIP"] = function(msg)
         KwikTipDB.spellLog       = {}
         KwikTipDB.debugSnapshots = {}
         _loggedSpells = {}
-        print("|cff00ff00KwikTip|r mapIDLog, encounterLog, keystoneLog, spellLog, and debugSnapshots cleared.")
+        print("|cff00ff00KwikTip|r " .. L.LOGS_CLEARED)
     elseif cmd == "feedback" then
-        print("|cff00ff00KwikTip|r Tips feel off? Open an issue at: https://github.com/postblink/KwikTip/issues")
+        print("|cff00ff00KwikTip|r " .. L.FEEDBACK_MSG)
     elseif cmd == "config" or cmd == "" then
         KwikTip:ToggleConfig()
     elseif cmd == "help" then
