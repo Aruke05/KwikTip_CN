@@ -48,6 +48,8 @@ read_globals = {
     "C_CreatureInfo",
     "C_Spell",
     "C_ChallengeMode",
+    "C_ScenarioInfo",
+    "LE_SCENARIO_TYPE_CHALLENGE_MODE",
     "C_Timer",
     "UIFrameFadeIn",
     "UIFrameFadeOut",

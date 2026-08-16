@@ -12,6 +12,7 @@ frame:RegisterEvent("PLAYER_ROLES_ASSIGNED")
 frame:RegisterEvent("CHALLENGE_MODE_START")
 frame:RegisterEvent("CHALLENGE_MODE_RESET")
 frame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
+frame:RegisterEvent("SCENARIO_CRITERIA_UPDATE")
 -- NOTE: In Midnight 12.x, UnitGUID() for hostile NPCs returns a tainted "secret value" —
 -- COMBAT_LOG_EVENT_UNFILTERED is also a protected event and cannot be registered.
 -- NPC-based trash tip detection is impossible; detection uses subzone/area events only.
@@ -49,6 +50,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "CHALLENGE_MODE_RESET" or event == "CHALLENGE_MODE_COMPLETED" then
         KwikTip:UpdateContent()
         KwikTip:UpdateVisibility()
+    elseif event == "SCENARIO_CRITERIA_UPDATE" then
+        -- Banked Enemy Forces % updates as mobs die; re-render the HUD.
+        KwikTip:UpdateContent()
     elseif event == "UNIT_SPELLCAST_START" then
         local unit, _, spellID = ...
         KwikTip:OnSpellCastStart(unit, spellID)
@@ -66,6 +70,12 @@ local GOLD  = "|cffffcc00"
 local WHITE = "|cffffffff"
 local GRAY  = "|cffbbbbbb"
 local RESET = "|r"
+
+-- Defensive tostring for debug output (secret values are unprintable).
+local function SafeStr(v)
+    local ok, s = pcall(tostring, v)
+    return ok and s or "<unprintable>"
+end
 
 -- Returns the player's current assigned role as a lowercase string matching the
 -- notes role keys ("tank", "healer", "dps"), or nil if unassigned/solo.
@@ -175,6 +185,54 @@ local function FormatAffixDetails()
         end
     end
     return table.concat(lines, "\n")
+end
+
+-- ============================================================
+-- Mythic+ banked Enemy Forces progress (display-only)
+-- ============================================================
+-- Reads the banked (already-earned) Enemy Forces percentage that
+-- Blizzard already exposes for display in the scenario objective
+-- tracker. This is the aggregate Blizzard shows — never the per-mob
+-- contribution, which is a secret value inside a key and must not be
+-- reconstructed by addon code (see Secret Values model).
+--
+-- Stateless by design: recomputed from C_ScenarioInfo on every call.
+-- No cached state, no polling. Returns Blizzard's own localized
+-- quantityString (e.g. "63.4%") or nil when not in a Mythic+ run or
+-- no weighted criterion is present.
+local function GetMPlusProgressString()
+    if not C_ScenarioInfo then return nil end
+    local ok, info = pcall(C_ScenarioInfo.GetScenarioInfo)
+    if not ok or not info then return nil end
+    if info.scenarioType ~= LE_SCENARIO_TYPE_CHALLENGE_MODE then return nil end
+    local _, _, _, numCriteria = C_ScenarioInfo.GetStepInfo()
+    if not numCriteria or numCriteria <= 0 then return nil end
+    for i = 1, numCriteria do
+        local c = C_ScenarioInfo.GetCriteriaInfo(i)
+        if c and c.isWeightedProgress and c.quantityString and c.quantityString ~= "" then
+            return c.quantityString
+        end
+    end
+    return nil
+end
+
+-- Footer line for the HUD: "M+ Progress  63.4%".
+-- Returns nil when not applicable so non-M+ content is untouched.
+local function FormatMPlusProgress()
+    local pct = GetMPlusProgressString()
+    if not pct then return nil end
+    return GRAY .. L.MPLUS_PROGRESS .. "  " .. WHITE .. pct .. RESET
+end
+
+-- Append the M+ progress footer to a HUD content string.
+-- No-op (returns content unchanged) when not in an active M+ run.
+local function AppendMPlusProgress(content)
+    local foot = FormatMPlusProgress()
+    if not foot then return content end
+    if content and content ~= "" then
+        return content .. "\n" .. foot
+    end
+    return foot
 end
 
 -- Build the HUD string for an active boss encounter.
@@ -411,7 +469,8 @@ function KwikTip:OnEncounterStart(encounterID, encounterName, difficultyID, grou
     self.bossActive = true
     local content = FormatBossContent(entry.dungeon, entry.boss, difficultyID)
     local bar = entry.dungeon.mythicPlus and FormatAffixBar()
-    self:SetContent(AppendUserNote(bar and (content .. "\n" .. bar) or content))
+    local cStart = bar and (content .. "\n" .. bar) or content
+    self:SetContent(AppendUserNote(AppendMPlusProgress(cStart)))
     self:UpdateVisibility()
 end
 
@@ -439,7 +498,8 @@ function KwikTip:OnEncounterEnd(success)
                     if nextBoss then
                         local bar     = dungeon.mythicPlus and FormatAffixBar()
                         local content = FormatBossContent(dungeon, nextBoss, lastDifficultyID)
-                        self:SetContent(AppendUserNote(bar and (content .. "\n" .. bar) or content))
+                        local cNext   = bar and (content .. "\n" .. bar) or content
+                        self:SetContent(AppendUserNote(AppendMPlusProgress(cNext)))
                         advanced = true
                     end
                     break
@@ -580,7 +640,8 @@ function KwikTip:UpdateContent()
         self.areaActive    = true
         self.dungeonActive = false
         local bar = dungeon.mythicPlus and FormatAffixBar()
-        self:SetContent(AppendUserNote(bar and (areaContent .. "\n" .. bar) or areaContent))
+        local cArea = bar and (areaContent .. "\n" .. bar) or areaContent
+        self:SetContent(AppendUserNote(AppendMPlusProgress(cArea)))
     elseif dungeon and KwikTipDB.showInDungeon then
         -- No area match — show M+ affix details if active, otherwise a holding message.
         self.areaActive    = false
@@ -589,9 +650,10 @@ function KwikTip:UpdateContent()
         if affixDetails then
             local instanceName = GetInstanceInfo()
             local displayName = (instanceName and instanceName ~= "") and instanceName or dungeon.name
-            self:SetContent(GOLD .. displayName .. RESET .. "\n" .. affixDetails)
+            local cAffix = GOLD .. displayName .. RESET .. "\n" .. affixDetails
+            self:SetContent(AppendMPlusProgress(cAffix))
         elseif dungeon.mythicPlus then
-            self:SetContent(GRAY .. L.WAITING_ENCOUNTER .. RESET)
+            self:SetContent(AppendMPlusProgress(GRAY .. L.WAITING_ENCOUNTER .. RESET))
         else
             self:SetContent("")
         end
@@ -740,6 +802,35 @@ SlashCmdList["KWIKTIP"] = function(msg)
         if keyLevel then
             print(string.format(L.DEBUG_KEYSTONE, keyLevel, keyAffixes and #keyAffixes or 0))
         end
+        -- Enemy Forces diagnostic — chat only, no new saved var.
+        local efDetail = "n/a (not in M+)"
+        if C_ScenarioInfo then
+            local ok, info = pcall(C_ScenarioInfo.GetScenarioInfo)
+            if ok and info then
+                local st = info.scenarioType
+                local _, _, _, nc = C_ScenarioInfo.GetStepInfo()
+                local weighted, qStr, numF, numR
+                if nc and nc > 0 then
+                    for i = 1, nc do
+                        local c = C_ScenarioInfo.GetCriteriaInfo(i)
+                        if c and c.isWeightedProgress then
+                            weighted, qStr, numF, numR = c.isWeightedProgress, c.quantityString, c.numFulfilled, c.numRequired
+                            break
+                        end
+                    end
+                end
+                if weighted then
+                    efDetail = string.format("type=%s crit=%s weighted=%s q=%q numF=%s numR=%s",
+                        SafeStr(st), SafeStr(nc), SafeStr(weighted),
+                        SafeStr(qStr), SafeStr(numF), SafeStr(numR))
+                else
+                    efDetail = string.format("type=%s crit=%s weighted=none", SafeStr(st), SafeStr(nc))
+                end
+            else
+                efDetail = "GetScenarioInfo failed"
+            end
+        end
+        print("|cff00ff00KwikTip|r " .. string.format(L.DEBUG_EF, efDetail))
         print(string.format(L.DEBUG_COUNTS,
             mapIDCount, encounterCount, keystoneCount, spellCount, snapshotCount))
         -- Save snapshot to SavedVariables for post-session inspection.
