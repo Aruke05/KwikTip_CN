@@ -1889,7 +1889,7 @@ KwikTip.DUNGEONS = {
             {
                 encounterID = 0,  -- TODO: verify in-game
                 npcID       = 0,
-                name        = "Ssorak",
+                name        = "Sszorak",  -- corrected: double-S per Wowhead (Sszorak); was Ssorak
                 tip         = "Raw-damage check + wind caller. Plan healer cooldowns for Raging Crosswinds, Turbulent Gusts, Howling Maelstrom, and Tempest phases; reposition cleanly through the wind. Tank/heal through the raw hits: Mutilate, Apex Predator, and To the Slaughter. If throughput is honest this boss confirms it — if not, Heroic groups stall here.",
                 notes = {
                     { role = "healer",    text = "Cooldown-plan for wind phases (Raging Crosswinds, Turbulent Gusts, Howling Maelstrom, Tempest) plus Mutilate/To the Slaughter burst." },
