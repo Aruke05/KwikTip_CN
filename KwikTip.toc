@@ -6,7 +6,7 @@
 ## Notes-deDE: Kontextuelle Boss- und Trash-Tipps für M+-Dungeons. Feedback: https://github.com/postblink/KwikTip/issues
 ## Notes-zhCN: 为史诗钥石地下城显示场景化首领和小怪提示。中文维护：https://github.com/Aruke05/KwikTip/issues
 ## Author: Lucas Boyles
-## Version: 3.4.0-zhCN.1
+## Version: 3.4.0-zhCN.2
 ## X-Localization-Maintainer: Aruke05
 ## X-License: GPL-3.0-or-later
 ## DefaultState: enabled
@@ -29,6 +29,7 @@ DungeonData_Timewalking.lua
 
 Locale\tips_enUS.lua
 Locale\tips_deDE.lua
+Locale\tips_zhCN.lua
 
 Core.lua
 Frames.lua

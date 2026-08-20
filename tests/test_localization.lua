@@ -92,6 +92,7 @@ local function newRuntime(locale)
     loadAddonFile("Locale/zhCN.lua", addon)
     loadAddonFile("Locale/tips_enUS.lua", addon)
     loadAddonFile("Locale/tips_deDE.lua", addon)
+    loadAddonFile("Locale/tips_zhCN.lua", addon)
 
     function addon:SetContent(content) self.captured = content end
     function addon:UpdateVisibility() end
@@ -440,6 +441,24 @@ ok(contains(table.concat(zhPrinted, "\n"), "调试日志已启用。"),
 SlashCmdList.KWIKTIP("feedback")
 ok(contains(table.concat(zhPrinted, "\n"), "Aruke05/KwikTip/issues"),
     "production feedback points to the Chinese-maintained fork")
+
+local localizedTipBoss = {
+    encounterID = 3071,
+    name = "Arcanotron Custos",
+    notes = {
+        { role = "general", text = "English Refueling Protocol note" },
+        { role = "healer", text = "English Ethereal Shackles note" },
+    },
+}
+local localizedTipDungeon = { name = "Magisters' Terrace", mythicPlus = false }
+local zhTipOutput = renderBoss(zhAddon, zhState, localizedTipDungeon, localizedTipBoss, 10,
+    "奥能全刚库斯托斯")
+ok(contains(zhTipOutput, "读条前将首领拉到房间角落"),
+    "production boss content uses Chinese general strategy text")
+ok(contains(zhTipOutput, "驱散两名随机玩家"),
+    "production boss content uses Chinese healer strategy text")
+ok(not contains(zhTipOutput, "English Refueling Protocol note"),
+    "Chinese strategy override replaces the English general note")
 
 io.write(string.format("\n=== RESULTS: %d passed, %d failed (of %d total) ===\n",
     PASS, FAIL, PASS + FAIL))

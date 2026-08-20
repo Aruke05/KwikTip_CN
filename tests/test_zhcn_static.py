@@ -49,6 +49,14 @@ class ZhCNLocaleTests(unittest.TestCase):
         self.assertIn("## Title-zhCN:", toc)
         self.assertIn("## Notes-zhCN:", toc)
         self.assertLess(toc.index("Locale\\enUS.lua"), toc.index("Locale\\zhCN.lua"))
+        self.assertIn("Locale\\tips_zhCN.lua", toc)
+
+    def test_priority_strategy_content_is_translated(self) -> None:
+        source = (ROOT / "Locale" / "tips_zhCN.lua").read_text(encoding="utf-8")
+        encounter_ids = set(re.findall(r"boss\[(\d+)\]", source))
+        self.assertGreaterEqual(len(encounter_ids), 30)
+        self.assertIn("读条前将首领拉到房间角落", source)
+        self.assertIn("当前第 2 赛季", (ROOT / "README_zhCN.md").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

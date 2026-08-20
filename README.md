@@ -45,7 +45,7 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 - **Send to Chat** — print the current tip to Say, Instance, Party, or Raid
 - **Resizable, draggable HUD** — drag to reposition, drag corners to resize; auto-expand height keeps long tips readable
 - **LibSharedMedia-3.0 support** — font picker lists all fonts from your other addons; falls back to built-in WoW fonts
-- **German (deDE) and Simplified Chinese (zhCN) localization** — UI, slash commands, and HUD labels fully translated (tip content stays English for accuracy)
+- **German (deDE) and Simplified Chinese (zhCN) localization** — UI, slash commands, HUD labels, and priority zhCN strategy content
 
 ---
 
@@ -159,9 +159,9 @@ A minimap button (when enabled) provides quick access: left-click opens settings
 
 ## Translations
 
-The settings UI, slash help, and HUD labels are fully localizable. **German (deDE)** and **Simplified Chinese (zhCN)** are bundled. Tip content intentionally stays in English — mechanical accuracy is critical and mistranslations could cost your group a key.
+The settings UI, slash help, and HUD labels are fully localizable. **German (deDE)** and **Simplified Chinese (zhCN)** are bundled. The zhCN edition also includes reviewed Chinese strategy text for the current Season 2 Mythic+ rotation and Magisters' Terrace; uncovered encounters continue to fall back to upstream English.
 
-The zhCN localization is maintained in the [Aruke05/KwikTip fork](https://github.com/Aruke05/KwikTip). 中文界面包括设置、斜杠命令、HUD 标签、悬浮提示及调试消息；攻略正文保持上游英文原文，避免未经副本实测的机制翻译改变含义。
+The zhCN localization is maintained in the [Aruke05/KwikTip fork](https://github.com/Aruke05/KwikTip). 中文界面包括设置、斜杠命令、HUD 标签、悬浮提示及调试消息；攻略正文使用稳定的首领和区域 ID 覆盖，并在缺少已校对翻译时自动回退到上游英文。
 
 To contribute a translation for your language:
 
