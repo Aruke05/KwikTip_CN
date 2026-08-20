@@ -9,6 +9,10 @@ Thumbs.db
 .vscode/
 *.swp
 
+# Python test cache
+__pycache__/
+*.py[cod]
+
 # Source monitor state and report (local only)
 tools/.monitor/
 IDEAS.md

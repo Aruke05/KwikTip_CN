@@ -1,0 +1,23 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  localization:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lua 5.1
+        run: sudo apt-get update && sudo apt-get install -y lua5.1
+
+      - name: Validate locale keys and placeholders
+        run: python3 -m unittest discover -s tests -p 'test_zhcn_static.py' -v
+
+      - name: Run production localization tests
+        run: lua5.1 tests/test_localization.lua

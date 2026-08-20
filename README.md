@@ -45,7 +45,7 @@ Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 - **Send to Chat** — print the current tip to Say, Instance, Party, or Raid
 - **Resizable, draggable HUD** — drag to reposition, drag corners to resize; auto-expand height keeps long tips readable
 - **LibSharedMedia-3.0 support** — font picker lists all fonts from your other addons; falls back to built-in WoW fonts
-- **German (deDE) localization** — UI, slash commands, and HUD labels fully translated (tip content stays English for accuracy)
+- **German (deDE) and Simplified Chinese (zhCN) localization** — UI, slash commands, and HUD labels fully translated (tip content stays English for accuracy)
 
 ---
 
@@ -159,7 +159,9 @@ A minimap button (when enabled) provides quick access: left-click opens settings
 
 ## Translations
 
-The settings UI, slash help, and HUD labels are fully localizable. **German (deDE)** is bundled and maintained with each release. Tip content intentionally stays in English — mechanical accuracy is critical and mistranslations could cost your group a key.
+The settings UI, slash help, and HUD labels are fully localizable. **German (deDE)** and **Simplified Chinese (zhCN)** are bundled. Tip content intentionally stays in English — mechanical accuracy is critical and mistranslations could cost your group a key.
+
+The zhCN localization is maintained in the [Aruke05/KwikTip fork](https://github.com/Aruke05/KwikTip). 中文界面包括设置、斜杠命令、HUD 标签、悬浮提示及调试消息；攻略正文保持上游英文原文，避免未经副本实测的机制翻译改变含义。
 
 To contribute a translation for your language:
 

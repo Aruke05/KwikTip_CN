@@ -89,6 +89,7 @@ local function newRuntime(locale)
     loadAddonFile("Locale/enUS.lua", addon)
     loadAddonFile("Locale/Locales.lua", addon)
     loadAddonFile("Locale/deDE.lua", addon)
+    loadAddonFile("Locale/zhCN.lua", addon)
     loadAddonFile("Locale/tips_enUS.lua", addon)
     loadAddonFile("Locale/tips_deDE.lua", addon)
 
@@ -400,6 +401,45 @@ ok(contains(table.concat(printed, "\n"), "Debug-Protokollierung aktiviert."),
 SlashCmdList.KWIKTIP("feedback")
 ok(contains(table.concat(printed, "\n"), "Tipps passen nicht?"),
     "production feedback message is localized")
+
+io.write("\n--- zhCN production runtime ---\n")
+local zhAddon, zhState, zhPrinted = newRuntime("zhCN")
+local expectedChinese = {
+    SETTINGS_TITLE = "KwikTip 设置",
+    LOADED_MSG = "已加载。输入 /kwik 打开设置。",
+    WAITING_ENCOUNTER = "正在等待相关战斗……",
+    DEMO_DUNGEON = "示例地下城",
+    TAB_GENERAL = "常规",
+    TAB_LAYOUT = "布局",
+    TAB_APPEARANCE = "外观",
+    CHECK_MINIMAP = "显示小地图按钮",
+    CHECK_PERSISTENT = "保持提示窗口",
+    LABEL_NONE = "无",
+    CHECK_AUTOEXPAND = "自动扩展高度",
+    LABEL_OUTLINE = "轮廓：",
+    OUTLINE_OUTLINE = "轮廓",
+    OUTLINE_THICK = "粗轮廓",
+    TOOLTIP_MINIMAP_DRAG = "拖动：调整位置",
+    BTN_NOTE_CLEAR = "清空",
+    TOOLTIP_PRINT = "将提示发送到副本聊天",
+}
+for key, value in pairs(expectedChinese) do
+    ok(zhAddon.L[key] == value, "zhCN value: " .. key)
+end
+
+zhAddon:ShowPreview()
+ok(contains(zhAddon.captured, "躲开红色区域"), "production preview uses Chinese general text")
+ok(contains(zhAddon.captured, "减益达到 3 层时换坦"), "production preview uses Chinese tank text")
+
+SlashCmdList.KWIKTIP("debug")
+local zhDebugText = table.concat(zhPrinted, "\n")
+ok(contains(zhDebugText, "类型=party"), "production debug output uses Chinese format")
+SlashCmdList.KWIKTIP("debuglog")
+ok(contains(table.concat(zhPrinted, "\n"), "调试日志已启用。"),
+    "production debug logging message is localized")
+SlashCmdList.KWIKTIP("feedback")
+ok(contains(table.concat(zhPrinted, "\n"), "Aruke05/KwikTip/issues"),
+    "production feedback points to the Chinese-maintained fork")
 
 io.write(string.format("\n=== RESULTS: %d passed, %d failed (of %d total) ===\n",
     PASS, FAIL, PASS + FAIL))
