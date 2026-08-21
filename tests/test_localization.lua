@@ -31,7 +31,7 @@ end
 local function loadAddonFile(relative, addon)
     local chunk, err = loadfile(repoPath(relative))
     assert(chunk, err)
-    return chunk("KwikTip", addon)
+    return chunk("KwikTip_CN", addon)
 end
 
 local function newRuntime(locale)
@@ -98,7 +98,7 @@ local function newRuntime(locale)
     function addon:UpdateVisibility() end
     function addon:InitHUD() end
 
-    KwikTipDB = {
+    KwikTipCNDB = {
         showInDungeon = true,
         delves = true,
         debugLog = false,
@@ -138,7 +138,7 @@ local HEAL_ICON = "|TInterface\\Icons\\Spell_Holy_Renew:13:13|t"
 
 io.write("\n--- enUS production runtime ---\n")
 local addon, state = newRuntime("enUS")
-ok(addon.L.SETTINGS_TITLE == "KwikTip Settings", "deDE guard preserves enUS locale")
+ok(addon.L.SETTINGS_TITLE == "KwikTip_CN Settings", "deDE guard preserves enUS locale")
 
 state.instanceName = "English Dungeon"
 local dungeon = { name = "English Dungeon", mythicPlus = false }
@@ -377,7 +377,7 @@ ok(venomfall and venomfall.bosses[1].encounterID == 3525,
 
 io.write("\n--- preserved German UI/runtime strings ---\n")
 local expectedGerman = {
-    SETTINGS_TITLE = "KwikTip-Einstellungen",
+    SETTINGS_TITLE = "KwikTip_CN-Einstellungen",
     LOADED_MSG = "geladen. Tippe /kwik für die Einstellungen.",
     WAITING_ENCOUNTER = "Warte auf passende Begegnung …",
     DEMO_DUNGEON = "Beispiel-Dungeon",
@@ -401,20 +401,20 @@ deAddon:ShowPreview()
 ok(contains(deAddon.captured, "Rote Zonen meiden"), "production preview restores German general text")
 ok(contains(deAddon.captured, "Tankwechsel bei 3 Stapeln"), "production preview restores German tank text")
 
-SlashCmdList.KWIKTIP("debug")
+SlashCmdList.KWIKTIPCN("debug")
 local debugText = table.concat(printed, "\n")
 ok(contains(debugText, "Typ=party"), "production debug output restores German format")
-SlashCmdList.KWIKTIP("debuglog")
+SlashCmdList.KWIKTIPCN("debuglog")
 ok(contains(table.concat(printed, "\n"), "Debug-Protokollierung aktiviert."),
     "production debug logging message is localized")
-SlashCmdList.KWIKTIP("feedback")
+SlashCmdList.KWIKTIPCN("feedback")
 ok(contains(table.concat(printed, "\n"), "Tipps passen nicht?"),
     "production feedback message is localized")
 
 io.write("\n--- zhCN production runtime ---\n")
 local zhAddon, zhState, zhPrinted = newRuntime("zhCN")
 local expectedChinese = {
-    SETTINGS_TITLE = "KwikTip 设置",
+    SETTINGS_TITLE = "KwikTip_CN 设置",
     LOADED_MSG = "已加载。输入 /kwik 打开设置。",
     WAITING_ENCOUNTER = "正在等待相关战斗……",
     DEMO_DUNGEON = "示例地下城",
@@ -440,14 +440,14 @@ zhAddon:ShowPreview()
 ok(contains(zhAddon.captured, "躲开红色区域"), "production preview uses Chinese general text")
 ok(contains(zhAddon.captured, "减益达到 3 层时换坦"), "production preview uses Chinese tank text")
 
-SlashCmdList.KWIKTIP("debug")
+SlashCmdList.KWIKTIPCN("debug")
 local zhDebugText = table.concat(zhPrinted, "\n")
 ok(contains(zhDebugText, "类型=party"), "production debug output uses Chinese format")
-SlashCmdList.KWIKTIP("debuglog")
+SlashCmdList.KWIKTIPCN("debuglog")
 ok(contains(table.concat(zhPrinted, "\n"), "调试日志已启用。"),
     "production debug logging message is localized")
-SlashCmdList.KWIKTIP("feedback")
-ok(contains(table.concat(zhPrinted, "\n"), "Aruke05/KwikTip/issues"),
+SlashCmdList.KWIKTIPCN("feedback")
+ok(contains(table.concat(zhPrinted, "\n"), "Aruke05/KwikTip_CN/issues"),
     "production feedback points to the Chinese-maintained fork")
 
 local localizedTipBoss = {
@@ -533,10 +533,10 @@ ok(not contains(delveOutput, "English TODO must not render"),
     "Venomfall Chinese override suppresses the upstream TODO body")
 
 local initAddon = { L = routeAddon.L }
-KwikTipDB = { showInDungeon = false }
+KwikTipCNDB = { showInDungeon = false }
 loadAddonFile("Init.lua", initAddon)
 initAddon:OnLoad()
-ok(KwikTipDB.showInDungeon == true and KwikTipDB.zhCNPersistentGuidanceV1 == true,
+ok(KwikTipCNDB.showInDungeon == true and KwikTipCNDB.zhCNPersistentGuidanceV1 == true,
     "zhCN migration enables persistent guidance once for existing installs")
 
 io.write(string.format("\n=== RESULTS: %d passed, %d failed (of %d total) ===\n",

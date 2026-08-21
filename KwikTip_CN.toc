@@ -1,0 +1,33 @@
+## Interface: 120100
+## Title: KwikTip_CN
+## Title-deDE: KwikTip_CN
+## Title-zhCN: KwikTip 中文版
+## Notes: Independent Simplified Chinese edition of KwikTip. Upstream: postblink/KwikTip
+## Notes-deDE: Eigenständige chinesische Ausgabe von KwikTip.
+## Notes-zhCN: KwikTip 独立中文维护版，包含中文界面与副本攻略。
+## Author: Lucas Boyles; zhCN maintained by Aruke05
+## Version: 3.4.0-cn.6
+## X-Localization-Maintainer: Aruke05
+## X-License: GPL-3.0-or-later
+## X-Website: https://github.com/Aruke05/KwikTip_CN
+## DefaultState: enabled
+## OptionalDeps: LibSharedMedia-3.0
+
+## SavedVariables: KwikTipCNDB
+
+Locale\enUS.lua
+Locale\Locales.lua
+Locale\deDE.lua
+Locale\zhCN.lua
+
+Init.lua
+DungeonData.lua
+DungeonData_Timewalking.lua
+
+Locale\tips_enUS.lua
+Locale\tips_deDE.lua
+Locale\tips_zhCN.lua
+
+Core.lua
+Frames.lua
+UI_Config.lua

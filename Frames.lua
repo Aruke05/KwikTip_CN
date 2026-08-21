@@ -31,10 +31,10 @@ local _pendingSendChannel
 -- ============================================================
 
 local function SaveHUDLayout()
-    KwikTipDB.width  = math.floor(hud:GetWidth()  + 0.5)
-    KwikTipDB.height = math.floor(hud:GetHeight() + 0.5)
-    KwikTipDB.x      = math.floor(hud:GetLeft()   + hud:GetWidth()  / 2 - UIParent:GetWidth()  / 2 + 0.5)
-    KwikTipDB.y      = math.floor(hud:GetBottom()  + hud:GetHeight() / 2 - UIParent:GetHeight() / 2 + 0.5)
+    KwikTipCNDB.width  = math.floor(hud:GetWidth()  + 0.5)
+    KwikTipCNDB.height = math.floor(hud:GetHeight() + 0.5)
+    KwikTipCNDB.x      = math.floor(hud:GetLeft()   + hud:GetWidth()  / 2 - UIParent:GetWidth()  / 2 + 0.5)
+    KwikTipCNDB.y      = math.floor(hud:GetBottom()  + hud:GetHeight() / 2 - UIParent:GetHeight() / 2 + 0.5)
 end
 
 local function UpdateScrollBar()
@@ -68,7 +68,7 @@ end
 function KwikTip:InitHUD()
     if self.HUD then return end
 
-    hud = CreateFrame("Frame", "KwikTipHUD", UIParent, "BackdropTemplate")
+    hud = CreateFrame("Frame", "KwikTipCNHUD", UIParent, "BackdropTemplate")
     self.HUD = hud
 
     hud:SetFrameStrata("MEDIUM")
@@ -204,7 +204,7 @@ function KwikTip:InitHUD()
 
     -- Print-to-chat button — small, sits in the bottom-right corner of the HUD.
     -- Always has EnableMouse(true) independently of the parent's mouse passthrough state.
-    printBtn = CreateFrame("Button", "KwikTipPrintBtn", hud)
+    printBtn = CreateFrame("Button", "KwikTipCNPrintBtn", hud)
     printBtn:SetSize(16, 16)
     printBtn:SetPoint("BOTTOMRIGHT", hud, "BOTTOMRIGHT", -3, 3)
     printBtn:SetFrameLevel(hud:GetFrameLevel() + 3)
@@ -244,7 +244,7 @@ function KwikTip:InitHUD()
                 lines[#lines + 1] = line
             end
         end
-        local channel = KwikTipDB.printChannel or "NONE"
+        local channel = KwikTipCNDB.printChannel or "NONE"
         if channel == "NONE" then return end
         if InCombatLockdown() then
             -- SendChatMessage is protected during combat; defer until PLAYER_REGEN_ENABLED.
@@ -284,7 +284,7 @@ function KwikTip:InitHUD()
     end)
 
     -- ---- Note button (pencil icon, bottom-left) ----
-    noteBtn = CreateFrame("Button", "KwikTipNoteBtn", hud)
+    noteBtn = CreateFrame("Button", "KwikTipCNNoteBtn", hud)
     noteBtn:SetSize(16, 16)
     noteBtn:SetPoint("BOTTOMLEFT", hud, "BOTTOMLEFT", 3, 3)
     noteBtn:SetFrameLevel(hud:GetFrameLevel() + 3)
@@ -302,7 +302,7 @@ function KwikTip:InitHUD()
     noteBtnHL:SetAllPoints(noteBtn)
 
     -- ---- Note popup ----
-    notePopup = CreateFrame("Frame", "KwikTipNotePopup", UIParent, "BackdropTemplate")
+    notePopup = CreateFrame("Frame", "KwikTipCNNotePopup", UIParent, "BackdropTemplate")
     notePopup:SetSize(240, 110)
     notePopup:SetFrameStrata("DIALOG")
     notePopup:SetMovable(true)
@@ -360,9 +360,9 @@ function KwikTip:InitHUD()
     local function SaveNote()
         local key = KwikTip:GetNoteKey()
         if not key then notePopup:Hide(); return end
-        if not KwikTipDB.notes then KwikTipDB.notes = {} end
+        if not KwikTipCNDB.notes then KwikTipCNDB.notes = {} end
         local text = noteEditBox:GetText():match("^%s*(.-)%s*$")
-        KwikTipDB.notes[key] = (text ~= "") and text or nil
+        KwikTipCNDB.notes[key] = (text ~= "") and text or nil
         notePopup:Hide()
         KwikTip:UpdateContent()
     end
@@ -379,8 +379,8 @@ function KwikTip:InitHUD()
 
     noteClearBtn:SetScript("OnClick", function()
         local key = KwikTip:GetNoteKey()
-        if key and KwikTipDB.notes then
-            KwikTipDB.notes[key] = nil
+        if key and KwikTipCNDB.notes then
+            KwikTipCNDB.notes[key] = nil
         end
         notePopup:Hide()
         KwikTip:UpdateContent()
@@ -392,7 +392,7 @@ function KwikTip:InitHUD()
             return
         end
         local key = KwikTip:GetNoteKey()
-        local existing = (key and KwikTipDB.notes and KwikTipDB.notes[key]) or ""
+        local existing = (key and KwikTipCNDB.notes and KwikTipCNDB.notes[key]) or ""
         noteEditBox:SetText(existing)
         noteEditBox:SetCursorPosition(noteEditBox:GetNumLetters())
         local titleStr = key and (L.LABEL_NOTE .. ": " .. key) or L.BTN_NOTE_ADD
@@ -464,7 +464,7 @@ end
 -- Apply saved settings to the HUD (size, opacity, position).
 function KwikTip:ApplySettings()
     if not hud then return end
-    local db = KwikTipDB
+    local db = KwikTipCNDB
     hud:SetSize(db.width, db.height)
     hud:SetBackdropColor(0, 0, 0, db.alpha)
     hud:ClearAllPoints()
@@ -492,7 +492,7 @@ end
 -- Show or hide the print button based on the showPrintBtn setting and HUD visibility.
 function KwikTip:_UpdatePrintBtn()
     if not printBtn then return end
-    if KwikTipDB.printChannel and KwikTipDB.printChannel ~= "NONE" and hud and hud:IsShown() then
+    if KwikTipCNDB.printChannel and KwikTipCNDB.printChannel ~= "NONE" and hud and hud:IsShown() then
         printBtn:Show()
     else
         printBtn:Hide()
@@ -502,7 +502,7 @@ end
 -- Show or hide the note (pencil) button based on the showNoteBtn setting and HUD visibility.
 function KwikTip:_UpdateNoteBtn()
     if not noteBtn then return end
-    if KwikTipDB.showNoteBtn ~= false and hud and hud:IsShown() then
+    if KwikTipCNDB.showNoteBtn ~= false and hud and hud:IsShown() then
         noteBtn:Show()
     else
         noteBtn:Hide()
@@ -516,7 +516,7 @@ end
 --   dungeonActive : player is in a known dungeon with showInDungeon enabled
 -- Respects the persistentHide flag set from the config window.
 function KwikTip:UpdateVisibility()
-    if KwikTipDB.persistentHide and not self.moveMode then
+    if KwikTipCNDB.persistentHide and not self.moveMode then
         if hud then hud:Hide() end
         return
     end
@@ -543,7 +543,7 @@ function KwikTip:ToggleMoveMode()
         hud:SetBackdropBorderColor(1, 0.82, 0, 1)  -- gold outline = move mode active
     else
         hud:EnableMouse(false)
-        local db = KwikTipDB
+        local db = KwikTipCNDB
         if db.borderEnabled ~= false then
             hud:SetBackdropBorderColor(db.borderColorR or 0, db.borderColorG or 0, db.borderColorB or 0, db.borderColorA or 1)
         else
@@ -582,12 +582,12 @@ function KwikTip:SetContent(str)
 
     contentText:SetText(str)
 
-    local savedH = KwikTipDB.height or 80
+    local savedH = KwikTipCNDB.height or 80
     local textH  = contentText:GetStringHeight() + 12  -- 6px top + 6px bottom inset
     textH = math.max(textH, 1)
     scrollChild:SetHeight(textH)
 
-    if KwikTipDB.autoExpand ~= false then
+    if KwikTipCNDB.autoExpand ~= false then
         -- Expand HUD to fit content; shrink back to savedH when content is short.
         hud:SetHeight(math.max(savedH, textH))
     else

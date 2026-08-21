@@ -6,7 +6,7 @@ if GetLocale() ~= "zhCN" then return end
 
 local L = KwikTip.L
 
-L.SETTINGS_TITLE          = "KwikTip 设置"
+L.SETTINGS_TITLE          = "KwikTip_CN 设置"
 L.LOADED_MSG              = "已加载。输入 /kwik 打开设置。"
 L.COMMANDS                = "命令："
 L.CMD_OPEN                = "  /kwik           — 打开设置"
@@ -39,7 +39,7 @@ L.DEBUG_LOGGING           = "调试日志已%s。"
 L.ENABLED                 = "启用"
 L.DISABLED                = "禁用"
 L.LOGS_CLEARED            = "已清空地图、战斗、钥石、法术日志和调试快照。"
-L.FEEDBACK_MSG            = "提示有误？请在此提交问题：https://github.com/Aruke05/KwikTip/issues"
+L.FEEDBACK_MSG            = "提示有误？请在此提交问题：https://github.com/Aruke05/KwikTip_CN/issues"
 L.TAB_GENERAL             = "常规"
 L.TAB_LAYOUT              = "布局"
 L.TAB_APPEARANCE          = "外观"

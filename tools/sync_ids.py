@@ -5,7 +5,7 @@ sync_ids.py — Sync dungeon IDs from the in-game KwikTip SavedVariable into Dun
 HOW THE DATA GETS CAPTURED (no manual /run typing required):
   The addon already logs every dungeon you enter (when debug logging is on):
     /kwik debuglog          -- toggles map/mob ID logging to SavedVariables
-  Core.lua writes KwikTipDB.mapIDLog entries containing:
+Core.lua writes KwikTipCNDB.mapIDLog entries containing:
     { mapID=..., instanceID=..., instanceName="Kings' Rest", subzone=..., ... }
   So to populate a new season's IDs you simply RUN each dungeon once with
   debuglog enabled, then run this script. No in-game /run commands per dungeon.

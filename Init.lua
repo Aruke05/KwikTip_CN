@@ -39,7 +39,7 @@ KwikTip.DEFAULTS = {
 -- ============================================================
 -- Event handling
 -- ============================================================
-local frame = CreateFrame("Frame", "KwikTipInitFrame", UIParent)
+local frame = CreateFrame("Frame", "KwikTipCNInitFrame", UIParent)
 frame:RegisterEvent("ADDON_LOADED")
 frame:RegisterEvent("PLAYER_LOGIN")
 
@@ -59,19 +59,19 @@ end)
 -- ============================================================
 
 function KwikTip:OnLoad()
-    KwikTipDB = KwikTipDB or {}
+    KwikTipCNDB = KwikTipCNDB or {}
     -- Seed any missing keys with defaults
     for k, v in pairs(self.DEFAULTS) do
-        if KwikTipDB[k] == nil then
-            KwikTipDB[k] = type(v) == "table" and {} or v
+        if KwikTipCNDB[k] == nil then
+            KwikTipCNDB[k] = type(v) == "table" and {} or v
         end
     end
     -- The zhCN maintenance edition promises persistent route guidance. Enable
     -- it once for existing installs that inherited the upstream false default;
     -- the marker ensures a later manual opt-out remains respected.
-    if GetLocale() == "zhCN" and KwikTipDB.zhCNPersistentGuidanceV1 == nil then
-        KwikTipDB.showInDungeon = true
-        KwikTipDB.zhCNPersistentGuidanceV1 = true
+    if GetLocale() == "zhCN" and KwikTipCNDB.zhCNPersistentGuidanceV1 == nil then
+        KwikTipCNDB.showInDungeon = true
+        KwikTipCNDB.zhCNPersistentGuidanceV1 = true
     end
     -- InitHUD/ApplySettings deferred to OnLogin — player data is guaranteed available there.
 end
@@ -82,5 +82,5 @@ function KwikTip:OnLogin()
     if self.UpdateVisibility then self:UpdateVisibility() end
     if self.UpdateContent then self:UpdateContent() end
     if self._PlaceMinimapBtn then self:_PlaceMinimapBtn() end
-    print("|cff00ff00KwikTip|r " .. L.LOADED_MSG)
+    print("|cff00ff00KwikTip_CN|r " .. L.LOADED_MSG)
 end

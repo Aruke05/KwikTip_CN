@@ -45,11 +45,24 @@ class ZhCNLocaleTests(unittest.TestCase):
         self.assertIn('if GetLocale() ~= "zhCN" then return end', source)
 
     def test_toc_loads_zhcn_after_base_locale(self) -> None:
-        toc = (ROOT / "KwikTip.toc").read_text(encoding="utf-8")
+        toc = (ROOT / "KwikTip_CN.toc").read_text(encoding="utf-8")
         self.assertIn("## Title-zhCN:", toc)
         self.assertIn("## Notes-zhCN:", toc)
         self.assertLess(toc.index("Locale\\enUS.lua"), toc.index("Locale\\zhCN.lua"))
         self.assertIn("Locale\\tips_zhCN.lua", toc)
+
+    def test_standalone_addon_identity(self) -> None:
+        toc_path = ROOT / "KwikTip_CN.toc"
+        self.assertTrue(toc_path.exists())
+        self.assertFalse((ROOT / "KwikTip.toc").exists())
+        toc = toc_path.read_text(encoding="utf-8")
+        self.assertIn("## SavedVariables: KwikTipCNDB", toc)
+        self.assertNotIn("X-Curse-Project-ID", toc)
+        self.assertNotIn("X-Wago-ID", toc)
+        self.assertNotIn("X-WoWI-ID", toc)
+        self.assertIn("package-as: KwikTip_CN", (ROOT / ".pkgmeta").read_text(encoding="utf-8"))
+        ui = (ROOT / "UI_Config.lua").read_text(encoding="utf-8")
+        self.assertIn(r"Interface\\AddOns\\KwikTip_CN\\assets", ui)
 
     def test_priority_strategy_content_is_translated(self) -> None:
         source = (ROOT / "Locale" / "tips_zhCN.lua").read_text(encoding="utf-8")

@@ -6,11 +6,16 @@
   World of Warcraft: Midnight — Patch 12.1 (Season 2)
 </p>
 
+> **KwikTip_CN independent Chinese edition.** This repository packages the addon as
+> `KwikTip_CN`, with its own TOC, SavedVariables, and GitHub releases. It is maintained
+> separately from the [upstream KwikTip project](https://github.com/postblink/KwikTip).
+> 中文安装与维护说明请参阅 [README_zhCN.md](README_zhCN.md)。
+
 A World of Warcraft: Midnight addon that displays contextual tips for dungeons, raids, delves, and Timewalking. As your group moves through an instance, KwikTip surfaces relevant boss and trash tips in a small, unobtrusive HUD — no interaction required mid-pull. **Day-one ready for Midnight Season 2.**
 
 Inspired by **QE Dungeon Tips** by QEdev (no longer maintained).
 
-**[Download on CurseForge](https://www.curseforge.com/wow/addons/kwiktip)** &nbsp;|&nbsp; **[Download on Wago](https://addons.wago.io/addons/kwiktip)** &nbsp;|&nbsp; **[Download on WoWInterface](https://www.wowinterface.com/downloads/info27074-KwikTip.html)**
+**[Download KwikTip_CN from GitHub Releases](https://github.com/Aruke05/KwikTip_CN/releases)**
 
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
@@ -117,11 +122,12 @@ The addon uses a daily cron monitor that watches method.gg and Icy Veins dungeon
 ## Installation
 
 1. Download or clone this repository
-2. Copy the `KwikTip` folder into your addons directory:
+2. Copy the `KwikTip_CN` folder into your addons directory:
    ```
-   World of Warcraft/_retail_/Interface/AddOns/KwikTip
+   World of Warcraft/_retail_/Interface/AddOns/KwikTip_CN
    ```
-3. Enable the addon in the WoW character select screen
+3. Remove or disable the old `KwikTip` folder so the two editions are not loaded together
+4. Restart WoW and enable **KwikTip 中文版** in the character select screen
 
 ---
 
@@ -129,7 +135,7 @@ The addon uses a daily cron monitor that watches method.gg and Icy Veins dungeon
 
 | Command | Action |
 |---|---|
-| `/kwiktip` or `/kwik` | Open/close settings |
+| `/kwiktipcn`, `/kwikcn`, `/kwiktip`, or `/kwik` | Open/close settings |
 | `/kwik move` | Toggle move mode (drag and resize the HUD) |
 | `/kwik debug` | Print current instance detection state to chat |
 | `/kwik debuglog` | Toggle map/mob ID logging to SavedVariables |
@@ -161,15 +167,9 @@ A minimap button (when enabled) provides quick access: left-click opens settings
 
 The settings UI, slash help, and HUD labels are fully localizable. **German (deDE)** and **Simplified Chinese (zhCN)** are bundled. The zhCN edition also includes reviewed Chinese strategy text for the current Season 2 Mythic+ rotation and Magisters' Terrace; uncovered encounters continue to fall back to upstream English.
 
-The zhCN localization is maintained in the [Aruke05/KwikTip fork](https://github.com/Aruke05/KwikTip). 中文界面包括设置、斜杠命令、HUD 标签、悬浮提示及调试消息；攻略正文使用稳定的首领和区域 ID 覆盖，并在缺少已校对翻译时自动回退到上游英文。
+The independent zhCN edition is maintained at [Aruke05/KwikTip_CN](https://github.com/Aruke05/KwikTip_CN). 中文界面包括设置、斜杠命令、HUD 标签、悬浮提示及调试消息；攻略正文使用稳定的首领和区域 ID 覆盖，并在缺少已校对翻译时自动回退到上游英文。
 
-To contribute a translation for your language:
-
-1. Log in to CurseForge
-2. Go to the [KwikTip localization page](https://legacy.curseforge.com/wow/addons/kwiktip/localization)
-3. Select your language and fill in the strings
-
-Translations are pulled automatically into each release via the CurseForge packager.
+Submit Chinese corrections directly through the [KwikTip_CN issue tracker](https://github.com/Aruke05/KwikTip_CN/issues). Upstream translation contributions belong in the upstream project.
 
 ---
 

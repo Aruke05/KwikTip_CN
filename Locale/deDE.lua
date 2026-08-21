@@ -11,7 +11,7 @@ if GetLocale() ~= "deDE" then return end
 -- Set UI translations: override L table values for deDE locale
 -- ============================================================
 local t = {
-    SETTINGS_TITLE    = "KwikTip-Einstellungen",
+    SETTINGS_TITLE    = "KwikTip_CN-Einstellungen",
     LOADED_MSG        = "geladen. Tippe /kwik für die Einstellungen.",
     COMMANDS          = "Befehle:",
     CMD_OPEN          = "  /kwik           — Einstellungen öffnen",
@@ -44,7 +44,7 @@ local t = {
     ENABLED           = "aktiviert",
     DISABLED          = "deaktiviert",
     LOGS_CLEARED      = "mapIDLog, encounterLog, keystoneLog, spellLog und debugSnapshots geleert.",
-    FEEDBACK_MSG      = "Tipps passen nicht? Issue auf https://github.com/postblink/KwikTip/issues eröffnen",
+    FEEDBACK_MSG      = "Tipps passen nicht? Issue auf https://github.com/Aruke05/KwikTip_CN/issues eröffnen",
     TAB_GENERAL       = "Allgemein",
     TAB_LAYOUT        = "Layout",
     TAB_APPEARANCE    = "Darstellung",

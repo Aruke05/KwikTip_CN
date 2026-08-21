@@ -4,7 +4,7 @@
 -- explicit table returns the key itself (matching the old English-prose pattern).
 local ADDON_NAME, KwikTip = ...
 local L = {
-    SETTINGS_TITLE         = "KwikTip Settings",
+    SETTINGS_TITLE         = "KwikTip_CN Settings",
     LOADED_MSG             = "loaded. Type /kwik for settings.",
     COMMANDS               = "commands:",
     CMD_OPEN               = "  /kwik           — open settings",
@@ -37,7 +37,7 @@ local L = {
     ENABLED                = "enabled",
     DISABLED               = "disabled",
     LOGS_CLEARED           = "mapIDLog, encounterLog, keystoneLog, spellLog, and debugSnapshots cleared.",
-    FEEDBACK_MSG           = "Tips feel off? Open an issue at: https://github.com/postblink/KwikTip/issues",
+    FEEDBACK_MSG           = "Tips feel off? Open an issue at: https://github.com/Aruke05/KwikTip_CN/issues",
     TAB_GENERAL            = "General",
     TAB_LAYOUT             = "Layout",
     TAB_APPEARANCE         = "Appearance",

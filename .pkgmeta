@@ -1,12 +1,4 @@
-package-as: KwikTip
-curse-id: 1478824
-wago-id: QN53W7KB
-wowi-id: 27074
+package-as: KwikTip_CN
 
 ignore:
   - CLAUDE.md
-
-localizations:
-  - localization-id: 1478824
-    output-file: Locale/Locales.lua
-    handle-unlocalized: english

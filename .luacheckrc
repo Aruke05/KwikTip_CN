@@ -1,4 +1,4 @@
--- luacheck configuration for KwikTip (WoW: Midnight addon)
+-- luacheck configuration for KwikTip_CN (WoW: Midnight addon)
 std = "lua51"
 
 -- Suppress line-length warnings — WoW addon tip strings are intentionally long
@@ -6,10 +6,12 @@ max_line_length = false
 
 -- Globals set (assigned) by this addon
 globals = {
-    "KwikTipDB",      -- SavedVariable; assigned in Init.lua OnLoad
-    "SLASH_KWIKTIP1", -- slash command registration
-    "SLASH_KWIKTIP2",
-    "SlashCmdList",   -- WoW dispatch table; we assign SlashCmdList["KWIKTIP"]
+    "KwikTipCNDB",    -- SavedVariable; assigned in Init.lua OnLoad
+    "SLASH_KWIKTIPCN1", -- slash command registration
+    "SLASH_KWIKTIPCN2",
+    "SLASH_KWIKTIPCN3",
+    "SLASH_KWIKTIPCN4",
+    "SlashCmdList",     -- WoW dispatch table; we assign SlashCmdList["KWIKTIPCN"]
 }
 
 -- WoW API globals read by the addon (never assigned at the top level)
