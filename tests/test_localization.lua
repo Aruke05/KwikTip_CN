@@ -460,6 +460,39 @@ ok(contains(zhTipOutput, "驱散两名随机玩家"),
 ok(not contains(zhTipOutput, "English Refueling Protocol note"),
     "Chinese strategy override replaces the English general note")
 
+io.write("\n--- boss tips are encounter-only ---\n")
+local routeAddon, routeState = newRuntime("zhCN")
+local routeBoss = {
+    encounterID = 8801,
+    name = "Current Boss",
+    notes = { { role = "general", text = "Current boss strategy" } },
+}
+local nextBoss = {
+    encounterID = 8802,
+    name = "Next Boss",
+    notes = { { role = "general", text = "NEXT BOSS STRATEGY MUST NOT SHOW" } },
+}
+local routeDungeon = {
+    name = "Route Test Dungeon",
+    mythicPlus = false,
+    bosses = { routeBoss, nextBoss },
+    areas = {
+        { id = "9001:1", subzone = "Boss Antechamber", bossIndex = 2 },
+    },
+}
+routeAddon.DUNGEON_BY_INSTANCEID[routeState.instanceID] = routeDungeon
+routeState.subzone = "Boss Antechamber"
+routeAddon:UpdateContent()
+ok(not contains(routeAddon.captured, "NEXT BOSS STRATEGY MUST NOT SHOW"),
+    "bossIndex-only area does not preview boss strategy before encounter start")
+
+routeState.subzone = ""
+routeDungeon.areas = {}
+renderBoss(routeAddon, routeState, routeDungeon, routeBoss, 10, "Current Boss")
+routeAddon:OnEncounterEnd(1)
+ok(not contains(routeAddon.captured, "NEXT BOSS STRATEGY MUST NOT SHOW"),
+    "successful encounter end does not advance to the next boss strategy")
+
 io.write(string.format("\n=== RESULTS: %d passed, %d failed (of %d total) ===\n",
     PASS, FAIL, PASS + FAIL))
 if FAIL > 0 then os.exit(1) end
