@@ -356,9 +356,9 @@ end
 
 -- Build the HUD string for the current sub-zone area.
 -- Matches GetSubZoneText() against dungeon.areas[].subzone.
--- Boss tips are deliberately not resolved from area.bossIndex: a boss-room
--- sub-zone can include substantial trash, so boss guidance is only shown
--- while ENCOUNTER_START has established an active encounter.
+-- If the area entry has a bossIndex field, the boss tip is shown instead
+-- of a generic area tip — used for boss room sub-zones so the tip appears
+-- as the group enters, before ENCOUNTER_START fires.
 -- Returns nil if the current sub-zone has no defined tip.
 local function FormatAreaContent(dungeon, difficultyID)
     local subzone = GetSubZoneText()
@@ -367,6 +367,12 @@ local function FormatAreaContent(dungeon, difficultyID)
         local match = (subzone ~= "" and SubzoneMatches(a, subzone))
                    or (a.mapID  and a.mapID  == mapID)
         if match then
+            if a.bossIndex then
+                local boss = dungeon.bosses[a.bossIndex]
+                if boss then
+                    return FormatBossContent(dungeon, boss, difficultyID)
+                end
+            end
             -- Check for translated area tip via AREA_OVERRIDE_BY_ID.
             -- An empty translated tip is untranslated and falls back to English.
             local areaText = nil
@@ -376,7 +382,7 @@ local function FormatAreaContent(dungeon, difficultyID)
             if not areaText then
                 areaText = Prose(a.tip)
             end
-            -- A bossIndex-only area stays blank until ENCOUNTER_START.
+            -- Guard: if neither bossIndex nor tip is present, skip rather than showing a blank body.
             if not areaText then return nil end
             -- Header: prefer localized instance name from Blizzard API
             local displayName = dungeon.name
@@ -468,19 +474,46 @@ function KwikTip:OnEncounterStart(encounterID, encounterName, difficultyID, grou
     self:UpdateVisibility()
 end
 
--- Called by ENCOUNTER_END. Both kills and resets immediately return to normal
--- area/trash detection. Never advance to the next boss here: the route between
--- encounters may contain substantial trash, and no reliable runtime signal says
--- that the group is ready for the next boss until ENCOUNTER_START fires.
-function KwikTip:OnEncounterEnd()
+-- Called by ENCOUNTER_END. On a kill, advances to the next boss tip in the
+-- dungeon sequence so areas without subzone/mapID coverage (e.g. Pit of Saron)
+-- still surface the upcoming boss immediately after a kill. In dungeons with
+-- normal area coverage the next ZONE_CHANGED_NEW_AREA will override it anyway.
+-- On a wipe/reset, restores normal area/trash detection immediately.
+function KwikTip:OnEncounterEnd(success)
+    local lastEntry          = self._activeBossEntry  -- capture before clear
+    local lastDifficultyID   = self._activeDifficultyID
     self._activeBossEntry    = nil
     self._activeEncounterID  = nil
     self._activeEncounterName = nil
     self._activeDifficultyID = nil
     self.bossActive = false
-    self:SetContent("")
-    self:UpdateContent()
-    self:UpdateVisibility()
+    if success == 1 then
+        -- Try to advance to the next boss tip in the dungeon sequence.
+        local advanced = false
+        if lastEntry then
+            local dungeon = lastEntry.dungeon
+            for i, boss in ipairs(dungeon.bosses) do
+                if boss == lastEntry.boss then
+                    local nextBoss = dungeon.bosses[i + 1]
+                    if nextBoss then
+                        local bar     = dungeon.mythicPlus and FormatAffixBar()
+                        local content = FormatBossContent(dungeon, nextBoss, lastDifficultyID)
+                        local cNext   = bar and (content .. "\n" .. bar) or content
+                        self:SetContent(AppendUserNote(AppendMPlusProgress(cNext)))
+                        advanced = true
+                    end
+                    break
+                end
+            end
+        end
+        -- No next boss (last boss of dungeon) — leave current tip up.
+        self:UpdateVisibility()
+    else
+        -- Wipe or reset — clear and return to normal detection.
+        self:SetContent("")
+        self:UpdateContent()
+        self:UpdateVisibility()
+    end
 end
 
 

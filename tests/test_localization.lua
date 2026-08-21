@@ -460,7 +460,7 @@ ok(contains(zhTipOutput, "驱散两名随机玩家"),
 ok(not contains(zhTipOutput, "English Refueling Protocol note"),
     "Chinese strategy override replaces the English general note")
 
-io.write("\n--- boss tips are encounter-only ---\n")
+io.write("\n--- persistent next-boss guidance ---\n")
 local routeAddon, routeState = newRuntime("zhCN")
 local routeBoss = {
     encounterID = 8801,
@@ -470,7 +470,7 @@ local routeBoss = {
 local nextBoss = {
     encounterID = 8802,
     name = "Next Boss",
-    notes = { { role = "general", text = "NEXT BOSS STRATEGY MUST NOT SHOW" } },
+    notes = { { role = "general", text = "NEXT BOSS STRATEGY STAYS VISIBLE" } },
 }
 local routeDungeon = {
     name = "Route Test Dungeon",
@@ -483,15 +483,22 @@ local routeDungeon = {
 routeAddon.DUNGEON_BY_INSTANCEID[routeState.instanceID] = routeDungeon
 routeState.subzone = "Boss Antechamber"
 routeAddon:UpdateContent()
-ok(not contains(routeAddon.captured, "NEXT BOSS STRATEGY MUST NOT SHOW"),
-    "bossIndex-only area does not preview boss strategy before encounter start")
+ok(contains(routeAddon.captured, "NEXT BOSS STRATEGY STAYS VISIBLE"),
+    "boss-room trash stage previews the upcoming boss strategy")
 
 routeState.subzone = ""
 routeDungeon.areas = {}
 renderBoss(routeAddon, routeState, routeDungeon, routeBoss, 10, "Current Boss")
 routeAddon:OnEncounterEnd(1)
-ok(not contains(routeAddon.captured, "NEXT BOSS STRATEGY MUST NOT SHOW"),
-    "successful encounter end does not advance to the next boss strategy")
+ok(contains(routeAddon.captured, "NEXT BOSS STRATEGY STAYS VISIBLE"),
+    "successful encounter end advances to persistent next-boss guidance")
+
+local initAddon = { L = routeAddon.L }
+KwikTipDB = { showInDungeon = false }
+loadAddonFile("Init.lua", initAddon)
+initAddon:OnLoad()
+ok(KwikTipDB.showInDungeon == true and KwikTipDB.zhCNPersistentGuidanceV1 == true,
+    "zhCN migration enables persistent guidance once for existing installs")
 
 io.write(string.format("\n=== RESULTS: %d passed, %d failed (of %d total) ===\n",
     PASS, FAIL, PASS + FAIL))

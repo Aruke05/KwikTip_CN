@@ -9,7 +9,7 @@ KwikTip.DEFAULTS = {
     x              = 0,
     y              = -200,
     persistentHide = false,
-    showInDungeon  = false,
+    showInDungeon  = true,    -- keep the HUD visible between encounters
     showMinimapBtn = true,
     printChannel   = "NONE",
     fontPath       = "Fonts\\FRIZQT__.TTF",
@@ -65,6 +65,13 @@ function KwikTip:OnLoad()
         if KwikTipDB[k] == nil then
             KwikTipDB[k] = type(v) == "table" and {} or v
         end
+    end
+    -- The zhCN maintenance edition promises persistent route guidance. Enable
+    -- it once for existing installs that inherited the upstream false default;
+    -- the marker ensures a later manual opt-out remains respected.
+    if GetLocale() == "zhCN" and KwikTipDB.zhCNPersistentGuidanceV1 == nil then
+        KwikTipDB.showInDungeon = true
+        KwikTipDB.zhCNPersistentGuidanceV1 = true
     end
     -- InitHUD/ApplySettings deferred to OnLogin — player data is guaranteed available there.
 end
