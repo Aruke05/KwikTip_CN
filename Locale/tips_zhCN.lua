@@ -10,6 +10,14 @@ KwikTip.AREA_OVERRIDE_BY_ID = KwikTip.AREA_OVERRIDE_BY_ID or {}
 local boss = KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID
 local area = KwikTip.AREA_OVERRIDE_BY_ID
 
+-- Venomfall Deeps — IDs and localized encounter name verified from the live
+-- zhCN runtime log. Mechanics remain intentionally conservative until combat
+-- observations are available; never leave the persistent HUD body blank.
+boss[3525] = {
+    name = "阿兹塔雷克",
+    tip = "该首领的详细攻略仍在整理；目前没有足够的实战记录可以可靠描述机制，请以游戏内技能提示为准。",
+}
+
 -- ============================================================
 -- Murder Row
 -- ============================================================

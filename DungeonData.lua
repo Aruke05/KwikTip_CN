@@ -1238,7 +1238,7 @@ KwikTip.DUNGEONS = {
         },
     },
     {
-        instanceID = 0,  -- TODO: verify in-game
+        instanceID = 3079,  -- confirmed from zhCN runtime encounter log, 2026-08-21
         uiMapID    = 2634,  -- synced from wago.tools UiMap.db2
         name       = "Venomfall Deeps",
         location   = "The Coiled Isle",
@@ -1247,8 +1247,8 @@ KwikTip.DUNGEONS = {
         mythicPlus = false,
         bosses = {
             {
-                encounterID = 0,
-                name        = "(TODO — Nemesis delve; verify boss name from Icy Veins S2 guide)",
+                encounterID = 3525,  -- confirmed from zhCN runtime encounter log, 2026-08-21
+                name        = "Aztarek",
                 tip         = "(TODO — source from Icy Veins + Wowhead S2 Nemesis delve guide)",
             },
         },

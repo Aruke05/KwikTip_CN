@@ -366,6 +366,14 @@ for _, dataDungeon in ipairs(dataAddon.DUNGEONS) do
     end
 end
 ok(total > 0 and missing == 0, "all authored area IDs are present and unique")
+local venomfall
+for _, dataDungeon in ipairs(dataAddon.DUNGEONS) do
+    if dataDungeon.name == "Venomfall Deeps" then venomfall = dataDungeon break end
+end
+ok(venomfall and venomfall.instanceID == 3079 and venomfall.uiMapID == 2634,
+    "Venomfall Deeps uses IDs confirmed by zhCN runtime")
+ok(venomfall and venomfall.bosses[1].encounterID == 3525,
+    "Aztarek encounter ID is indexed from zhCN runtime evidence")
 
 io.write("\n--- preserved German UI/runtime strings ---\n")
 local expectedGerman = {
@@ -492,6 +500,37 @@ renderBoss(routeAddon, routeState, routeDungeon, routeBoss, 10, "Current Boss")
 routeAddon:OnEncounterEnd(1)
 ok(contains(routeAddon.captured, "NEXT BOSS STRATEGY STAYS VISIBLE"),
     "successful encounter end advances to persistent next-boss guidance")
+
+routeAddon._persistentBossEntry = nil
+routeDungeon.areas = {}
+routeAddon:UpdateContent()
+ok(contains(routeAddon.captured, "Current boss strategy"),
+    "known dungeon with no area match falls back to first-boss guidance")
+
+local delveBoss = {
+    encounterID = 3525,
+    name = "Aztarek",
+    tip = "English TODO must not render",
+}
+local delveDungeon = {
+    name = "Venomfall Deeps",
+    mythicPlus = false,
+    bosses = { delveBoss },
+    areas = {},
+}
+resetBossState(routeAddon)
+routeAddon._persistentBossEntry = nil
+routeAddon.DUNGEON_BY_INSTANCEID[routeState.instanceID] = delveDungeon
+routeState.instanceName = "毒瀑深渊"
+routeState.difficultyID = 208
+routeAddon:UpdateContent()
+local delveOutput = routeAddon.captured
+ok(contains(delveOutput, "详细攻略仍在整理"),
+    "known Venomfall encounter renders a non-empty conservative Chinese body")
+ok(contains(delveOutput, "阿兹塔雷克"),
+    "persistent Venomfall preview uses the verified localized boss name")
+ok(not contains(delveOutput, "English TODO must not render"),
+    "Venomfall Chinese override suppresses the upstream TODO body")
 
 local initAddon = { L = routeAddon.L }
 KwikTipDB = { showInDungeon = false }

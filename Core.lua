@@ -312,10 +312,9 @@ local function FormatBossContent(dungeon, boss, difficultyID)
     if not body then body = ResolveLevel(tipOver, boss) end
 
     -- Header: the instance name is always available localized. Blizzard only
-    -- supplies the localized boss name to this addon through ENCOUNTER_START,
-    -- so pre-encounter and next-boss previews intentionally keep the authored
-    -- English boss.name fallback rather than fabricating locale translations.
-    local bossName = boss.name
+    -- supplies the localized boss name through ENCOUNTER_START. A locale
+    -- overlay may also provide a runtime-verified name for persistent previews.
+    local bossName = (tipOver and Prose(tipOver.name)) or boss.name
     if KwikTip._activeEncounterName then
         bossName = KwikTip._activeEncounterName
     end
@@ -466,6 +465,7 @@ function KwikTip:OnEncounterStart(encounterID, encounterName, difficultyID, grou
     if not entry then return end
 
     self._activeBossEntry = entry
+    self._persistentBossEntry = entry
     self.bossActive = true
     local content = FormatBossContent(entry.dungeon, entry.boss, difficultyID)
     local bar = entry.dungeon.mythicPlus and FormatAffixBar()
@@ -489,18 +489,20 @@ function KwikTip:OnEncounterEnd(success)
     self.bossActive = false
     if success == 1 then
         -- Try to advance to the next boss tip in the dungeon sequence.
-        local advanced = false
         if lastEntry then
             local dungeon = lastEntry.dungeon
             for i, boss in ipairs(dungeon.bosses) do
                 if boss == lastEntry.boss then
                     local nextBoss = dungeon.bosses[i + 1]
                     if nextBoss then
+                        self._persistentBossEntry = { dungeon = dungeon, boss = nextBoss }
                         local bar     = dungeon.mythicPlus and FormatAffixBar()
                         local content = FormatBossContent(dungeon, nextBoss, lastDifficultyID)
                         local cNext   = bar and (content .. "\n" .. bar) or content
                         self:SetContent(AppendUserNote(AppendMPlusProgress(cNext)))
-                        advanced = true
+                    else
+                        -- Keep the final boss guidance visible after a clear.
+                        self._persistentBossEntry = lastEntry
                     end
                     break
                 end
@@ -643,19 +645,31 @@ function KwikTip:UpdateContent()
         local cArea = bar and (areaContent .. "\n" .. bar) or areaContent
         self:SetContent(AppendUserNote(AppendMPlusProgress(cArea)))
     elseif dungeon and KwikTipDB.showInDungeon then
-        -- No area match — show M+ affix details if active, otherwise a holding message.
+        -- No area match: keep useful guidance visible. Prefer the boss selected
+        -- by encounter progression; on a fresh route, preview the first boss.
         self.areaActive    = false
         self.dungeonActive = true
-        local affixDetails = dungeon.mythicPlus and FormatAffixDetails()
-        if affixDetails then
-            local instanceName = GetInstanceInfo()
-            local displayName = (instanceName and instanceName ~= "") and instanceName or dungeon.name
-            local cAffix = GOLD .. displayName .. RESET .. "\n" .. affixDetails
-            self:SetContent(AppendMPlusProgress(cAffix))
-        elseif dungeon.mythicPlus then
-            self:SetContent(AppendMPlusProgress(GRAY .. L.WAITING_ENCOUNTER .. RESET))
+        local previewBoss = nil
+        if self._persistentBossEntry and self._persistentBossEntry.dungeon == dungeon then
+            previewBoss = self._persistentBossEntry.boss
+        elseif dungeon.bosses then
+            previewBoss = dungeon.bosses[1]
+        end
+        if previewBoss then
+            local content = FormatBossContent(dungeon, previewBoss, difficultyID)
+            local bar = dungeon.mythicPlus and FormatAffixBar()
+            local cPreview = bar and (content .. "\n" .. bar) or content
+            self:SetContent(AppendUserNote(AppendMPlusProgress(cPreview)))
         else
-            self:SetContent("")
+            local affixDetails = dungeon.mythicPlus and FormatAffixDetails()
+            if affixDetails then
+                local instanceName = GetInstanceInfo()
+                local displayName = (instanceName and instanceName ~= "") and instanceName or dungeon.name
+                local cAffix = GOLD .. displayName .. RESET .. "\n" .. affixDetails
+                self:SetContent(AppendMPlusProgress(cAffix))
+            else
+                self:SetContent(AppendMPlusProgress(GRAY .. L.WAITING_ENCOUNTER .. RESET))
+            end
         end
     else
         self.areaActive    = false
