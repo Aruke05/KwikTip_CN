@@ -2,7 +2,7 @@
 
 `KwikTip_CN` 基于上游 [postblink/KwikTip](https://github.com/postblink/KwikTip)，但使用独立的插件目录、TOC、SavedVariables 和发布包。它不会再冒充原版 `KwikTip`，也不携带原版在 CurseForge、Wago 或 WoWInterface 的项目 ID。
 
-当前版本：`3.4.0-cn.8`，基于上游 `v3.4.0`。
+当前版本：`3.4.0-cn.9`，基于上游 `v3.4.0`。
 
 ## 自定义富文本提示
 
@@ -26,6 +26,7 @@ HUD 左下角的铅笔按钮可直接编辑当前正在显示的副本总览、�
 - `/kwikcn`、`/kwik` 命令帮助、状态与调试消息
 - HUD 固定标签、预览文本和个人备注界面
 - 当前第 2 赛季全部 8 个史诗钥石地下城的可编辑条目
+- 设置页和悬浮窗中的大秘境副本名、首领名（直接读取 Blizzard 中文客户端数据）
 - 富文本工具栏、实时预览与保存状态
 
 首领战检测仍使用 Blizzard 的稳定 `encounterID`。插件不会提供或回退到内置攻略正文，所有操作提示均由用户自行编写。

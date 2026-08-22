@@ -6,7 +6,7 @@
 ## Notes-deDE: Eigenständige chinesische Ausgabe von KwikTip.
 ## Notes-zhCN: 大秘境自定义富文本提示，包含中文编辑器与实时预览。
 ## Author: Lucas Boyles; zhCN maintained by Aruke05
-## Version: 3.4.0-cn.8
+## Version: 3.4.0-cn.9
 ## X-Localization-Maintainer: Aruke05
 ## X-License: GPL-3.0-or-later
 ## X-Website: https://github.com/Aruke05/KwikTip_CN

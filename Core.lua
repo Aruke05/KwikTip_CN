@@ -318,14 +318,16 @@ local function FormatBossContent(dungeon, boss, difficultyID)
         if not body then body = ResolveLevel(tipOver, boss) end
     end
 
-    -- Header: the instance name is always available localized. Blizzard only
-    -- supplies the localized boss name through ENCOUNTER_START. A locale
-    -- overlay may also provide a runtime-verified name for persistent previews.
-    local bossName = (tipOver and Prose(tipOver.name)) or boss.name
+    -- Header names come from Blizzard's localized Challenge Mode / Encounter
+    -- Journal data; ENCOUNTER_START remains the most authoritative live name.
+    local bossName = KwikTip.GetLocalizedBossName
+        and KwikTip:GetLocalizedBossName(dungeon, boss)
+        or (tipOver and Prose(tipOver.name)) or boss.name
     if KwikTip._activeEncounterName then
         bossName = KwikTip._activeEncounterName
     end
-    local dungeonName = dungeon.name
+    local dungeonName = KwikTip.GetLocalizedDungeonName
+        and KwikTip:GetLocalizedDungeonName(dungeon) or dungeon.name
     local instanceName = GetInstanceInfo()
     if instanceName and instanceName ~= "" then
         dungeonName = instanceName
@@ -397,7 +399,8 @@ local function FormatAreaContent(dungeon, difficultyID)
             -- Guard: if neither bossIndex nor tip is present, skip rather than showing a blank body.
             if not areaText then return nil end
             -- Header: prefer localized instance name from Blizzard API
-            local displayName = dungeon.name
+            local displayName = KwikTip.GetLocalizedDungeonName
+                and KwikTip:GetLocalizedDungeonName(dungeon) or dungeon.name
             local instanceName = GetInstanceInfo()
             if instanceName and instanceName ~= "" then
                 displayName = instanceName
@@ -688,7 +691,8 @@ function KwikTip:UpdateContent()
             self:SetContent(AppendUserNote(AppendMPlusProgress(cPreview)))
         elseif dungeonText then
             local instanceName = GetInstanceInfo()
-            local displayName = (instanceName and instanceName ~= "") and instanceName or dungeon.name
+            local displayName = (instanceName and instanceName ~= "") and instanceName
+                or (KwikTip.GetLocalizedDungeonName and KwikTip:GetLocalizedDungeonName(dungeon) or dungeon.name)
             local content = GOLD .. displayName .. RESET .. "\n" .. dungeonText
             if self.SetCurrentTipEditTarget and self.GetDungeonTipKey then
                 self:SetCurrentTipEditTarget(self:GetDungeonTipKey(dungeon), displayName)
@@ -700,7 +704,8 @@ function KwikTip:UpdateContent()
             local affixDetails = dungeon.mythicPlus and FormatAffixDetails()
             if affixDetails then
                 local instanceName = GetInstanceInfo()
-                local displayName = (instanceName and instanceName ~= "") and instanceName or dungeon.name
+                local displayName = (instanceName and instanceName ~= "") and instanceName
+                    or (KwikTip.GetLocalizedDungeonName and KwikTip:GetLocalizedDungeonName(dungeon) or dungeon.name)
                 local cAffix = GOLD .. displayName .. RESET .. "\n" .. affixDetails
                 self:SetContent(AppendMPlusProgress(cAffix))
             else

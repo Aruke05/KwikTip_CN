@@ -134,6 +134,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2813,
+        challengeMapID = 587,
         uiMapID = 2433,
         altMapIDs = {
             2435,
@@ -149,21 +150,25 @@ KwikTip.DUNGEONS = {
             {
                 name = "Kystia Manaheart",
                 encounterID = 3101,
+                journalEncounterID = 2679,
                 npcID = 252458,
             },
             {
                 name = "Zaen Bladesorrow",
                 encounterID = 3102,
+                journalEncounterID = 2680,
                 npcID = 234649,
             },
             {
                 name = "Xathuux the Annihilator",
                 encounterID = 3103,
+                journalEncounterID = 2681,
                 npcID = 234647,
             },
             {
                 name = "Lithiel Cinderfury",
                 encounterID = 3105,
+                journalEncounterID = 2682,
                 npcID = 237415,
             },
         },
@@ -226,6 +231,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2825,
+        challengeMapID = 586,
         uiMapID = 2514,
         altMapIDs = {
             2564,
@@ -240,16 +246,19 @@ KwikTip.DUNGEONS = {
             {
                 name = "The Hoardmonger",
                 encounterID = 3207,
+                journalEncounterID = 2776,
                 npcID = 248710,
             },
             {
                 name = "Sentinel of Winter",
                 encounterID = 3208,
+                journalEncounterID = 2777,
                 npcID = 261053,
             },
             {
                 name = "Nalorakk",
                 encounterID = 3209,
+                journalEncounterID = 2778,
                 npcID = 258877,
             },
         },
@@ -691,6 +700,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2859,
+        challengeMapID = 584,
         uiMapID = 2500,
         name = "The Blinding Vale",
         location = "Harandar",
@@ -701,6 +711,7 @@ KwikTip.DUNGEONS = {
             {
                 name = "Lightblossom Trinity",
                 encounterID = 3199,
+                journalEncounterID = 2769,
                 npcID = 243028,
                 altNpcIDs = {
                     243029,
@@ -710,16 +721,19 @@ KwikTip.DUNGEONS = {
             {
                 name = "Ikuzz the Light Hunter",
                 encounterID = 3200,
+                journalEncounterID = 2770,
                 npcID = 244887,
             },
             {
                 name = "Lightwarden Ruia",
                 encounterID = 3201,
+                journalEncounterID = 2771,
                 npcID = 245912,
             },
             {
                 name = "Ziekket",
                 encounterID = 3202,
+                journalEncounterID = 2772,
                 npcID = 247676,
             },
         },
@@ -806,6 +820,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2923,
+        challengeMapID = 585,
         uiMapID = 2572,
         altMapIDs = {
             2573,
@@ -820,16 +835,19 @@ KwikTip.DUNGEONS = {
             {
                 name = "Taz'Rah",
                 encounterID = 3285,
+                journalEncounterID = 2791,
                 npcID = 238887,
             },
             {
                 name = "Atroxus",
                 encounterID = 3286,
+                journalEncounterID = 2792,
                 npcID = 239008,
             },
             {
                 name = "Charonus",
                 encounterID = 3287,
+                journalEncounterID = 2793,
                 npcID = 248015,
             },
         },
@@ -1495,6 +1513,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 1762,
+        challengeMapID = 249,
         uiMapID = 1004,
         name = "Kings' Rest",
         location = "Zuldazar",
@@ -1505,21 +1524,25 @@ KwikTip.DUNGEONS = {
             {
                 name = "The Golden Serpent",
                 encounterID = 2139,
+                journalEncounterID = 2165,
                 npcID = 0,
             },
             {
                 name = "Mchimba the Embalmer",
                 encounterID = 2142,
+                journalEncounterID = 2171,
                 npcID = 0,
             },
             {
                 name = "The Council of Tribes",
                 encounterID = 2140,
+                journalEncounterID = 2170,
                 npcID = 0,
             },
             {
                 name = "Dazar, the First King",
                 encounterID = 2143,
+                journalEncounterID = 2172,
                 npcID = 0,
             },
         },
@@ -1572,6 +1595,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 1877,
+        challengeMapID = 250,
         uiMapID = 1038,
         name = "Temple of Sethraliss",
         location = "Vol'dun",
@@ -1582,6 +1606,7 @@ KwikTip.DUNGEONS = {
             {
                 name = "Adderis and Aspix",
                 encounterID = 2124,
+                journalEncounterID = 2142,
                 npcID = 0,
                 altNpcIDs = {
                     0,
@@ -1590,16 +1615,19 @@ KwikTip.DUNGEONS = {
             {
                 name = "Merektha",
                 encounterID = 2125,
+                journalEncounterID = 2143,
                 npcID = 0,
             },
             {
                 name = "Galvazzt",
                 encounterID = 2126,
+                journalEncounterID = 2144,
                 npcID = 0,
             },
             {
                 name = "Avatar of Sethraliss",
                 encounterID = 2127,
+                journalEncounterID = 2145,
                 npcID = 0,
             },
         },
@@ -1680,6 +1708,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2521,
+        challengeMapID = 399,
         uiMapID = 2094,
         name = "Ruby Life Pools",
         location = "The Waking Shores",
@@ -1690,16 +1719,19 @@ KwikTip.DUNGEONS = {
             {
                 name = "Melidrussa Chillworn",
                 encounterID = 2609,
+                journalEncounterID = 2488,
                 npcID = 0,
             },
             {
                 name = "Kokia Blazehoof",
                 encounterID = 2606,
+                journalEncounterID = 2485,
                 npcID = 0,
             },
             {
                 name = "Kyrakka and Erkhart Stormvein",
                 encounterID = 2623,
+                journalEncounterID = 2503,
                 npcID = 0,
                 altNpcIDs = {
                     0,
@@ -1771,6 +1803,7 @@ KwikTip.DUNGEONS = {
     },
     {
         instanceID = 2993,
+        challengeMapID = 588,
         uiMapID = 2588,
         name = "Altar of Fangs",
         location = "The Coiled Isle",
@@ -1781,16 +1814,19 @@ KwikTip.DUNGEONS = {
             {
                 name = "Rav'i",
                 encounterID = 3456,
+                journalEncounterID = 2878,
                 npcID = 0,
             },
             {
                 name = "The Writhing Coil",
                 encounterID = 3457,
+                journalEncounterID = 2879,
                 npcID = 0,
             },
             {
                 name = "Zul'jan",
                 encounterID = 3458,
+                journalEncounterID = 2880,
                 npcID = 0,
             },
         },

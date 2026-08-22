@@ -5,6 +5,7 @@ local ADDON_NAME, KwikTip = ...
 
 -- Localized boss names keyed by encounterID.
 KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID = KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID or {}
+KwikTip.DUNGEON_LOCALE_BY_INSTANCEID = KwikTip.DUNGEON_LOCALE_BY_INSTANCEID or {}
 
 -- Reserved localized trash names keyed by npcID.
 KwikTip.TIP_OVERRIDE_BY_NPCID = KwikTip.TIP_OVERRIDE_BY_NPCID or {}

@@ -3,6 +3,7 @@ local ADDON_NAME, KwikTip = ...
 if GetLocale() ~= "deDE" then return end
 
 KwikTip.TIP_OVERRIDE_BY_ENCOUNTERID = {}
+KwikTip.DUNGEON_LOCALE_BY_INSTANCEID = {}
 KwikTip.AREA_OVERRIDE_BY_ID = {}
 KwikTip.SUBZONE_LOCALE_BY_AREA_ID = {
     ["2805:1"] = {

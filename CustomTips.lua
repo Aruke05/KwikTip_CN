@@ -17,6 +17,33 @@ local function DungeonID(dungeon)
     return dungeon and tonumber(dungeon.instanceID) or 0
 end
 
+-- Resolve names through Blizzard's localized runtime data instead of shipping
+-- a second, easily-stale translation catalog.  challengeMapID and
+-- journalEncounterID are stable identifiers stored in DungeonData.lua.
+function KwikTip:GetLocalizedDungeonName(dungeon)
+    if not dungeon then return "?" end
+    if dungeon.challengeMapID and C_ChallengeMode and C_ChallengeMode.GetMapUIInfo then
+        local ok, name = pcall(C_ChallengeMode.GetMapUIInfo, dungeon.challengeMapID)
+        if ok and type(name) == "string" and name ~= "" then return name end
+    end
+    local localized = self.DUNGEON_LOCALE_BY_INSTANCEID
+        and self.DUNGEON_LOCALE_BY_INSTANCEID[dungeon.instanceID]
+    return (type(localized) == "string" and localized ~= "" and localized)
+        or dungeon.name or "?"
+end
+
+function KwikTip:GetLocalizedBossName(dungeon, boss)
+    if not boss then return "?" end
+    if boss.journalEncounterID and EJ_GetEncounterInfo then
+        local ok, name = pcall(EJ_GetEncounterInfo, boss.journalEncounterID)
+        if ok and type(name) == "string" and name ~= "" then return name end
+    end
+    local localized = boss.encounterID and self.TIP_OVERRIDE_BY_ENCOUNTERID
+        and self.TIP_OVERRIDE_BY_ENCOUNTERID[boss.encounterID]
+    return (localized and type(localized.name) == "string" and localized.name ~= "" and localized.name)
+        or boss.name or "?"
+end
+
 function KwikTip:GetDungeonTipKey(dungeon)
     return "dungeon:" .. tostring(DungeonID(dungeon))
 end
@@ -92,7 +119,7 @@ function KwikTip:GetEditableMythicPlusDungeons()
         if dungeon.mythicPlus == true then result[#result + 1] = dungeon end
     end
     table.sort(result, function(a, b)
-        return (a.name or "") < (b.name or "")
+        return self:GetLocalizedDungeonName(a) < self:GetLocalizedDungeonName(b)
     end)
     return result
 end
@@ -108,10 +135,7 @@ function KwikTip:GetTipEditorEntries(dungeon)
         },
     }
     for _, boss in ipairs((dungeon and dungeon.bosses) or {}) do
-        local localized = boss.encounterID and self.TIP_OVERRIDE_BY_ENCOUNTERID
-            and self.TIP_OVERRIDE_BY_ENCOUNTERID[boss.encounterID]
-        local bossName = (localized and localized.name and localized.name ~= "" and localized.name)
-            or boss.name or "?"
+        local bossName = self:GetLocalizedBossName(dungeon, boss)
         entries[#entries + 1] = {
             key = self:GetBossTipKey(dungeon, boss),
             label = string.format(L.EDITOR_BOSS_FMT, bossName),

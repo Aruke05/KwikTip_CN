@@ -1005,7 +1005,7 @@ function KwikTip:CreateConfigWindow()
     local function LoadEditorDungeon(dungeon)
         if editorDirty then SaveEditorText() end
         editorDungeon = dungeon
-        editorDungeonBtn:SetText(dungeon and dungeon.name or L.EDITOR_NO_DUNGEONS)
+        editorDungeonBtn:SetText(dungeon and KwikTip:GetLocalizedDungeonName(dungeon) or L.EDITOR_NO_DUNGEONS)
         editorEntries = dungeon and KwikTip:GetTipEditorEntries(dungeon) or {}
         PopulateEditorMenu(editorEntryList, editorEntryRows, editorEntries,
             function(entry) return entry.label end,
@@ -1015,7 +1015,7 @@ function KwikTip:CreateConfigWindow()
 
     local editorDungeons = KwikTip:GetEditableMythicPlusDungeons()
     PopulateEditorMenu(editorDungeonList, editorDungeonRows, editorDungeons,
-        function(dungeon) return dungeon.name end,
+        function(dungeon) return KwikTip:GetLocalizedDungeonName(dungeon) end,
         LoadEditorDungeon)
 
     editorDungeonBtn:SetScript("OnClick", function()

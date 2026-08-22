@@ -46,7 +46,14 @@ CreateFrame = function()
 end
 C_Timer = { After = function(_, callback) callback() end }
 C_Map = { GetBestMapForUnit = function() return state.mapID end }
-C_ChallengeMode = nil
+C_ChallengeMode = {
+    GetMapUIInfo = function(mapID) return "中文副本" .. tostring(mapID) end,
+    GetActiveKeystoneInfo = function() return 0, {} end,
+    GetAffixInfo = function() return nil end,
+}
+EJ_GetEncounterInfo = function(journalEncounterID)
+    return "中文首领" .. tostring(journalEncounterID)
+end
 UnitGroupRolesAssigned = function() return "DAMAGER" end
 IsInInstance = function() return true, "party" end
 GetSubZoneText = function() return state.subzone end
@@ -83,6 +90,14 @@ KwikTipCNDB = {
 io.write("\n--- custom-only catalog ---\n")
 local editable = addon:GetEditableMythicPlusDungeons()
 ok(#editable == 8, "settings catalog contains the eight current Mythic+ dungeons")
+local localizedIDsPresent = true
+for _, currentDungeon in ipairs(editable) do
+    if not currentDungeon.challengeMapID then localizedIDsPresent = false end
+    for _, currentBoss in ipairs(currentDungeon.bosses or {}) do
+        if not currentBoss.journalEncounterID then localizedIDsPresent = false end
+    end
+end
+ok(localizedIDsPresent, "every current Mythic+ dungeon and boss has a Blizzard localization ID")
 
 local proseFound = false
 for _, dungeon in ipairs(addon.DUNGEONS) do
@@ -102,6 +117,10 @@ local dungeon = addon.DUNGEON_BY_INSTANCEID[state.instanceID]
 local entries = addon:GetTipEditorEntries(dungeon)
 ok(entries[1].key == "dungeon:2993", "editor exposes a stable dungeon-overview key")
 ok(#entries == 1 + #dungeon.bosses, "editor exposes overview and every boss for Altar of Fangs")
+ok(addon:GetLocalizedDungeonName(dungeon) == "中文副本588",
+    "dungeon names come from Blizzard's localized Challenge Mode data")
+ok(contains(entries[2].label, "中文首领2878"),
+    "boss editor labels come from Blizzard's localized Encounter Journal data")
 
 addon:SetCustomTip(entries[1].key, "  |cffffcc00我的富文本|r  ")
 ok(addon:GetCustomDungeonTip(dungeon) == "|cffffcc00我的富文本|r",

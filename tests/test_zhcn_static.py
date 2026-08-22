@@ -95,6 +95,16 @@ class ZhCNLocaleTests(unittest.TestCase):
         self.assertIn("RegisterCanvasLayoutCategory", ui)
         self.assertIn("RegisterAddOnCategory", ui)
 
+    def test_current_mythic_plus_names_use_blizzard_localization_ids(self) -> None:
+        data = (ROOT / "DungeonData.lua").read_text(encoding="utf-8")
+        custom = (ROOT / "CustomTips.lua").read_text(encoding="utf-8")
+        self.assertEqual(8, len(re.findall(r"\bchallengeMapID\s*=", data)))
+        self.assertEqual(28, len(re.findall(r"\bjournalEncounterID\s*=", data)))
+        self.assertIn("C_ChallengeMode.GetMapUIInfo", custom)
+        self.assertIn("EJ_GetEncounterInfo", custom)
+        self.assertIn("GetLocalizedDungeonName", custom)
+        self.assertIn("GetLocalizedBossName", custom)
+
 
 if __name__ == "__main__":
     unittest.main()
