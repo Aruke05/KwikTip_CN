@@ -2,7 +2,7 @@
 
 `KwikTip_CN` is an independent Simplified Chinese edition based on
 [postblink/KwikTip](https://github.com/postblink/KwikTip). Version
-`3.4.0-cn.7` keeps the dungeon detection engine but removes all bundled
+`3.4.0-cn.8` keeps the dungeon detection engine but removes all bundled
 strategy prose. HUD bodies are written and maintained by the player.
 
 ## Rich-text editor

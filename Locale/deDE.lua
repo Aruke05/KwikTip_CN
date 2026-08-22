@@ -12,6 +12,9 @@ if GetLocale() ~= "deDE" then return end
 -- ============================================================
 local t = {
     SETTINGS_TITLE    = "KwikTip_CN-Einstellungen",
+    SETTINGS_NATIVE_DESCRIPTION = "Eigene Mythisch+-Rich-Text-Hinweise und HUD-Darstellung konfigurieren.",
+    SETTINGS_OPEN_EDITOR = "KwikTip_CN-Editor öffnen",
+    SETTINGS_NATIVE_HINT = "Hinweise lassen sich im vollständigen Editor oder über den HUD-Stift bearbeiten.",
     LOADED_MSG        = "geladen. Tippe /kwik für die Einstellungen.",
     COMMANDS          = "Befehle:",
     CMD_OPEN          = "  /kwik           — Einstellungen öffnen",

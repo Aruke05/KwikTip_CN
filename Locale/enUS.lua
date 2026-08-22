@@ -5,6 +5,9 @@
 local ADDON_NAME, KwikTip = ...
 local L = {
     SETTINGS_TITLE         = "KwikTip_CN Settings",
+    SETTINGS_NATIVE_DESCRIPTION = "Configure your custom Mythic+ rich-text tips and HUD appearance.",
+    SETTINGS_OPEN_EDITOR   = "Open KwikTip_CN Editor",
+    SETTINGS_NATIVE_HINT   = "Tip text can be edited here through the full editor, or directly from the HUD pencil button.",
     LOADED_MSG             = "loaded. Type /kwik for settings.",
     COMMANDS               = "commands:",
     CMD_OPEN               = "  /kwik           — open settings",

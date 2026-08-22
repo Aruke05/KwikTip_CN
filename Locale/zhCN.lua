@@ -7,6 +7,9 @@ if GetLocale() ~= "zhCN" then return end
 local L = KwikTip.L
 
 L.SETTINGS_TITLE          = "KwikTip_CN 设置"
+L.SETTINGS_NATIVE_DESCRIPTION = "配置你的大秘境富文本攻略和悬浮窗外观。"
+L.SETTINGS_OPEN_EDITOR    = "打开 KwikTip_CN 编辑器"
+L.SETTINGS_NATIVE_HINT    = "攻略可在完整编辑器中配置，也可点击悬浮窗左下角的铅笔直接编辑。"
 L.LOADED_MSG              = "已加载。输入 /kwik 打开设置。"
 L.COMMANDS                = "命令："
 L.CMD_OPEN                = "  /kwik           — 打开设置"

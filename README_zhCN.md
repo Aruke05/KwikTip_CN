@@ -2,7 +2,7 @@
 
 `KwikTip_CN` 基于上游 [postblink/KwikTip](https://github.com/postblink/KwikTip)，但使用独立的插件目录、TOC、SavedVariables 和发布包。它不会再冒充原版 `KwikTip`，也不携带原版在 CurseForge、Wago 或 WoWInterface 的项目 ID。
 
-当前版本：`3.4.0-cn.7`，基于上游 `v3.4.0`。
+当前版本：`3.4.0-cn.8`，基于上游 `v3.4.0`。
 
 ## 自定义富文本提示
 

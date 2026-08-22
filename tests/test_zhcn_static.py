@@ -92,6 +92,8 @@ class ZhCNLocaleTests(unittest.TestCase):
         self.assertIn("GetCurrentTipEditTarget", frames)
         self.assertIn("SetMaxLetters(8000)", frames)
         self.assertIn("UpdateNotePreview", frames)
+        self.assertIn("RegisterCanvasLayoutCategory", ui)
+        self.assertIn("RegisterAddOnCategory", ui)
 
 
 if __name__ == "__main__":

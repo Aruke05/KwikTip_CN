@@ -1110,6 +1110,53 @@ end
 -- Public API
 -- ============================================================
 
+-- Register a native Blizzard Settings > AddOns entry.  The full editor stays
+-- in KwikTip's own resizable window; this canvas panel makes the addon
+-- discoverable from the standard settings list and opens that window.
+function KwikTip:RegisterSettingsPanel()
+    if self.SettingsCategory or not Settings
+        or not Settings.RegisterCanvasLayoutCategory
+        or not Settings.RegisterAddOnCategory
+    then
+        return
+    end
+
+    local panel = CreateFrame("Frame", "KwikTipCNSettingsPanel", UIParent)
+    panel.name = "KwikTip_CN"
+
+    local title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
+    title:SetPoint("TOPLEFT", panel, "TOPLEFT", 16, -16)
+    title:SetText(L.SETTINGS_TITLE)
+
+    local description = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    description:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -12)
+    description:SetPoint("RIGHT", panel, "RIGHT", -24, 0)
+    description:SetJustifyH("LEFT")
+    description:SetText(L.SETTINGS_NATIVE_DESCRIPTION)
+
+    local openButton = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
+    openButton:SetSize(220, 28)
+    openButton:SetPoint("TOPLEFT", description, "BOTTOMLEFT", 0, -18)
+    openButton:SetText(L.SETTINGS_OPEN_EDITOR)
+    openButton:SetScript("OnClick", function()
+        if SettingsPanel and SettingsPanel:IsShown() then SettingsPanel:Hide() end
+        if not KwikTip.Config or not KwikTip.Config:IsShown() then
+            KwikTip:ToggleConfig()
+        end
+    end)
+
+    local hint = panel:CreateFontString(nil, "ARTWORK", "GameFontDisable")
+    hint:SetPoint("TOPLEFT", openButton, "BOTTOMLEFT", 0, -12)
+    hint:SetPoint("RIGHT", panel, "RIGHT", -24, 0)
+    hint:SetJustifyH("LEFT")
+    hint:SetText(L.SETTINGS_NATIVE_HINT)
+
+    local category = Settings.RegisterCanvasLayoutCategory(panel, "KwikTip_CN")
+    Settings.RegisterAddOnCategory(category)
+    self.SettingsPanel = panel
+    self.SettingsCategory = category
+end
+
 function KwikTip:ToggleConfig()
     if not self.Config then
         self:CreateConfigWindow()

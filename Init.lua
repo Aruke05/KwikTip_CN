@@ -78,6 +78,7 @@ function KwikTip:OnLoad()
 end
 
 function KwikTip:OnLogin()
+    if self.RegisterSettingsPanel then self:RegisterSettingsPanel() end
     if self.InitHUD then self:InitHUD() end
     if self.ApplySettings then self:ApplySettings() end
     if self.UpdateVisibility then self:UpdateVisibility() end
