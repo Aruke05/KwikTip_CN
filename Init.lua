@@ -19,6 +19,7 @@ KwikTip.DEFAULTS = {
     autoExpand     = true,   -- expand HUD height to fit content (false = fixed height + scroll)
     showNoteBtn    = true,   -- show the pencil note button on the HUD
     notes          = {},     -- user notes keyed by "instanceID:subzone"
+    customTips     = {},     -- rich-text tips keyed by stable dungeon/boss/area IDs
     delves         = false,  -- opt-in: show tips inside Delve instances
     debugLog       = false,
     mapIDLog       = {},

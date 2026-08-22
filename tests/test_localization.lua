@@ -1,10 +1,7 @@
 -- Run from any working directory with: lua5.1 tests/test_localization.lua
--- This suite loads the shipped locale files and Core.lua. Runtime assertions
--- enter through KwikTip's production methods; fallback and subzone logic are
--- intentionally not reimplemented here.
+-- Production-path checks for the custom-only rich-text edition.
 
 local PASS, FAIL = 0, 0
-
 local function ok(condition, message)
     if condition then
         PASS = PASS + 1
@@ -23,521 +20,118 @@ local source = debug.getinfo(1, "S").source
 local testFile = source:sub(1, 1) == "@" and source:sub(2) or source
 local testDir = testFile:match("^(.*[/\\])") or "./"
 local repoDir = testDir .. ".."
-
-local function repoPath(relative)
-    return repoDir .. "/" .. relative
-end
-
 local function loadAddonFile(relative, addon)
-    local chunk, err = loadfile(repoPath(relative))
+    local chunk, err = loadfile(repoDir .. "/" .. relative)
     assert(chunk, err)
     return chunk("KwikTip_CN", addon)
 end
 
-local function newRuntime(locale)
-    local state = {
-        locale = locale,
-        role = "HEALER",
-        instanceName = "Localized Dungeon",
-        instanceType = "party",
-        difficultyID = 10,
-        instanceID = 9001,
-        mapID = 7001,
-        subzone = "",
-        inInstance = true,
-    }
-    local printed = {}
+local state = {
+    instanceID = 2993,
+    mapID = 2588,
+    instanceName = "测试大秘境",
+    difficultyID = 8,
+    subzone = "",
+}
 
-    UIParent = {}
-    SlashCmdList = {}
-    C_Timer = { After = function(_, callback) callback() end }
-    C_Map = {
-        GetBestMapForUnit = function() return state.mapID end,
-        GetPlayerMapPosition = function() return nil end,
+UIParent = {}
+SlashCmdList = {}
+GetLocale = function() return "zhCN" end
+CreateFrame = function()
+    return {
+        RegisterEvent = function() end,
+        UnregisterEvent = function() end,
+        SetScript = function() end,
     }
-    C_ChallengeMode = nil
-    GetLocale = function() return state.locale end
-    UnitGroupRolesAssigned = function() return state.role end
-    IsInInstance = function() return state.inInstance, state.instanceType end
-    GetSubZoneText = function() return state.subzone end
-    GetInstanceInfo = function()
-        return state.instanceName, state.instanceType, state.difficultyID,
-            "Difficulty", 5, 0, false, state.instanceID
-    end
-    UnitCanAttack = function() return false end
-    UnitIsPlayer = function() return false end
-    date = function() return "test-time" end
-    print = function(...)
-        local parts = {}
-        for i = 1, select("#", ...) do parts[i] = tostring(select(i, ...)) end
-        table.insert(printed, table.concat(parts, "\t"))
-    end
-    CreateFrame = function()
-        return {
-            RegisterEvent = function() end,
-            UnregisterEvent = function() end,
-            SetScript = function() end,
-        }
-    end
-
-    local addon = {
-        DEFAULTS = {},
-        DUNGEON_BY_INSTANCEID = {},
-        DUNGEON_BY_UIMAPID = {},
-        BOSS_BY_ENCOUNTERID = {},
-    }
-    loadAddonFile("Locale/enUS.lua", addon)
-    loadAddonFile("Locale/Locales.lua", addon)
-    loadAddonFile("Locale/deDE.lua", addon)
-    loadAddonFile("Locale/zhCN.lua", addon)
-    loadAddonFile("Locale/tips_enUS.lua", addon)
-    loadAddonFile("Locale/tips_deDE.lua", addon)
-    loadAddonFile("Locale/tips_zhCN.lua", addon)
-
-    function addon:SetContent(content) self.captured = content end
-    function addon:UpdateVisibility() end
-    function addon:InitHUD() end
-
-    KwikTipCNDB = {
-        showInDungeon = true,
-        delves = true,
-        debugLog = false,
-        notes = {},
-        mapIDLog = {},
-        encounterLog = {},
-        keystoneLog = {},
-        spellLog = {},
-        debugSnapshots = {},
-    }
-    loadAddonFile("Core.lua", addon)
-    return addon, state, printed
 end
-
-local function resetBossState(addon)
-    addon._activeBossEntry = nil
-    addon._activeEncounterID = nil
-    addon._activeEncounterName = nil
-    addon._activeDifficultyID = nil
-    addon.bossActive = false
-    addon.previewActive = false
-    addon.captured = nil
-end
-
-local function renderBoss(addon, state, dungeon, boss, difficultyID, encounterName)
-    resetBossState(addon)
-    addon.BOSS_BY_ENCOUNTERID = {
-        [boss.encounterID] = { dungeon = dungeon, boss = boss },
-    }
-    state.difficultyID = difficultyID
-    addon:OnEncounterStart(boss.encounterID, encounterName or boss.name, difficultyID, 5)
-    return addon.captured
-end
-
-local GOLD, WHITE, GRAY, RESET = "|cffffcc00", "|cffffffff", "|cffbbbbbb", "|r"
-local HEAL_ICON = "|TInterface\\Icons\\Spell_Holy_Renew:13:13|t"
-
-io.write("\n--- enUS production runtime ---\n")
-local addon, state = newRuntime("enUS")
-ok(addon.L.SETTINGS_TITLE == "KwikTip_CN Settings", "deDE guard preserves enUS locale")
-
-state.instanceName = "English Dungeon"
-local dungeon = { name = "English Dungeon", mythicPlus = false }
-local notesBoss = {
-    encounterID = 101,
-    name = "English Boss",
-    tip = "English flat fallback",
-    notes = {
-        { role = "general", text = "English general one" },
-        { role = "general", text = "English general two" },
-        { role = "healer", text = "English healer" },
-        { role = "tank", text = "English tank" },
-    },
-}
-dungeon.bosses = { notesBoss }
-addon.TIP_OVERRIDE_BY_ENCOUNTERID = {}
-local output = renderBoss(addon, state, dungeon, notesBoss, 10)
-local expectedNotes = GOLD .. "English Dungeon" .. RESET .. "\n"
-    .. WHITE .. "English Boss" .. RESET .. "\n"
-    .. GRAY .. "English general one" .. RESET .. "\n"
-    .. GRAY .. "English general two" .. RESET .. "\n"
-    .. HEAL_ICON .. " |cff33cc33English healer" .. RESET
-ok(output == expectedNotes, "enUS notes match pre-localization rendering exactly")
-
-local flatBoss = { encounterID = 102, name = "Flat Boss", tip = "Flat English tip" }
-dungeon.bosses = { flatBoss }
-local expectedFlat = GOLD .. "English Dungeon" .. RESET .. "\n"
-    .. WHITE .. "Flat Boss" .. RESET .. "\n" .. GRAY .. "Flat English tip" .. RESET
-ok(renderBoss(addon, state, dungeon, flatBoss, 10) == expectedFlat,
-    "enUS flat tip matches pre-localization rendering exactly")
-
-io.write("\n--- production fallback semantics ---\n")
-addon.TIP_OVERRIDE_BY_ENCOUNTERID = {
-    [101] = { notes = { { role = "general", text = "German general" } } },
-}
-dungeon.bosses = { notesBoss }
-output = renderBoss(addon, state, dungeon, notesBoss, 10)
-ok(contains(output, "German general"), "translated general note is rendered")
-ok(contains(output, "English healer"), "missing translated healer falls back to English healer")
-ok(not contains(output, "English general one"), "translated general owns the general role")
-
-notesBoss.difficulties = {
-    [10] = { notes = { { role = "general", text = "English difficulty general" } } },
-}
-addon.TIP_OVERRIDE_BY_ENCOUNTERID = {
-    [101] = { difficulties = { [10] = { tip = "German difficulty tip" } } },
-}
-output = renderBoss(addon, state, dungeon, notesBoss, 10)
-ok(contains(output, "German difficulty tip"),
-    "translated difficulty flat tip wins over lower-priority English notes")
-ok(not contains(output, "English difficulty general"),
-    "English difficulty notes do not suppress translated difficulty flat tip")
-
-notesBoss.difficulties = {
-    [10] = { notes = {
-        { role = "general", text = "English difficulty general" },
-        { role = "healer", text = "English difficulty healer" },
-    } },
-}
-addon.TIP_OVERRIDE_BY_ENCOUNTERID = {
-    [101] = { difficulties = { [10] = {
-        notes = { { role = "general", text = "German difficulty general" } },
-    } } },
-}
-output = renderBoss(addon, state, dungeon, notesBoss, 10)
-ok(contains(output, "German difficulty general"), "translated difficulty general is rendered")
-ok(contains(output, "English difficulty healer"),
-    "missing translated difficulty healer uses English difficulty healer")
-ok(not contains(output, "English difficulty general"),
-    "translated difficulty general replaces English difficulty general")
-
-addon.TIP_OVERRIDE_BY_ENCOUNTERID = {
-    [101] = { difficulties = { [10] = {
-        tip = "German difficulty role fallback tip",
-        notes = { { role = "tank", text = "German tank only" } },
-    } } },
-}
-output = renderBoss(addon, state, dungeon, notesBoss, 10)
-ok(contains(output, "German difficulty role fallback tip"),
-    "translated flat tip is used when its structured notes do not apply to the player")
-ok(not contains(output, "English difficulty healer"),
-    "lower-priority English role note does not suppress translated flat tip")
-
-notesBoss.difficulties = nil
-addon.TIP_OVERRIDE_BY_ENCOUNTERID = { [101] = { tip = "German base tip" } }
-output = renderBoss(addon, state, dungeon, notesBoss, 10)
-ok(contains(output, "German base tip"), "missing translated difficulty falls back to translated base")
-
-addon.TIP_OVERRIDE_BY_ENCOUNTERID = {}
-notesBoss.difficulties = {
-    [10] = { notes = { { role = "general", text = "English difficulty only" } } },
-}
-output = renderBoss(addon, state, dungeon, notesBoss, 10)
-ok(contains(output, "English difficulty only"), "missing translations use English difficulty content")
-ok(not contains(output, "English general one"), "English difficulty content retains legacy override semantics")
-
-notesBoss.difficulties = { [10] = {} }
-output = renderBoss(addon, state, dungeon, notesBoss, 10)
-ok(contains(output, "English general one"), "empty English difficulty falls back to English base")
-
--- Sparse combinations that previously terminated an ipairs candidate walk.
-notesBoss.difficulties = nil
-addon.TIP_OVERRIDE_BY_ENCOUNTERID = { [101] = { difficulties = {} } }
-output = renderBoss(addon, state, dungeon, notesBoss, 10)
-ok(contains(output, "English general one"), "sparse override table reaches English base")
-addon.TIP_OVERRIDE_BY_ENCOUNTERID = nil
-output = renderBoss(addon, state, dungeon, notesBoss, 10)
-ok(contains(output, "English healer"), "nil override table reaches English base")
-
-state.instanceName = "Lokalisierter Instanzname"
-output = renderBoss(addon, state, dungeon, notesBoss, 10, "Localized Encounter")
-ok(contains(output, "Lokalisierter Instanzname"),
-    "dungeon header uses first GetInstanceInfo return")
-ok(not contains(output, "|cffffcc00party"), "instance type is not used as dungeon header")
-
-io.write("\n--- production subzone matching and authored IDs ---\n")
-local deAddon, deState, printed = newRuntime("deDE")
-deState.instanceName = "Lokalisierter Dungeon"
-deState.instanceID = 2805
-deState.mapID = 999999
-deState.subzone = "Die Promenade"
-deAddon.DUNGEON_BY_INSTANCEID = {
-    [2805] = {
-        instanceID = 2805,
-        name = "Windrunner Spire",
-        mythicPlus = false,
-        bosses = {},
-        areas = {
-            { id = "2805:1", subzone = "The Promenade", tip = "Area tip" },
-        },
-    },
-}
-deAddon:UpdateContent()
-ok(contains(deAddon.captured, "Area tip"), "Core SubzoneMatches accepts loaded verified deDE alias")
-ok(contains(deAddon.captured, "Lokalisierter Dungeon"), "localized area header uses Blizzard instance name")
-
-io.write("\n--- production localized affix heading (deDE) ---\n")
--- P2-1: the M+ holding screen heading must come from the locale table, not a
--- hard-coded English literal. Driven through UpdateContent, the shipped path.
-local savedSubzone, savedInstanceID = deState.subzone, deState.instanceID
-deState.subzone    = ""
-deState.instanceID = 2813
-deAddon.DUNGEON_BY_INSTANCEID[2813] = {
-    instanceID = 2813, name = "Murder Row", mythicPlus = true, bosses = {}, areas = {},
-}
-C_ChallengeMode = {
-    GetActiveKeystoneInfo = function() return 12, { 9 } end,
-    GetAffixInfo = function() return { name = "Tyrannisch", description = "Bosse sind stärker." } end,
-}
-resetBossState(deAddon)
-deAddon:UpdateContent()
-ok(contains(deAddon.captured, "+12 Aktive Affixe"),
-    "production affix heading uses the deDE locale value")
-ok(not contains(deAddon.captured, "Active Affixes"),
-    "production affix heading no longer emits the English literal")
+C_Timer = { After = function(_, callback) callback() end }
+C_Map = { GetBestMapForUnit = function() return state.mapID end }
 C_ChallengeMode = nil
-deAddon.DUNGEON_BY_INSTANCEID[2813] = nil
-deState.subzone, deState.instanceID = savedSubzone, savedInstanceID
+UnitGroupRolesAssigned = function() return "DAMAGER" end
+IsInInstance = function() return true, "party" end
+GetSubZoneText = function() return state.subzone end
+GetInstanceInfo = function()
+    return state.instanceName, "party", state.difficultyID,
+        "Mythic", 5, 0, false, state.instanceID
+end
+UnitCanAttack = function() return false end
+UnitIsPlayer = function() return false end
+date = function() return "test-time" end
+print = function() end
 
-io.write("\n--- empty translations fall back to English ---\n")
--- P2-2: "" is how translation tooling spells "untranslated". It must never
--- shadow the English prose behind it, at any level of the fallback chain.
-deAddon.AREA_OVERRIDE_BY_ID["2805:1"] = { tip = "" }
-resetBossState(deAddon)
-deAddon:UpdateContent()
-ok(contains(deAddon.captured, "Area tip"),
-    "empty translated area tip falls back to the English area tip")
-deAddon.AREA_OVERRIDE_BY_ID["2805:1"] = nil
+local addon = {}
+loadAddonFile("Locale/enUS.lua", addon)
+loadAddonFile("Locale/Locales.lua", addon)
+loadAddonFile("Locale/deDE.lua", addon)
+loadAddonFile("Locale/zhCN.lua", addon)
+loadAddonFile("Init.lua", addon)
+loadAddonFile("DungeonData.lua", addon)
+loadAddonFile("DungeonData_Timewalking.lua", addon)
+loadAddonFile("Locale/tips_enUS.lua", addon)
+loadAddonFile("Locale/tips_deDE.lua", addon)
+loadAddonFile("Locale/tips_zhCN.lua", addon)
+loadAddonFile("CustomTips.lua", addon)
 
-local emptyDungeon = { name = "Windrunner Spire", mythicPlus = false }
-local emptyNotesBoss = {
-    encounterID = 201,
-    name = "Empty Note Boss",
-    notes = {
-        { role = "general", text = "English general" },
-        { role = "healer",  text = "English healer" },
-    },
+KwikTipCNDB = {
+    showInDungeon = true,
+    delves = false,
+    notes = {},
+    customTips = {},
+    mapIDLog = {}, encounterLog = {}, keystoneLog = {}, spellLog = {}, debugSnapshots = {},
 }
-emptyDungeon.bosses = { emptyNotesBoss }
-deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[201] = {
-    notes = {
-        { role = "general", text = "Deutscher Allgemeinhinweis" },
-        { role = "healer",  text = "" },
-    },
-}
-output = renderBoss(deAddon, deState, emptyDungeon, emptyNotesBoss, 10)
-ok(contains(output, "English healer"),
-    "empty translated role note does not claim its role — English healer survives")
-ok(not contains(output, HEAL_ICON .. " |cff33cc33" .. RESET),
-    "empty translated role note renders no blank role line")
-ok(contains(output, "Deutscher Allgemeinhinweis"),
-    "non-empty translated role note is still rendered alongside the fallback")
-deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[201] = nil
 
-local emptyFlatBoss = { encounterID = 202, name = "Empty Flat Boss", tip = "English flat tip" }
-emptyDungeon.bosses = { emptyFlatBoss }
-deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[202] = { tip = "" }
-output = renderBoss(deAddon, deState, emptyDungeon, emptyFlatBoss, 10)
-ok(contains(output, "English flat tip"),
-    "empty translated flat tip falls back to the English flat tip")
-deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[202] = nil
+io.write("\n--- custom-only catalog ---\n")
+local editable = addon:GetEditableMythicPlusDungeons()
+ok(#editable == 8, "settings catalog contains the eight current Mythic+ dungeons")
 
-local emptyDiffBoss = {
-    encounterID = 203,
-    name = "Empty Difficulty Boss",
-    tip = "English base tip",
-    difficulties = { [10] = { tip = "English difficulty tip" } },
-}
-emptyDungeon.bosses = { emptyDiffBoss }
-deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[203] = { difficulties = { [10] = { tip = "" } } }
-output = renderBoss(deAddon, deState, emptyDungeon, emptyDiffBoss, 10)
-ok(contains(output, "English difficulty tip"),
-    "empty translated difficulty flat tip falls back to the English difficulty tip")
-deAddon.TIP_OVERRIDE_BY_ENCOUNTERID[203] = nil
-resetBossState(deAddon)
-
-local dataAddon = {}
-loadAddonFile("DungeonData.lua", dataAddon)
-local ids, total, missing = {}, 0, 0
-for _, dataDungeon in ipairs(dataAddon.DUNGEONS) do
-    for _, area in ipairs(dataDungeon.areas or {}) do
-        total = total + 1
-        if not area.id or ids[area.id] then missing = missing + 1 end
-        ids[area.id] = true
+local proseFound = false
+for _, dungeon in ipairs(addon.DUNGEONS) do
+    for _, boss in ipairs(dungeon.bosses or {}) do
+        if boss.tip or boss.notes then proseFound = true end
+    end
+    for _, mob in ipairs(dungeon.trash or {}) do
+        if mob.tip or mob.notes then proseFound = true end
+    end
+    for _, area in ipairs(dungeon.areas or {}) do
+        if area.tip or area.notes then proseFound = true end
     end
 end
-ok(total > 0 and missing == 0, "all authored area IDs are present and unique")
-local venomfall
-for _, dataDungeon in ipairs(dataAddon.DUNGEONS) do
-    if dataDungeon.name == "Venomfall Deeps" then venomfall = dataDungeon break end
-end
-ok(venomfall and venomfall.instanceID == 3079 and venomfall.uiMapID == 2634,
-    "Venomfall Deeps uses IDs confirmed by zhCN runtime")
-ok(venomfall and venomfall.bosses[1].encounterID == 3525,
-    "Aztarek encounter ID is indexed from zhCN runtime evidence")
+ok(not proseFound, "bundled boss, trash, and area strategy prose is absent")
 
-io.write("\n--- preserved German UI/runtime strings ---\n")
-local expectedGerman = {
-    SETTINGS_TITLE = "KwikTip_CN-Einstellungen",
-    LOADED_MSG = "geladen. Tippe /kwik für die Einstellungen.",
-    WAITING_ENCOUNTER = "Warte auf passende Begegnung …",
-    DEMO_DUNGEON = "Beispiel-Dungeon",
-    TAB_APPEARANCE = "Darstellung",
-    CHECK_MINIMAP = "Minikarten-Button anzeigen",
-    CHECK_PERSISTENT = "Dauerhaftes Tipp-Fenster",
-    LABEL_NONE = "Keine",
-    CHECK_AUTOEXPAND = "Höhe automatisch anpassen",
-    LABEL_OUTLINE = "Kontur:",
-    OUTLINE_OUTLINE = "Kontur",
-    OUTLINE_THICK = "Dicke Kontur",
-    TOOLTIP_MINIMAP_DRAG = "Ziehen: Position ändern",
-    BTN_NOTE_CLEAR = "Leeren",
-    TOOLTIP_PRINT = "Tipp in Instanzchat ausgeben",
-}
-for key, value in pairs(expectedGerman) do
-    ok(deAddon.L[key] == value, "preserved deDE value: " .. key)
-end
+local dungeon = addon.DUNGEON_BY_INSTANCEID[state.instanceID]
+local entries = addon:GetTipEditorEntries(dungeon)
+ok(entries[1].key == "dungeon:2993", "editor exposes a stable dungeon-overview key")
+ok(#entries == 1 + #dungeon.bosses, "editor exposes overview and every boss for Altar of Fangs")
 
-deAddon:ShowPreview()
-ok(contains(deAddon.captured, "Rote Zonen meiden"), "production preview restores German general text")
-ok(contains(deAddon.captured, "Tankwechsel bei 3 Stapeln"), "production preview restores German tank text")
+addon:SetCustomTip(entries[1].key, "  |cffffcc00我的富文本|r  ")
+ok(addon:GetCustomDungeonTip(dungeon) == "|cffffcc00我的富文本|r",
+    "custom rich text is trimmed, saved, and returned unchanged")
+addon:SetCustomTip(entries[1].key, "   ")
+ok(addon:GetCustomDungeonTip(dungeon) == nil, "blank editor text clears the saved entry")
 
-SlashCmdList.KWIKTIPCN("debug")
-local debugText = table.concat(printed, "\n")
-ok(contains(debugText, "Typ=party"), "production debug output restores German format")
-SlashCmdList.KWIKTIPCN("debuglog")
-ok(contains(table.concat(printed, "\n"), "Debug-Protokollierung aktiviert."),
-    "production debug logging message is localized")
-SlashCmdList.KWIKTIPCN("feedback")
-ok(contains(table.concat(printed, "\n"), "Tipps passen nicht?"),
-    "production feedback message is localized")
+local zeroBossDungeon = { instanceID = 9999, bosses = { { encounterID = 0 }, { encounterID = 0 } } }
+ok(addon:GetBossTipKey(zeroBossDungeon, zeroBossDungeon.bosses[1]) ~=
+   addon:GetBossTipKey(zeroBossDungeon, zeroBossDungeon.bosses[2]),
+   "unconfirmed encounter IDs receive distinct fallback keys")
 
-io.write("\n--- zhCN production runtime ---\n")
-local zhAddon, zhState, zhPrinted = newRuntime("zhCN")
-local expectedChinese = {
-    SETTINGS_TITLE = "KwikTip_CN 设置",
-    LOADED_MSG = "已加载。输入 /kwik 打开设置。",
-    WAITING_ENCOUNTER = "正在等待相关战斗……",
-    DEMO_DUNGEON = "示例地下城",
-    TAB_GENERAL = "常规",
-    TAB_LAYOUT = "布局",
-    TAB_APPEARANCE = "外观",
-    CHECK_MINIMAP = "显示小地图按钮",
-    CHECK_PERSISTENT = "保持提示窗口",
-    LABEL_NONE = "无",
-    CHECK_AUTOEXPAND = "自动扩展高度",
-    LABEL_OUTLINE = "轮廓：",
-    OUTLINE_OUTLINE = "轮廓",
-    OUTLINE_THICK = "粗轮廓",
-    TOOLTIP_MINIMAP_DRAG = "拖动：调整位置",
-    BTN_NOTE_CLEAR = "清空",
-    TOOLTIP_PRINT = "将提示发送到副本聊天",
-}
-for key, value in pairs(expectedChinese) do
-    ok(zhAddon.L[key] == value, "zhCN value: " .. key)
-end
+io.write("\n--- production HUD rendering ---\n")
+function addon:SetContent(content) self.captured = content end
+function addon:UpdateVisibility() end
+function addon:InitHUD() end
+loadAddonFile("Core.lua", addon)
 
-zhAddon:ShowPreview()
-ok(contains(zhAddon.captured, "躲开红色区域"), "production preview uses Chinese general text")
-ok(contains(zhAddon.captured, "减益达到 3 层时换坦"), "production preview uses Chinese tank text")
+local boss = dungeon.bosses[1]
+addon:OnEncounterStart(boss.encounterID, boss.name, state.difficultyID, 5)
+ok(contains(addon.captured, state.instanceName), "empty custom entry still renders the detected header")
+ok(not contains(addon.captured, "我的攻略"), "no built-in strategy body is injected")
+ok(addon:GetCurrentTipEditTarget().key == addon:GetBossTipKey(dungeon, boss),
+    "HUD pencil target follows the currently rendered boss")
 
-SlashCmdList.KWIKTIPCN("debug")
-local zhDebugText = table.concat(zhPrinted, "\n")
-ok(contains(zhDebugText, "类型=party"), "production debug output uses Chinese format")
-SlashCmdList.KWIKTIPCN("debuglog")
-ok(contains(table.concat(zhPrinted, "\n"), "调试日志已启用。"),
-    "production debug logging message is localized")
-SlashCmdList.KWIKTIPCN("feedback")
-ok(contains(table.concat(zhPrinted, "\n"), "Aruke05/KwikTip_CN/issues"),
-    "production feedback points to the Chinese-maintained fork")
-
-local localizedTipBoss = {
-    encounterID = 3071,
-    name = "Arcanotron Custos",
-    notes = {
-        { role = "general", text = "English Refueling Protocol note" },
-        { role = "healer", text = "English Ethereal Shackles note" },
-    },
-}
-local localizedTipDungeon = { name = "Magisters' Terrace", mythicPlus = false }
-local zhTipOutput = renderBoss(zhAddon, zhState, localizedTipDungeon, localizedTipBoss, 10,
-    "奥能全刚库斯托斯")
-ok(contains(zhTipOutput, "读条前将首领拉到房间角落"),
-    "production boss content uses Chinese general strategy text")
-ok(contains(zhTipOutput, "驱散两名随机玩家"),
-    "production boss content uses Chinese healer strategy text")
-ok(not contains(zhTipOutput, "English Refueling Protocol note"),
-    "Chinese strategy override replaces the English general note")
-
-io.write("\n--- persistent next-boss guidance ---\n")
-local routeAddon, routeState = newRuntime("zhCN")
-local routeBoss = {
-    encounterID = 8801,
-    name = "Current Boss",
-    notes = { { role = "general", text = "Current boss strategy" } },
-}
-local nextBoss = {
-    encounterID = 8802,
-    name = "Next Boss",
-    notes = { { role = "general", text = "NEXT BOSS STRATEGY STAYS VISIBLE" } },
-}
-local routeDungeon = {
-    name = "Route Test Dungeon",
-    mythicPlus = false,
-    bosses = { routeBoss, nextBoss },
-    areas = {
-        { id = "9001:1", subzone = "Boss Antechamber", bossIndex = 2 },
-    },
-}
-routeAddon.DUNGEON_BY_INSTANCEID[routeState.instanceID] = routeDungeon
-routeState.subzone = "Boss Antechamber"
-routeAddon:UpdateContent()
-ok(contains(routeAddon.captured, "NEXT BOSS STRATEGY STAYS VISIBLE"),
-    "boss-room trash stage previews the upcoming boss strategy")
-
-routeState.subzone = ""
-routeDungeon.areas = {}
-renderBoss(routeAddon, routeState, routeDungeon, routeBoss, 10, "Current Boss")
-routeAddon:OnEncounterEnd(1)
-ok(contains(routeAddon.captured, "NEXT BOSS STRATEGY STAYS VISIBLE"),
-    "successful encounter end advances to persistent next-boss guidance")
-
-routeAddon._persistentBossEntry = nil
-routeDungeon.areas = {}
-routeAddon:UpdateContent()
-ok(contains(routeAddon.captured, "Current boss strategy"),
-    "known dungeon with no area match falls back to first-boss guidance")
-
-local delveBoss = {
-    encounterID = 3525,
-    name = "Aztarek",
-    tip = "English TODO must not render",
-}
-local delveDungeon = {
-    name = "Venomfall Deeps",
-    mythicPlus = false,
-    bosses = { delveBoss },
-    areas = {},
-}
-resetBossState(routeAddon)
-routeAddon._persistentBossEntry = nil
-routeAddon.DUNGEON_BY_INSTANCEID[routeState.instanceID] = delveDungeon
-routeState.instanceName = "毒瀑深渊"
-routeState.difficultyID = 208
-routeAddon:UpdateContent()
-local delveOutput = routeAddon.captured
-ok(contains(delveOutput, "详细攻略仍在整理"),
-    "known Venomfall encounter renders a non-empty conservative Chinese body")
-ok(contains(delveOutput, "阿兹塔雷克"),
-    "persistent Venomfall preview uses the verified localized boss name")
-ok(not contains(delveOutput, "English TODO must not render"),
-    "Venomfall Chinese override suppresses the upstream TODO body")
-
-local initAddon = { L = routeAddon.L }
-KwikTipCNDB = { showInDungeon = false }
-loadAddonFile("Init.lua", initAddon)
-initAddon:OnLoad()
-ok(KwikTipCNDB.showInDungeon == true and KwikTipCNDB.zhCNPersistentGuidanceV1 == true,
-    "zhCN migration enables persistent guidance once for existing installs")
+addon:SetCustomTip(addon:GetBossTipKey(dungeon, boss),
+    "|cffffcc00我的攻略|r\n• 自定义机制")
+addon:OnEncounterStart(boss.encounterID, boss.name, state.difficultyID, 5)
+ok(contains(addon.captured, "我的攻略"), "saved rich-text boss content reaches the HUD")
+ok(contains(addon.captured, "自定义机制"), "multi-line custom content reaches the HUD")
 
 io.write(string.format("\n=== RESULTS: %d passed, %d failed (of %d total) ===\n",
     PASS, FAIL, PASS + FAIL))

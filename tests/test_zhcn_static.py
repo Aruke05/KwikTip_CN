@@ -50,6 +50,8 @@ class ZhCNLocaleTests(unittest.TestCase):
         self.assertIn("## Notes-zhCN:", toc)
         self.assertLess(toc.index("Locale\\enUS.lua"), toc.index("Locale\\zhCN.lua"))
         self.assertIn("Locale\\tips_zhCN.lua", toc)
+        self.assertLess(toc.index("Locale\\tips_zhCN.lua"), toc.index("CustomTips.lua"))
+        self.assertLess(toc.index("CustomTips.lua"), toc.index("Core.lua"))
 
     def test_standalone_addon_identity(self) -> None:
         toc_path = ROOT / "KwikTip_CN.toc"
@@ -64,12 +66,32 @@ class ZhCNLocaleTests(unittest.TestCase):
         ui = (ROOT / "UI_Config.lua").read_text(encoding="utf-8")
         self.assertIn(r"Interface\\AddOns\\KwikTip_CN\\assets", ui)
 
-    def test_priority_strategy_content_is_translated(self) -> None:
-        source = (ROOT / "Locale" / "tips_zhCN.lua").read_text(encoding="utf-8")
-        encounter_ids = set(re.findall(r"boss\[(\d+)\]", source))
-        self.assertGreaterEqual(len(encounter_ids), 30)
-        self.assertIn("读条前将首领拉到房间角落", source)
+    def test_bundled_strategy_prose_is_removed(self) -> None:
+        sources = [
+            ROOT / "DungeonData.lua",
+            ROOT / "DungeonData_Timewalking.lua",
+            ROOT / "Locale" / "tips_deDE.lua",
+            ROOT / "Locale" / "tips_zhCN.lua",
+        ]
+        combined = "\n".join(path.read_text(encoding="utf-8") for path in sources)
+        self.assertNotRegex(combined, r"\btip\s*=")
+        self.assertNotRegex(combined, r"\bnotes\s*=")
         self.assertIn("当前第 2 赛季", (ROOT / "README_zhCN.md").read_text(encoding="utf-8"))
+
+    def test_custom_rich_text_mode_is_wired(self) -> None:
+        custom = (ROOT / "CustomTips.lua").read_text(encoding="utf-8")
+        ui = (ROOT / "UI_Config.lua").read_text(encoding="utf-8")
+        frames = (ROOT / "Frames.lua").read_text(encoding="utf-8")
+        init = (ROOT / "Init.lua").read_text(encoding="utf-8")
+        self.assertIn("KwikTip.CUSTOM_TIPS_ONLY = true", custom)
+        self.assertIn("GetEditableMythicPlusDungeons", custom)
+        self.assertIn("customTips", init)
+        self.assertIn("L.TAB_TIP_EDITOR", ui)
+        self.assertIn("EDITOR_PREVIEW", ui)
+        self.assertIn("SetCustomTip", ui)
+        self.assertIn("GetCurrentTipEditTarget", frames)
+        self.assertIn("SetMaxLetters(8000)", frames)
+        self.assertIn("UpdateNotePreview", frames)
 
 
 if __name__ == "__main__":

@@ -91,7 +91,8 @@ function KwikTip:CreateConfigWindow()
     if self.Config then return end
 
     local cfg = CreateFrame("Frame", "KwikTipCNConfig", UIParent, "BasicFrameTemplate")
-    cfg:SetSize(550, 450)
+    local CFG_W, CFG_H = 700, 560
+    cfg:SetSize(CFG_W, CFG_H)
     cfg:SetPoint("CENTER")
     cfg:SetFrameStrata("HIGH")
     cfg:SetMovable(true)
@@ -121,7 +122,7 @@ function KwikTip:CreateConfigWindow()
     -- ============================================================
     local NAV_W     = 140
     local TITLE_H   = 28
-    local CONTENT_W = 550 - NAV_W - 5   -- ~405px
+    local CONTENT_W = CFG_W - NAV_W - 5
     local INNER_W   = CONTENT_W - 24    -- ~381px (12px margin each side)
     local MARGIN    = 12
 
@@ -293,14 +294,14 @@ function KwikTip:CreateConfigWindow()
     -- ============================================================
     -- Tab system
     -- ============================================================
-    local TAB_NAMES  = { L.TAB_GENERAL, L.TAB_LAYOUT, L.TAB_APPEARANCE }
+    local TAB_NAMES  = { L.TAB_GENERAL, L.TAB_LAYOUT, L.TAB_APPEARANCE, L.TAB_TIP_EDITOR }
     local TAB_BTN_H  = 34
     local TAB_BTN_W  = NAV_W - 2
     local tabButtons = {}
     local tabFrames  = {}
 
     -- Hoisted so SelectTab can close them when switching tabs
-    local chatDropList, fontDropList, outlineDropList
+    local chatDropList, fontDropList, outlineDropList, editorDungeonList, editorEntryList
 
     -- Gold accent bar that slides to the active tab button
     local accentBar = navPane:CreateTexture(nil, "OVERLAY")
@@ -308,9 +309,11 @@ function KwikTip:CreateConfigWindow()
     accentBar:SetSize(3, TAB_BTN_H)
 
     local function SelectTab(index)
-        chatDropList:Hide()
-        fontDropList:Hide()
-        outlineDropList:Hide()
+        if chatDropList then chatDropList:Hide() end
+        if fontDropList then fontDropList:Hide() end
+        if outlineDropList then outlineDropList:Hide() end
+        if editorDungeonList then editorDungeonList:Hide() end
+        if editorEntryList then editorEntryList:Hide() end
         for i = 1, #tabFrames do
             tabFrames[i]:SetShown(i == index)
             if i == index then
@@ -362,7 +365,7 @@ function KwikTip:CreateConfigWindow()
     -- Preview button: centered in nav pane, 16px below the last tab button
     local previewBtn = CreateFrame("Button", "KwikTipCNConfigPreviewBtn", navPane, "UIPanelButtonTemplate")
     previewBtn:SetSize(120, 22)
-    previewBtn:SetPoint("TOP", navPane, "TOP", 0, -(3 * (TAB_BTN_H + 3) + 12 + 16))
+    previewBtn:SetPoint("TOP", navPane, "TOP", 0, -(#TAB_NAMES * (TAB_BTN_H + 3) + 12 + 16))
     previewBtn:SetText(L.PREVIEW_BTN)
     previewBtn:SetScript("OnClick", function() KwikTip:TogglePreview() end)
 
@@ -784,11 +787,287 @@ function KwikTip:CreateConfigWindow()
         end
     end)
 
+    -- ============================================================
+    -- TAB 4: User-authored Mythic+ rich-text tips
+    -- ============================================================
+    local tf4 = tabFrames[4]
+    local editorDungeonBtn, editorEntryBtn, editorEditBox
+    local editorPreviewText, editorStatus
+    local editorDungeon, editorEntry, editorEntries
+    local editorLoading, editorDirty = false, false
+    local editorDungeonRows, editorEntryRows = {}, {}
+
+    local editorTitle = tf4:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+    editorTitle:SetPoint("TOPLEFT", tf4, "TOPLEFT", MARGIN, -14)
+    editorTitle:SetText(L.TAB_TIP_EDITOR)
+    editorTitle:SetTextColor(0.9, 0.75, 0.3, 1)
+
+    local editorHelp = tf4:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    editorHelp:SetPoint("TOPLEFT", editorTitle, "BOTTOMLEFT", 0, -7)
+    editorHelp:SetPoint("RIGHT", tf4, "RIGHT", -MARGIN, 0)
+    editorHelp:SetJustifyH("LEFT")
+    editorHelp:SetTextColor(0.72, 0.72, 0.72, 1)
+    editorHelp:SetText(L.EDITOR_HELP)
+
+    local dungeonLabel = tf4:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    dungeonLabel:SetPoint("TOPLEFT", editorHelp, "BOTTOMLEFT", 0, -14)
+    dungeonLabel:SetText(L.EDITOR_DUNGEON)
+
+    editorDungeonBtn = CreateFrame("Button", nil, tf4, "UIPanelButtonTemplate")
+    editorDungeonBtn:SetSize(245, 24)
+    editorDungeonBtn:SetPoint("TOPLEFT", dungeonLabel, "BOTTOMLEFT", 0, -4)
+
+    local entryLabel = tf4:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    entryLabel:SetPoint("TOPLEFT", editorDungeonBtn, "TOPRIGHT", 12, 20)
+    entryLabel:SetText(L.EDITOR_SECTION)
+
+    editorEntryBtn = CreateFrame("Button", nil, tf4, "UIPanelButtonTemplate")
+    editorEntryBtn:SetSize(245, 24)
+    editorEntryBtn:SetPoint("TOPLEFT", entryLabel, "BOTTOMLEFT", 0, -4)
+
+    local function MakeEditorMenu(width)
+        local menu = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
+        menu:SetWidth(width)
+        menu:SetFrameStrata("TOOLTIP")
+        menu:SetBackdrop({
+            bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+            edgeFile = "Interface\\Buttons\\WHITE8x8",
+            edgeSize = 1,
+            insets = { left = 1, right = 1, top = 1, bottom = 1 },
+        })
+        menu:SetBackdropColor(0.06, 0.06, 0.07, 0.98)
+        menu:SetBackdropBorderColor(0.45, 0.45, 0.48, 1)
+        menu:Hide()
+        return menu
+    end
+
+    editorDungeonList = MakeEditorMenu(245)
+    editorEntryList = MakeEditorMenu(245)
+
+    local function PopulateEditorMenu(menu, rows, items, labelFunc, onClick)
+        for _, row in ipairs(rows) do row:Hide() end
+        local rowHeight = 23
+        for index, item in ipairs(items) do
+            local row = rows[index]
+            if not row then
+                row = CreateFrame("Button", nil, menu)
+                row:SetSize(243, rowHeight)
+                local hl = row:CreateTexture(nil, "HIGHLIGHT")
+                hl:SetColorTexture(1, 1, 1, 0.08)
+                hl:SetAllPoints(row)
+                row._text = row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+                row._text:SetPoint("LEFT", row, "LEFT", 7, 0)
+                row._text:SetPoint("RIGHT", row, "RIGHT", -5, 0)
+                row._text:SetJustifyH("LEFT")
+                rows[index] = row
+            end
+            row:ClearAllPoints()
+            row:SetPoint("TOPLEFT", menu, "TOPLEFT", 1, -1 - (index - 1) * rowHeight)
+            row._text:SetText(labelFunc(item))
+            local selectedItem = item
+            row:SetScript("OnClick", function()
+                menu:Hide()
+                onClick(selectedItem)
+            end)
+            row:Show()
+        end
+        menu:SetHeight(math.max(2, #items * rowHeight + 2))
+    end
+
+    local toolbar = CreateFrame("Frame", nil, tf4)
+    toolbar:SetSize(INNER_W, 25)
+    toolbar:SetPoint("TOPLEFT", editorDungeonBtn, "BOTTOMLEFT", 0, -12)
+
+    local function EditorButton(textValue, tooltip, insertText, closeText)
+        local button = CreateFrame("Button", nil, toolbar, "UIPanelButtonTemplate")
+        button:SetSize(46, 23)
+        button:SetText(textValue)
+        AddTooltip(button, tooltip)
+        button:SetScript("OnClick", function()
+            if not editorEditBox or not editorEntry then return end
+            local cursor = editorEditBox:GetCursorPosition()
+            editorEditBox:Insert(insertText .. (closeText or ""))
+            if closeText then editorEditBox:SetCursorPosition(cursor + #insertText) end
+            editorEditBox:SetFocus()
+        end)
+        return button
+    end
+
+    local tools = {
+        EditorButton("|cffffcc00金|r", L.EDITOR_COLOR_GOLD, "|cffffcc00", "|r"),
+        EditorButton("|cffffffff白|r", L.EDITOR_COLOR_WHITE, "|cffffffff", "|r"),
+        EditorButton("|cffbbbbbb灰|r", L.EDITOR_COLOR_GRAY, "|cffbbbbbb", "|r"),
+        EditorButton("|cffff5555红|r", L.EDITOR_COLOR_RED, "|cffff5555", "|r"),
+        EditorButton("坦", L.EDITOR_ROLE_TANK, "|TInterface\\Icons\\Ability_Warrior_DefensiveStance:13:13|t "),
+        EditorButton("疗", L.EDITOR_ROLE_HEALER, "|TInterface\\Icons\\Spell_Holy_Renew:13:13|t "),
+        EditorButton("输", L.EDITOR_ROLE_DPS, "|TInterface\\Icons\\Ability_DualWield:13:13|t "),
+        EditorButton("断", L.EDITOR_ROLE_INTERRUPT, "|TInterface\\Icons\\Ability_Kick:13:13|t "),
+        EditorButton("•", L.EDITOR_BULLET, "\n• "),
+        EditorButton("↵", L.EDITOR_NEWLINE, "\n"),
+    }
+    for index, button in ipairs(tools) do
+        button:SetPoint("LEFT", toolbar, "LEFT", (index - 1) * 49, 0)
+    end
+
+    local editBg = CreateFrame("Frame", nil, tf4, "BackdropTemplate")
+    editBg:SetPoint("TOPLEFT", toolbar, "BOTTOMLEFT", 0, -7)
+    editBg:SetPoint("RIGHT", tf4, "RIGHT", -MARGIN, 0)
+    editBg:SetHeight(175)
+    editBg:SetBackdrop({
+        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+        edgeFile = "Interface\\Buttons\\WHITE8x8",
+        edgeSize = 1,
+        insets = { left = 3, right = 3, top = 3, bottom = 3 },
+    })
+    editBg:SetBackdropColor(0.035, 0.035, 0.045, 0.96)
+    editBg:SetBackdropBorderColor(0.35, 0.35, 0.38, 1)
+
+    local editScroll = CreateFrame("ScrollFrame", nil, editBg, "UIPanelScrollFrameTemplate")
+    editScroll:SetPoint("TOPLEFT", editBg, "TOPLEFT", 7, -7)
+    editScroll:SetPoint("BOTTOMRIGHT", editBg, "BOTTOMRIGHT", -27, 7)
+
+    editorEditBox = CreateFrame("EditBox", nil, editScroll)
+    editorEditBox:SetMultiLine(true)
+    editorEditBox:SetAutoFocus(false)
+    editorEditBox:SetFontObject(GameFontNormal)
+    editorEditBox:SetWidth(470)
+    editorEditBox:SetHeight(160)
+    editorEditBox:SetMaxLetters(8000)
+    editorEditBox:SetTextInsets(2, 2, 2, 2)
+    editorEditBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+    editScroll:SetScrollChild(editorEditBox)
+
+    local previewHeader = tf4:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    previewHeader:SetPoint("TOPLEFT", editBg, "BOTTOMLEFT", 0, -11)
+    previewHeader:SetText(L.EDITOR_PREVIEW)
+    previewHeader:SetTextColor(0.9, 0.75, 0.3, 1)
+
+    local previewBg = CreateFrame("Frame", nil, tf4, "BackdropTemplate")
+    previewBg:SetPoint("TOPLEFT", previewHeader, "BOTTOMLEFT", 0, -4)
+    previewBg:SetPoint("RIGHT", tf4, "RIGHT", -MARGIN, 0)
+    previewBg:SetHeight(90)
+    previewBg:SetBackdrop({ bgFile = "Interface\\Tooltips\\UI-Tooltip-Background" })
+    previewBg:SetBackdropColor(0, 0, 0, 0.72)
+
+    editorPreviewText = previewBg:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    editorPreviewText:SetPoint("TOPLEFT", previewBg, "TOPLEFT", 8, -7)
+    editorPreviewText:SetPoint("BOTTOMRIGHT", previewBg, "BOTTOMRIGHT", -8, 7)
+    editorPreviewText:SetJustifyH("LEFT")
+    editorPreviewText:SetJustifyV("TOP")
+
+    local saveBtn = CreateFrame("Button", nil, tf4, "UIPanelButtonTemplate")
+    saveBtn:SetSize(110, 24)
+    saveBtn:SetPoint("TOPLEFT", previewBg, "BOTTOMLEFT", 0, -9)
+    saveBtn:SetText(L.EDITOR_SAVE)
+
+    local clearBtn = CreateFrame("Button", nil, tf4, "UIPanelButtonTemplate")
+    clearBtn:SetSize(110, 24)
+    clearBtn:SetPoint("LEFT", saveBtn, "RIGHT", 8, 0)
+    clearBtn:SetText(L.EDITOR_CLEAR)
+
+    editorStatus = tf4:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    editorStatus:SetPoint("LEFT", clearBtn, "RIGHT", 10, 0)
+    editorStatus:SetTextColor(0.7, 0.7, 0.7, 1)
+
+    local function UpdateEditorPreview()
+        local textValue = editorEditBox:GetText() or ""
+        editorPreviewText:SetText(textValue ~= "" and textValue or ("|cff777777" .. L.EDITOR_EMPTY .. "|r"))
+        local lines = editorEditBox.GetNumLines and editorEditBox:GetNumLines()
+        if not lines then
+            local _, newlineCount = textValue:gsub("\n", "\n")
+            lines = newlineCount + 1
+        end
+        editorEditBox:SetHeight(math.max(160, lines * 15 + 12))
+    end
+
+    local function SaveEditorText(statusText)
+        if not editorEntry then return end
+        KwikTip:SetCustomTip(editorEntry.key, editorEditBox:GetText())
+        editorDirty = false
+        editorStatus:SetText(statusText or L.EDITOR_SAVED)
+        editorStatus:SetTextColor(0.35, 0.9, 0.45, 1)
+        KwikTip:UpdateContent()
+    end
+
+    local function LoadEditorEntry(entry)
+        if editorDirty then SaveEditorText() end
+        editorEntry = entry
+        editorEntryBtn:SetText(entry and entry.label or "—")
+        editorLoading = true
+        editorEditBox:SetText((entry and KwikTip:GetCustomTip(entry.key)) or "")
+        editorEditBox:SetCursorPosition(editorEditBox:GetNumLetters())
+        editorLoading = false
+        editorDirty = false
+        editorStatus:SetText("")
+        UpdateEditorPreview()
+    end
+
+    local function LoadEditorDungeon(dungeon)
+        if editorDirty then SaveEditorText() end
+        editorDungeon = dungeon
+        editorDungeonBtn:SetText(dungeon and dungeon.name or L.EDITOR_NO_DUNGEONS)
+        editorEntries = dungeon and KwikTip:GetTipEditorEntries(dungeon) or {}
+        PopulateEditorMenu(editorEntryList, editorEntryRows, editorEntries,
+            function(entry) return entry.label end,
+            LoadEditorEntry)
+        LoadEditorEntry(editorEntries[1])
+    end
+
+    local editorDungeons = KwikTip:GetEditableMythicPlusDungeons()
+    PopulateEditorMenu(editorDungeonList, editorDungeonRows, editorDungeons,
+        function(dungeon) return dungeon.name end,
+        LoadEditorDungeon)
+
+    editorDungeonBtn:SetScript("OnClick", function()
+        editorEntryList:Hide()
+        editorDungeonList:ClearAllPoints()
+        editorDungeonList:SetPoint("TOPLEFT", editorDungeonBtn, "BOTTOMLEFT", 0, -2)
+        editorDungeonList:SetShown(not editorDungeonList:IsShown())
+    end)
+    editorEntryBtn:SetScript("OnClick", function()
+        editorDungeonList:Hide()
+        editorEntryList:ClearAllPoints()
+        editorEntryList:SetPoint("TOPLEFT", editorEntryBtn, "BOTTOMLEFT", 0, -2)
+        editorEntryList:SetShown(not editorEntryList:IsShown())
+    end)
+
+    editorEditBox:SetScript("OnTextChanged", function()
+        UpdateEditorPreview()
+        if not editorLoading and editorEntry then
+            editorDirty = true
+            editorStatus:SetText(L.EDITOR_DIRTY)
+            editorStatus:SetTextColor(1, 0.75, 0.2, 1)
+        end
+    end)
+    editorEditBox:SetScript("OnCursorChanged", function(_, _, cursorY, _, cursorHeight)
+        if not cursorY or not cursorHeight then return end
+        local offset = editScroll:GetVerticalScroll()
+        local height = editScroll:GetHeight()
+        if -cursorY < offset then
+            editScroll:SetVerticalScroll(math.max(0, -cursorY))
+        elseif -cursorY + cursorHeight > offset + height then
+            editScroll:SetVerticalScroll(-cursorY + cursorHeight - height)
+        end
+    end)
+    saveBtn:SetScript("OnClick", function() SaveEditorText(L.EDITOR_SAVED) end)
+    clearBtn:SetScript("OnClick", function()
+        editorLoading = true
+        editorEditBox:SetText("")
+        editorLoading = false
+        SaveEditorText(L.EDITOR_CLEARED)
+        UpdateEditorPreview()
+    end)
+
+    LoadEditorDungeon(editorDungeons[1])
+
     -- Hide all floating dropdowns when the config window closes
     cfg:HookScript("OnHide", function()
+        if editorDirty then SaveEditorText() end
         chatDropList:Hide()
         fontDropList:Hide()
         outlineDropList:Hide()
+        editorDungeonList:Hide()
+        editorEntryList:Hide()
     end)
 
     -- Initialise tab state (tab 1 shown, others hidden)

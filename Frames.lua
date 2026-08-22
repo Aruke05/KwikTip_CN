@@ -15,6 +15,7 @@ local hoverOverlay
 local noteBtn
 local notePopup
 local noteEditBox
+local notePopupTarget
 local printBtn
 local cornerHandles = {}
 local _scrollFadeTimer
@@ -238,8 +239,8 @@ function KwikTip:InitHUD()
 
         -- Collect non-empty lines and skip only the first (dungeon name); keep boss/entity name.
         local lines = {}
-        for line in plain:gmatch("[^\n]+") do
-            line = line:match("^%s*(.-)%s*$")
+        for rawLine in plain:gmatch("[^\n]+") do
+            local line = rawLine:match("^%s*(.-)%s*$")
             if line ~= "" then
                 lines[#lines + 1] = line
             end
@@ -283,7 +284,7 @@ function KwikTip:InitHUD()
         GameTooltip:Hide()
     end)
 
-    -- ---- Note button (pencil icon, bottom-left) ----
+    -- ---- Rich-text edit button (pencil icon, bottom-left) ----
     noteBtn = CreateFrame("Button", "KwikTipCNNoteBtn", hud)
     noteBtn:SetSize(16, 16)
     noteBtn:SetPoint("BOTTOMLEFT", hud, "BOTTOMLEFT", 3, 3)
@@ -301,9 +302,9 @@ function KwikTip:InitHUD()
     noteBtnHL:SetColorTexture(1, 1, 1, 0.2)
     noteBtnHL:SetAllPoints(noteBtn)
 
-    -- ---- Note popup ----
+    -- ---- HUD rich-text editor popup ----
     notePopup = CreateFrame("Frame", "KwikTipCNNotePopup", UIParent, "BackdropTemplate")
-    notePopup:SetSize(240, 110)
+    notePopup:SetSize(440, 340)
     notePopup:SetFrameStrata("DIALOG")
     notePopup:SetMovable(true)
     notePopup:EnableMouse(true)
@@ -323,12 +324,54 @@ function KwikTip:InitHUD()
 
     local notePopupTitle = notePopup:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     notePopupTitle:SetPoint("TOPLEFT", notePopup, "TOPLEFT", 8, -8)
+    notePopupTitle:SetPoint("RIGHT", notePopup, "RIGHT", -8, 0)
+    notePopupTitle:SetJustifyH("LEFT")
+    notePopupTitle:SetWordWrap(false)
     notePopupTitle:SetText(L.BTN_NOTE_ADD)
     KwikTip._notePopupTitle = notePopupTitle
 
+    local noteToolbar = CreateFrame("Frame", nil, notePopup)
+    noteToolbar:SetPoint("TOPLEFT", notePopup, "TOPLEFT", 8, -28)
+    noteToolbar:SetSize(424, 22)
+
+    local function MakeRichInsertButton(label, tooltip, prefix, suffix)
+        local button = CreateFrame("Button", nil, noteToolbar, "UIPanelButtonTemplate")
+        button:SetSize(38, 22)
+        button:SetText(label)
+        button:SetScript("OnClick", function()
+            local cursor = noteEditBox:GetCursorPosition()
+            noteEditBox:Insert(prefix .. (suffix or ""))
+            if suffix then noteEditBox:SetCursorPosition(cursor + #prefix) end
+            noteEditBox:SetFocus()
+        end)
+        button:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_TOP")
+            GameTooltip:SetText(tooltip, 1, 1, 1)
+            GameTooltip:Show()
+        end)
+        button:SetScript("OnLeave", function() GameTooltip:Hide() end)
+        return button
+    end
+
+    local noteTools = {
+        MakeRichInsertButton("|cffffcc00金|r", L.EDITOR_COLOR_GOLD, "|cffffcc00", "|r"),
+        MakeRichInsertButton("|cffffffff白|r", L.EDITOR_COLOR_WHITE, "|cffffffff", "|r"),
+        MakeRichInsertButton("|cffbbbbbb灰|r", L.EDITOR_COLOR_GRAY, "|cffbbbbbb", "|r"),
+        MakeRichInsertButton("|cffff5555红|r", L.EDITOR_COLOR_RED, "|cffff5555", "|r"),
+        MakeRichInsertButton("坦", L.EDITOR_ROLE_TANK, "|TInterface\\Icons\\Ability_Warrior_DefensiveStance:13:13|t "),
+        MakeRichInsertButton("疗", L.EDITOR_ROLE_HEALER, "|TInterface\\Icons\\Spell_Holy_Renew:13:13|t "),
+        MakeRichInsertButton("输", L.EDITOR_ROLE_DPS, "|TInterface\\Icons\\Ability_DualWield:13:13|t "),
+        MakeRichInsertButton("断", L.EDITOR_ROLE_INTERRUPT, "|TInterface\\Icons\\Ability_Kick:13:13|t "),
+        MakeRichInsertButton("•", L.EDITOR_BULLET, "\n• "),
+        MakeRichInsertButton("↵", L.EDITOR_NEWLINE, "\n"),
+    }
+    for index, button in ipairs(noteTools) do
+        button:SetPoint("LEFT", noteToolbar, "LEFT", (index - 1) * 41, 0)
+    end
+
     local noteEditBg = CreateFrame("Frame", nil, notePopup, "BackdropTemplate")
-    noteEditBg:SetPoint("TOPLEFT",     notePopup, "TOPLEFT",      8, -24)
-    noteEditBg:SetPoint("BOTTOMRIGHT", notePopup, "BOTTOMRIGHT",  -8,  34)
+    noteEditBg:SetPoint("TOPLEFT",     notePopup, "TOPLEFT",      8, -56)
+    noteEditBg:SetPoint("BOTTOMRIGHT", notePopup, "BOTTOMRIGHT",  -8, 126)
     noteEditBg:SetBackdrop({
         bgFile   = "Interface\\Tooltips\\UI-Tooltip-Background",
         edgeFile = "Interface\\Buttons\\WHITE8x8",
@@ -338,14 +381,55 @@ function KwikTip:InitHUD()
     noteEditBg:SetBackdropColor(0.1, 0.1, 0.1, 0.9)
     noteEditBg:SetBackdropBorderColor(0.35, 0.35, 0.35, 1)
 
-    noteEditBox = CreateFrame("EditBox", nil, noteEditBg)
-    noteEditBox:SetPoint("TOPLEFT",     noteEditBg, "TOPLEFT",      4, -4)
-    noteEditBox:SetPoint("BOTTOMRIGHT", noteEditBg, "BOTTOMRIGHT",  -4,  4)
+    local noteScroll = CreateFrame("ScrollFrame", nil, noteEditBg, "UIPanelScrollFrameTemplate")
+    noteScroll:SetPoint("TOPLEFT", noteEditBg, "TOPLEFT", 6, -6)
+    noteScroll:SetPoint("BOTTOMRIGHT", noteEditBg, "BOTTOMRIGHT", -26, 6)
+
+    noteEditBox = CreateFrame("EditBox", nil, noteScroll)
+    noteEditBox:SetWidth(386)
+    noteEditBox:SetHeight(146)
     noteEditBox:SetFontObject(GameFontNormal)
     noteEditBox:SetAutoFocus(false)
-    noteEditBox:SetMaxLetters(300)
+    noteEditBox:SetMaxLetters(8000)
     noteEditBox:SetMultiLine(true)
+    noteEditBox:SetTextInsets(2, 2, 2, 2)
     noteEditBox:SetScript("OnEscapePressed", function() notePopup:Hide() end)
+    noteScroll:SetScrollChild(noteEditBox)
+
+    local notePreviewBg = CreateFrame("Frame", nil, notePopup, "BackdropTemplate")
+    notePreviewBg:SetPoint("BOTTOMLEFT", notePopup, "BOTTOMLEFT", 8, 38)
+    notePreviewBg:SetPoint("BOTTOMRIGHT", notePopup, "BOTTOMRIGHT", -8, 38)
+    notePreviewBg:SetHeight(78)
+    notePreviewBg:SetBackdrop({ bgFile = "Interface\\Tooltips\\UI-Tooltip-Background" })
+    notePreviewBg:SetBackdropColor(0, 0, 0, 0.72)
+
+    local notePreviewText = notePreviewBg:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    notePreviewText:SetPoint("TOPLEFT", notePreviewBg, "TOPLEFT", 7, -6)
+    notePreviewText:SetPoint("BOTTOMRIGHT", notePreviewBg, "BOTTOMRIGHT", -7, 6)
+    notePreviewText:SetJustifyH("LEFT")
+    notePreviewText:SetJustifyV("TOP")
+
+    local function UpdateNotePreview()
+        local text = noteEditBox:GetText() or ""
+        notePreviewText:SetText(text ~= "" and text or ("|cff777777" .. L.EDITOR_EMPTY .. "|r"))
+        local lines = noteEditBox.GetNumLines and noteEditBox:GetNumLines()
+        if not lines then
+            local _, count = text:gsub("\n", "\n")
+            lines = count + 1
+        end
+        noteEditBox:SetHeight(math.max(146, lines * 15 + 12))
+    end
+    noteEditBox:SetScript("OnTextChanged", UpdateNotePreview)
+    noteEditBox:SetScript("OnCursorChanged", function(_, _, cursorY, _, cursorHeight)
+        if not cursorY or not cursorHeight then return end
+        local offset = noteScroll:GetVerticalScroll()
+        local height = noteScroll:GetHeight()
+        if -cursorY < offset then
+            noteScroll:SetVerticalScroll(math.max(0, -cursorY))
+        elseif -cursorY + cursorHeight > offset + height then
+            noteScroll:SetVerticalScroll(-cursorY + cursorHeight - height)
+        end
+    end)
 
     local noteSaveBtn = CreateFrame("Button", nil, notePopup, "UIPanelButtonTemplate")
     noteSaveBtn:SetSize(80, 22)
@@ -358,30 +442,26 @@ function KwikTip:InitHUD()
     noteClearBtn:SetText(L.BTN_NOTE_CLEAR)
 
     local function SaveNote()
-        local key = KwikTip:GetNoteKey()
-        if not key then notePopup:Hide(); return end
-        if not KwikTipCNDB.notes then KwikTipCNDB.notes = {} end
-        local text = noteEditBox:GetText():match("^%s*(.-)%s*$")
-        KwikTipCNDB.notes[key] = (text ~= "") and text or nil
+        local target = notePopupTarget
+        if not target then notePopup:Hide(); return end
+        KwikTip:SetCustomTip(target.key, noteEditBox:GetText())
         notePopup:Hide()
         KwikTip:UpdateContent()
     end
 
     noteSaveBtn:SetScript("OnClick", SaveNote)
     noteEditBox:SetScript("OnEnterPressed", function(self)
-        -- Shift+Enter inserts a newline; bare Enter saves.
-        if IsShiftKeyDown() then
-            self:Insert("\n")
-        else
+        -- Ctrl+Enter saves; Enter remains available for multi-line editing.
+        if IsControlKeyDown() then
             SaveNote()
+        else
+            self:Insert("\n")
         end
     end)
 
     noteClearBtn:SetScript("OnClick", function()
-        local key = KwikTip:GetNoteKey()
-        if key and KwikTipCNDB.notes then
-            KwikTipCNDB.notes[key] = nil
-        end
+        local target = notePopupTarget
+        if target then KwikTip:SetCustomTip(target.key, nil) end
         notePopup:Hide()
         KwikTip:UpdateContent()
     end)
@@ -391,16 +471,18 @@ function KwikTip:InitHUD()
             notePopup:Hide()
             return
         end
-        local key = KwikTip:GetNoteKey()
-        local existing = (key and KwikTipCNDB.notes and KwikTipCNDB.notes[key]) or ""
+        local target = KwikTip:GetCurrentTipEditTarget()
+        if not target then return end
+        notePopupTarget = { key = target.key, label = target.label }
+        local existing = KwikTip:GetCustomTip(target.key) or ""
         noteEditBox:SetText(existing)
         noteEditBox:SetCursorPosition(noteEditBox:GetNumLetters())
-        local titleStr = key and (L.LABEL_NOTE .. ": " .. key) or L.BTN_NOTE_ADD
-        if #titleStr > 36 then titleStr = titleStr:sub(1, 33) .. "..." end
+        local titleStr = L.LABEL_NOTE .. ": " .. (target.label or target.key)
         KwikTip._notePopupTitle:SetText(titleStr)
         notePopup:ClearAllPoints()
         notePopup:SetPoint("BOTTOM", hud, "TOP", 0, 4)
         notePopup:Show()
+        UpdateNotePreview()
         noteEditBox:SetFocus()
     end)
 
@@ -502,7 +584,8 @@ end
 -- Show or hide the note (pencil) button based on the showNoteBtn setting and HUD visibility.
 function KwikTip:_UpdateNoteBtn()
     if not noteBtn then return end
-    if KwikTipCNDB.showNoteBtn ~= false and hud and hud:IsShown() then
+    local target = self.GetCurrentTipEditTarget and self:GetCurrentTipEditTarget()
+    if KwikTipCNDB.showNoteBtn ~= false and target and hud and hud:IsShown() then
         noteBtn:Show()
     else
         noteBtn:Hide()

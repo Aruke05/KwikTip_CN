@@ -174,14 +174,16 @@ local function FormatAffixDetails()
         local data = KwikTip.AFFIXES and KwikTip.AFFIXES[id]
         local info = C_ChallengeMode.GetAffixInfo(id)
         local name = (data and data.name) or (info and info.name) or ("Affix#"..id)
-        local tip  = data and data.tip
+        local tip  = not KwikTip.CUSTOM_TIPS_ONLY and data and data.tip
         if tip then
             table.insert(lines, GOLD .. name .. RESET .. ": " .. GRAY .. tip .. RESET)
-        else
+        elseif not KwikTip.CUSTOM_TIPS_ONLY then
             -- Fall back to in-game description; truncate if long
             local desc = info and info.description
             if desc and #desc > 80 then desc = desc:sub(1, 77) .. "..." end
             table.insert(lines, GOLD .. name .. RESET .. (desc and (": " .. GRAY .. desc .. RESET) or ""))
+        else
+            table.insert(lines, GOLD .. name .. RESET)
         end
     end
     return table.concat(lines, "\n")
@@ -308,8 +310,13 @@ local function FormatBossContent(dungeon, boss, difficultyID)
         return body
     end
 
-    local body = ResolveLevel(tipOverDiff, override)
-    if not body then body = ResolveLevel(tipOver, boss) end
+    local body
+    if KwikTip.CUSTOM_TIPS_ONLY and KwikTip.GetCustomBossTip then
+        body = KwikTip:GetCustomBossTip(dungeon, boss)
+    else
+        body = ResolveLevel(tipOverDiff, override)
+        if not body then body = ResolveLevel(tipOver, boss) end
+    end
 
     -- Header: the instance name is always available localized. Blizzard only
     -- supplies the localized boss name through ENCOUNTER_START. A locale
@@ -322,6 +329,10 @@ local function FormatBossContent(dungeon, boss, difficultyID)
     local instanceName = GetInstanceInfo()
     if instanceName and instanceName ~= "" then
         dungeonName = instanceName
+    end
+
+    if KwikTip.SetCurrentTipEditTarget and KwikTip.GetBossTipKey then
+        KwikTip:SetCurrentTipEditTarget(KwikTip:GetBossTipKey(dungeon, boss), bossName)
     end
 
     local header = FormatHeader(dungeonName, bossName)
@@ -372,13 +383,15 @@ local function FormatAreaContent(dungeon, difficultyID)
                     return FormatBossContent(dungeon, boss, difficultyID)
                 end
             end
-            -- Check for translated area tip via AREA_OVERRIDE_BY_ID.
+            -- Player-authored rich text is the only body in custom-only mode.
             -- An empty translated tip is untranslated and falls back to English.
             local areaText = nil
-            if a.id and KwikTip.AREA_OVERRIDE_BY_ID and KwikTip.AREA_OVERRIDE_BY_ID[a.id] then
+            if KwikTip.CUSTOM_TIPS_ONLY and KwikTip.GetCustomAreaTip then
+                areaText = KwikTip:GetCustomAreaTip(dungeon, a)
+            elseif a.id and KwikTip.AREA_OVERRIDE_BY_ID and KwikTip.AREA_OVERRIDE_BY_ID[a.id] then
                 areaText = Prose(KwikTip.AREA_OVERRIDE_BY_ID[a.id].tip)
             end
-            if not areaText then
+            if not areaText and not KwikTip.CUSTOM_TIPS_ONLY then
                 areaText = Prose(a.tip)
             end
             -- Guard: if neither bossIndex nor tip is present, skip rather than showing a blank body.
@@ -388,6 +401,10 @@ local function FormatAreaContent(dungeon, difficultyID)
             local instanceName = GetInstanceInfo()
             if instanceName and instanceName ~= "" then
                 displayName = instanceName
+            end
+            if KwikTip.SetCurrentTipEditTarget and KwikTip.GetAreaTipKey then
+                KwikTip:SetCurrentTipEditTarget(KwikTip:GetAreaTipKey(dungeon, a),
+                    subzone ~= "" and subzone or displayName)
             end
             return GOLD .. displayName .. RESET .. "\n"
                 .. WHITE .. (subzone ~= "" and subzone or "") .. RESET .. "\n"
@@ -417,12 +434,9 @@ end
 -- Appends the user's saved note for the current area to a content string.
 -- Returns the string unchanged when no note exists.
 local function AppendUserNote(content)
-    if not KwikTipCNDB or not KwikTipCNDB.notes then return content end
-    local key = KwikTip:GetNoteKey()
-    if not key then return content end
-    local note = KwikTipCNDB.notes[key]
-    if not note or note == "" then return content end
-    return content .. "\n|cffffdd88" .. note .. "|r"
+    -- Legacy per-subzone notes are no longer rendered.  The HUD pencil edits
+    -- the same rich-text entry as the settings editor instead.
+    return content
 end
 
 -- ============================================================
@@ -459,10 +473,16 @@ function KwikTip:OnEncounterStart(encounterID, encounterName, difficultyID, grou
     -- Guard HUD update against disabled instance types (raids off, delves off, etc.).
     -- encounterLog above is intentionally unconditional — always-on for debug purposes.
     local inInstance, instanceType = IsInInstance()
-    if not IsSupportedInstance(inInstance, instanceType) then return end
+    if not IsSupportedInstance(inInstance, instanceType) then
+        if self.SetCurrentTipEditTarget then self:SetCurrentTipEditTarget(nil) end
+        return
+    end
 
     local entry = KwikTip.BOSS_BY_ENCOUNTERID[encounterID]
-    if not entry then return end
+    if not entry then
+        if self.SetCurrentTipEditTarget then self:SetCurrentTipEditTarget(nil) end
+        return
+    end
 
     self._activeBossEntry = entry
     self._persistentBossEntry = entry
@@ -605,12 +625,14 @@ end
 -- for area updates — events drive UpdateContent directly.
 function KwikTip:UpdateContent()
     if self.bossActive or self.previewActive then return end
+    if self.SetCurrentTipEditTarget then self:SetCurrentTipEditTarget(nil) end
 
     local inInstance, instanceType = IsInInstance()
     if not IsSupportedInstance(inInstance, instanceType) then
         self.areaActive    = false
         self.dungeonActive = false
         self:SetContent("")
+        if self.SetCurrentTipEditTarget then self:SetCurrentTipEditTarget(nil) end
         if self._targetEventsRegistered then
             frame:UnregisterEvent("UNIT_SPELLCAST_START")
             self._targetEventsRegistered = false
@@ -650,9 +672,13 @@ function KwikTip:UpdateContent()
         self.areaActive    = false
         self.dungeonActive = true
         local previewBoss = nil
+        local dungeonText = KwikTip.GetCustomDungeonTip and KwikTip:GetCustomDungeonTip(dungeon)
         if self._persistentBossEntry and self._persistentBossEntry.dungeon == dungeon then
-            previewBoss = self._persistentBossEntry.boss
-        elseif dungeon.bosses then
+            local persistentBoss = self._persistentBossEntry.boss
+            local persistentText = KwikTip.GetCustomBossTip
+                and KwikTip:GetCustomBossTip(dungeon, persistentBoss)
+            if persistentText or not dungeonText then previewBoss = persistentBoss end
+        elseif not dungeonText and dungeon.bosses then
             previewBoss = dungeon.bosses[1]
         end
         if previewBoss then
@@ -660,6 +686,16 @@ function KwikTip:UpdateContent()
             local bar = dungeon.mythicPlus and FormatAffixBar()
             local cPreview = bar and (content .. "\n" .. bar) or content
             self:SetContent(AppendUserNote(AppendMPlusProgress(cPreview)))
+        elseif dungeonText then
+            local instanceName = GetInstanceInfo()
+            local displayName = (instanceName and instanceName ~= "") and instanceName or dungeon.name
+            local content = GOLD .. displayName .. RESET .. "\n" .. dungeonText
+            if self.SetCurrentTipEditTarget and self.GetDungeonTipKey then
+                self:SetCurrentTipEditTarget(self:GetDungeonTipKey(dungeon), displayName)
+            end
+            local bar = dungeon.mythicPlus and FormatAffixBar()
+            local cDungeon = bar and (content .. "\n" .. bar) or content
+            self:SetContent(AppendUserNote(AppendMPlusProgress(cDungeon)))
         else
             local affixDetails = dungeon.mythicPlus and FormatAffixDetails()
             if affixDetails then
@@ -675,6 +711,7 @@ function KwikTip:UpdateContent()
         self.areaActive    = false
         self.dungeonActive = false
         self:SetContent("")
+        if self.SetCurrentTipEditTarget then self:SetCurrentTipEditTarget(nil) end
     end
 
     if prevAreaActive ~= self.areaActive or prevDungeonActive ~= self.dungeonActive then
@@ -743,22 +780,15 @@ end
 -- Preview (settings demo)
 -- ============================================================
 
--- Static demo notes — module-scoped so ShowPreview doesn't reallocate on every call.
-local DEMO_NOTES = {
-    { role = "general",   text = L.DEMO_GENERAL },
-    { role = "tank",      text = L.DEMO_TANK },
-    { role = "healer",    text = L.DEMO_HEALER },
-    { role = "dps",       text = L.DEMO_DPS },
-    { role = "interrupt", text = L.DEMO_INTERRUPT },
-}
-
--- Show a demo tip in the HUD with one note of every role category.
+-- Show a neutral preview without injecting any bundled strategy prose.
 -- Sets previewActive so UpdateContent won't override it while config is open.
 -- Call ClearPreview() (or close the config window) to dismiss.
 function KwikTip:ShowPreview()
     self.previewActive = true
+    if self.SetCurrentTipEditTarget then self:SetCurrentTipEditTarget(nil) end
     self:InitHUD()
-    self:SetContent(FormatHeader(L.DEMO_DUNGEON, L.DEMO_BOSS) .. "\n" .. FormatNotes(DEMO_NOTES))
+    self:SetContent(FormatHeader(L.DEMO_DUNGEON, L.DEMO_BOSS)
+        .. "\n" .. GRAY .. L.EDITOR_EMPTY .. RESET)
     self:UpdateVisibility()
 end
 
